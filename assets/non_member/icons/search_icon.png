@@ -1,0 +1,22 @@
+view-grid:before,
+.icon-jfi-view-list:before,
+.icon-jfi-zip:before {
+        display: inline-block;
+  font-family: "jquery-filer";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+      }
+
+      .icon-jfi-ban:before { content: "\f328"; }
+.icon-jfi-calendar:before { content: "\f30b"; }
+.icon-jfi-check:before { content: "\f2f6"; }
+.icon-jfi-check-circle:before { content: "\f30c"; }
+.
