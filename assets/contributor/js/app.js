@@ -1,14 +1,22 @@
 $(document).foundation()
 
 $(document).ready(function(){
-	
+	if(sessionStorage.getItem('onReload') === 'activateUpload') {
+    	
+    	sessionStorage.setItem('onReload', '');
+    	$("#account").removeClass('is-active');
+    	$("#account_link").removeClass('is-active');
+        $("#uploads").addClass('is-active');
+        $("#uploads_link").addClass('is-active');
+
+	}
+
 	var state = "open";
 	var popup_state = "closed";
 	var close_btn = "false";
 	
 	$(function() {
             $('.slc_category').change(function() {
-                console.log($(this).val());
             }).multipleSelect({
                 width: '100%'
             });

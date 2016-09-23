@@ -51,9 +51,9 @@
         </div>          
         <div class="contributor_tab">
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
-              <li class="tabs-title is-active"><a href="#account" aria-selected="true"> Account </a></li>
-              <li class="tabs-title"><a href="#uploads">Uploads (0)</a></li>
-              <li class="tabs-title"><a href="#sales">Sales History (0)</a></li>
+              <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
+              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (0)</a></li>
+              <li class="tabs-title" id="sales_link"><a href="#sales">Sales History (0)</a></li>
             </ul>
         </div>
         <div class="tabs-content" data-tabs-content="contributor-tabs">
@@ -519,22 +519,23 @@
                         <li class="tabs-title"><a href="#releases"> Releases (0) </a></li>
                   </ul>
 
-                  <?php if($user_details[0]['contributor_approved'] == FALSE ) { ?>
+          <?php if($user_details[0]['upload_status'] == FALSE ) { ?>
                   <div class="tabs-content" data-tabs-content="upload-tabs">
-                        <div class="tabs-panel is-active" id="images">
+                       <?php if($user_details[0]['edit_status'] == FALSE ) { ?>
+                       <div class="tabs-panel is-active" id="images">
                           <div class="alert_message">
                               <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
                               Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is
                               worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
                           </div>
-                          <form method="post" enctype="multipart/form-data" onsubmit="return submit_trial_images();">
+                          <form id="trial_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_trial_images();">
                           <div class="row">
                               <div class="large-10 columns pull-right">
                                  Shows us what you are good at by submitting atleast 5 of your best images in JPEG format. Make sure the images are
                                  of high quality with a minimum file size of 8MB each.
                                </div>
                                <div class="large-2 columns pull-left">   
-                                      <input type="file" name="trial_files[]"  class="impress_image_filer" multiple="multiple">
+                                      <input type="file" name="trialfiles[]"  class="impress_image_filer" multiple="multiple">
                                </div>
                               
                            </div>
@@ -548,7 +549,11 @@
                             
                             <div style="clear: both"></div>        
                        </div>
+                        <?php } else {
 
+                        require_once('edit_image_files.php');
+                        }?>
+                        
                         <div class="tabs-panel" id="videos">
                               <div class="alert_message">
                               <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
@@ -591,7 +596,8 @@
                            <div style="clear: both"></div>
                         </div>
                   </div>
-                  <?php }  ?>
+                 
+                <?php }  ?>
           </div>
           <div class="tabs-panel contributor_panel" id="sales">
                 <div class="tab_header">

@@ -1180,6 +1180,8 @@ ul#menu_account::before {
     font-style: italic;
     color: #ff0000;
     text-align: center;
+    padding: 2px;
+    margin: 0px;
   }
   span.status_waiting {
       background: #4c4b4d;

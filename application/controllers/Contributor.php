@@ -6,6 +6,7 @@ class contributor extends CI_Controller {
 	{
        parent::__construct();
        $this->load->model('user_model');
+       $this->load->model('contributor_model');
    	}
 	public function index()
 	{
@@ -18,7 +19,10 @@ class contributor extends CI_Controller {
 		
 		if(strlen($data['user_session']['user_meta']['0']['email']) > 0 ){
 			$data['user_details'] = $this->fetch_user_details();
+			$id = $data['user_details'][0]['user_id'];
 			$data['payment_details'] = $this->fetch_payment_details();
+			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
+			
 			if(sizeof($data['user_details']) > 0){
 				   $data['code'] = array_search($data['user_details']['0']['country'], $this->countrycodes()); // returns 'US'
 		    }
@@ -151,45 +155,96 @@ class contributor extends CI_Controller {
 	public function upload_contributor_images() {
 		 
 		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
 		 $this->load->helper(array('form', 'url'));
 		 $config['upload_path'] = './assets/uploads/';
 		 $config['allowed_types'] = 'gif|jpg|png';
-		 $config['max_size'] = '10000';
-		 $config['max_width']  = '10240';
-		 $config['max_height']  = '7680';
-		 $config['overwrite'] = TRUE; 
+		 $config['overwrite'] = FALSE; 
 
 		 $this->load->library('upload', $config);
 		 $this->upload->initialize($config);
-	     $avatarfile = 'avatarfile';
-	     $_FILES['avatarfile']['name'] = $_FILES['avatarfile']['name']['0'];
-	     $_FILES['avatarfile']['type'] = $_FILES['avatarfile']['type']['0'];
-	     $_FILES['avatarfile']['tmp_name'] = $_FILES['avatarfile']['tmp_name']['0'];
-	     $_FILES['avatarfile']['error'] = $_FILES['avatarfile']['error']['0'];
-	     $_FILES['avatarfile']['size'] = $_FILES['avatarfile']['size']['0'];
 
-        if (!$this->upload->do_upload($avatarfile)) {
-               $error = array('error' => $this->upload->display_errors());
-           	   $data['success'] = FALSE;
-               $data['message'] = $this->upload->display_errors();
-               $this->load->view('contributor/header', $data);
-               $this->load->view('contributor/index', $data);
-               $this->load->view('contributor/footer', $data); 
-        } else {
-            //success
-            $this->load->library('session');
-            $data['success'] = TRUE;
-            $data['message'] = 'Upload successfull';
-            $id = $data['user_session']['user_meta']['0']['id'];
-            $this->user_model->update_user_avatar($id);
-            $this->load->view('contributor/header', $data);
-            $this->load->view('contributor/index', $data);
-            $this->load->view('contributor/footer', $data);
-        }
+		 $files = $_FILES;
+		 $count = count($_FILES['trialfiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
 
-		 
+			 $trialfiles = 'trialfiles';
+		     $_FILES['trialfiles']['name'] = $files['trialfiles']['name'][$i];
+		     $_FILES['trialfiles']['size'] = $files['trialfiles']['size'][$i];
+		     $_FILES['trialfiles']['tmp_name'] = $files['trialfiles']['tmp_name'][$i];
+		     $_FILES['trialfiles']['error'] = $files['trialfiles']['error'][$i];
+		     $_FILES['trialfiles']['type'] = $files['trialfiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($trialfiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size']);
+		           $success = 1;
+         	    }
+		    $i++;
+		}
+		if($success === 1){
+			$this->user_model->update_edit_status($id,TRUE);
+		}
+		echo $success;
 	}
-	
+	public function add_model(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));	
+		$this->load->library('form_validation');
+	    $data['user_session']=$this->session->all_userdata();;
+	    $this->form_validation->set_rules('all_model_notification', 'all_model_notification', 'required|valid_email'); 
+        
+        if ($this->form_validation->run() === FALSE) {
+	    	echo 0;
+	    } else {
+	    	$id = $data['user_session']['user_meta']['0']['id'];
+			$this->contributor_model->add_contributor_model($id);
+			echo 1;
+	    }	
+	}
+	public function find_model(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));	
+		$this->load->library('form_validation');
+	    $data['user_session']=$this->session->all_userdata();;
+	    $this->form_validation->set_rules('model_email', 'model_email', 'required|valid_email'); 
+        
+        if ($this->form_validation->run() === FALSE) {
+	    	echo 2;
+	    } else {
+	    	$id = $data['user_session']['user_meta']['0']['id'];
+			$result = $this->contributor_model->find_contributor_model($id);
+			if(count($result) == 0){
+				echo 0 ;
+			} else {
+				echo 1;	
+			}
+	    }	
+	}
+	public function replace_model($email){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));	
+		$this->load->library('form_validation');
+	    $data['user_session']=$this->session->all_userdata();;
+	    $this->form_validation->set_rules('replace_email', 'replace_email', 'required|valid_email'); 
+        if ($this->form_validation->run() === FALSE) {
+	    	echo 2;
+	    } else {
+	    	$id = $data['user_session']['user_meta']['0']['id'];
+		    $this->contributor_model->replace_contributor_model($id,$email);
+			echo 1;	
+	    }			
+	}
 	public function fetch_user_details() {
    		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;

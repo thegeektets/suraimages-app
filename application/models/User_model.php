@@ -176,6 +176,18 @@ class User_model extends CI_Model {
                 VALUES(".$this->db->escape($fname).",".$this->db->escape($mname).",".$this->db->escape($sname).",".$this->db->escape($paddress).",".$this->db->escape($poaddress).",".$this->db->escape($zcode).",".$this->db->escape($city).",".$this->db->escape($country).",".$this->db->escape($telnumber).",".$this->db->escape($email).",".$this->db->escape($user_id).")");
                       
         }
+        public function update_upload_status($id , $status){
+                $user_id = $id;
+                $sql = "UPDATE user_details SET upload_status = ".
+                     $this->db->escape($status) ." WHERE user_id = ".$this->db->escape($id);
+                     $this->db->query($sql);                     
+        }
+        public function update_edit_status($id , $status){
+                $user_id = $id;
+                $sql = "UPDATE user_details SET edit_status = ".
+                     $this->db->escape($status) ." WHERE user_id = ".$this->db->escape($id);
+                     $this->db->query($sql);                     
+        }
         public function update_payment_details($id){
                 $payment_mode = $this->input->post("slc_payment");
                 $bank_name = $this->input->post("bank_name");
