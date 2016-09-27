@@ -1024,8 +1024,9 @@ ul#menu_account::before {
    
 }
 .btn_upload:hover , .btn_upload:active , .btn_upload:focus {
-  background-color: #f8991c;
-  color: #fff;
+  border:1px solid #f8991c;
+  color: #f8991c;
+  background: #fff;
   
 }
 .btn_upload_id {
@@ -1183,17 +1184,17 @@ ul#menu_account::before {
     padding: 2px;
     margin: 0px;
   }
-  span.status_waiting {
+  .status_waiting {
       background: #4c4b4d;
       color: #fff;
       padding: 10px;
   }
-  span.status_approved {
+  .status_approved {
       background: #37b34a;
       color: #fff;
       padding: 10px;
   }
-  span.status_declined {
+  .status_declined {
       background: #ed272f;
       color: #fff;
       padding: 10px;
@@ -1635,4 +1636,23 @@ ul#menu_account::before {
   color:  #fff;
   text-transform: uppercase;
   border: #f8991c;
+}
+div#deleteModal {
+  margin-top: 150px;
+  background: #f8991c;
+  text-align: center;
+  color: #fff;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.reveal-modal {
+    position: relative;
+}
+a.close-reveal-modal {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 25px;
+    padding: 4px;
+    color: #fff;
 }

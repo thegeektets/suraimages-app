@@ -3,10 +3,10 @@
 
        <div class="row">
             <ul class="tabs admin_tabs" data-tabs id="admin-tabs">
-                  <li class="tabs-title is-active"><a href="#account" aria-selected="true"> Account </a></li>
+                  <li class="tabs-title is-active" id="account_link" ><a href="#account" aria-selected="true"> Account </a></li>
                   <li class="tabs-title"><a href="#pricing"> Pricing </a></li>
                   <li class="tabs-title"><a href="#members"> Members (<?php  echo sizeof($members)?>)</a></li>
-                  <li class="tabs-title"><a href="#contributors"> Contributors (<?php  echo (sizeof($newcontributors)+sizeof($exscontributors))?>)</a></li>
+                  <li class="tabs-title" id="contributors_link" ><a href="#contributors"> Contributors (<?php  echo (sizeof($newcontributors)+sizeof($exscontributors))?>)</a></li>
                   <li class="tabs-title"><a href="#sales"> Sales History </a></li>
                   
             </ul>
@@ -596,6 +596,15 @@
                 </ul>
 
                 <div class="tabs-content" data-tabs-content="contributor-tabs">
+                
+                <?php if (($user_session['edit_status']) === TRUE) {
+                        ?>
+                       <div class="tabs-panel is-active" id="nwcontributors">
+                            <?php  require_once('file_approval.php'); ?>
+                        </div>
+                    
+                <?php   }  else { ?>
+                    
                     <div class="tabs-panel is-active" id="nwcontributors">
                         <div class="row">
                            <div class="large-4 columns medium-4 columns pull-right">
@@ -668,7 +677,7 @@
                                           (0)
                                      </div>
                                      <div class="large-2 column report_col">
-                                          <a href="">(5)</a>
+                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$newcontributors[$i]['user_id']);?>" >(5)</a>
                                      </div>
                                      
                                   </div>
@@ -745,34 +754,13 @@
                               ?>
                         </div>                       
                     </div>
+                <?php
+                    }
+                ?>
+                
+               
                     <div class="tabs-panel" id="excontributors">
                         <div class="row">
-                           <div class="large-5 columns medium-5 columns pull-left">
-                               <form class="reports_search">
-                                 <select class="inside_search_slc edit_slc">
-                                     <option value=""> Action </option>
-                                     <option value="Title"> Freeze Account </option>
-                                     <option value="Delete"> Delete </option>
-                                 </select>
-                                 <span class="question_wrap">
-                                     <span class="question_this">
-                                        <img src="assets/icons/question.png">
-                                     </span>
-                                     <span class="question_text">
-                                          <a class="question_close">
-                                              <i class="fa fa-times" aria-hidden="true"></i>
-                                          </a>
-                                          Actions help you apply multiple commands on multiple files all at once. How
-                                          does it work? First select the multiple files you want to Action by clicking on
-                                          checkbox(s) on the left side of each file then choose an action under the
-                                          “Actions” dropdown menu and the click “Apply” button.
-                                          Every action you chose under the dropdown menu has the help message specific
-                                          explaining about that action. Simply move your mouse over the question mark.
-                                     </span>
-                                 </span>
-                                   
-                               </form>
-                           </div>
                            <div class="large-4 columns medium-4 columns pull-right">
                                 <span class="search_pagination"> 
                                   <select class="pagination_slc">
@@ -785,36 +773,21 @@
                                      <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
                                      <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
                                 </span>
-                           </div>
-                        </div>
-                        <div class="row">
-                            <div class="reports_search large-6 columns pull-left">
-                              <form class="title">
-                                      <div class="add_title">
-                                       Freeze Account  : 
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
-                                      </div>
-                              </form>
-                            </div>
-                            <div class="large-4 columns medium-4 columns pull-right">
-                                 <form class="row collapse">
-                                     <div class="small-8 columns pull-left">
-                                        <input type="text" name="search" class="" placeholder="Search">
-                                     </div>
-                                     <div class="small-4 columns pull-left">
-                                        <a class="button btn_search" href="#">
-                                             SEARCH
-                                        </a>
-                                     </div>
-                                 </form>
-                            </div> 
-                        </div>
+                                <form class="row collapse">
+                                    <div class="small-8 columns pull-left">
+                                       <input type="text" name="search" class="" placeholder="Search">
+                                    </div>
+                                    <div class="small-4 columns pull-left">
+                                       <a class="button btn_search" href="#">
+                                            SEARCH
+                                       </a>
+                                    </div>
+                                </form>
+                           </div>  
+                        </div>    
                         <div class="report_header">
                            <div class="row">
                                <div class="large-2 column">
-                                   <input type="checkbox" name="" class="select_all">
                                    Name
                                </div>
                                <div class="large-2 column">
@@ -836,61 +809,70 @@
                            </div>
                         </div> 
                         <div class="report_content">
+                             <?php     
+                                  for ($i=0; $i < sizeof($exscontributors); $i++){
+                              ?>
+                              
                              <div class="report_item">
                                   <div class="row">
                                      <div class="large-2 column report_col">
-                                       <input type="checkbox" name="" class="select_file">
-                                        George Ngechu
+                                       <?php echo $exscontributors[$i]['firstname']." ".$exscontributors[$i]['middlename'] ?>
                                      </div>
                                      <div class="large-2 column report_col">
-                                         gngechu@gmail.com
+                                         <?php echo $exscontributors[$i]['email']?>
                                      </div>
                                      <div class="large-2 column report_col">
-                                         +254 723 112233
+                                         <?php echo $exscontributors[$i]['telnumber']?>
                                      </div>
                                      <div class="large-2 column report_col">
-                                         30th Dec 2015
+                                         <?php  echo date("F j, Y", strtotime($exscontributors[$i]['date_joined'])); ?>
                                      </div>
                                      <div class="large-2 column report_col">
-                                          <a href="">(25) </a>
+                                          (0)
                                      </div>
                                      <div class="large-2 column report_col">
-                                          <a href="">(5) </a>
+                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$exscontributors[$i]['user_id']);?>" >(5)</a>
                                      </div>
                                      
                                   </div>
                                   <div class="row more_details">
                                      <div class="large-2 column report_col">
-                                            <img src="assets/img/user_avatar.png">
+                                            <?php if(isset($exscontributors[$i]['avatar'])) { ?>
+                                            <img src="<?php echo $exscontributors[$i]['avatar']?>" class="user_avatar">
+                                            <?php } else { ?>
+                                             <img src="<?php echo base_url('assets/contributor/img/user_avatar.png')?>" class="user_avatar">
+                                             <?php } ?> 
                                      </div>
                                      <div class="large-4 column report_col">
                                           <div>
-                                              <span class="strong"> Name: </span>  George Ngechu
+                                              <span class="strong"> Name: </span>  <?php echo $exscontributors[$i]['firstname']." ".$exscontributors[$i]['middlename'] ?>
                                           </div>
                                           <div>
-                                              <span class="strong"> Email: </span> jmakali@gmail.com
+                                              <span class="strong"> Email: </span> <?php echo $exscontributors[$i]['email']?>
                                           </div>
                                           <div>
-                                              <span class="strong"> Tel No: </span> +254 723 112233
+                                              <span class="strong"> Tel No: </span> <?php echo $exscontributors[$i]['telnumber']?>
                                           </div>                                                        
                                           <div>
-                                              <span class="strong"> Mode of Payment: </span> Bank
+                                              <span class="strong"> Mode of Payment: </span> <?php echo $exscontributors[$i]['payment_mode']?>
                                           </div> 
                                           <div>
-                                              <span class="strong"> Address: </span> 38540-00100
+                                              <span class="strong"> Address: </span> <?php echo $exscontributors[$i]['postaladdress']?>
                                           </div> 
                                           <div>
-                                              <span class="strong"> Country: </span> Kenya
+                                              <span class="strong"> Country: </span> <?php echo $exscontributors[$i]['country']?>
                                           </div> 
                                           <div>
-                                              <span class="strong"> Town: </span> Nairobi
+                                              <span class="strong"> Town: </span> <?php echo $exscontributors[$i]['city']?>
                                           </div> 
                                      </div>
                                    
 
                                      <div class="large-4 column report_col pull-left">
                                               <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
+                                                  <span class="strong"> Date Joined: </span> <?php 
+                                                      echo date("F j, Y", strtotime($exscontributors[$i]['date_joined'])); 
+                                                  ?>
                                               </div>
                                               <div>
                                                   <span class="strong"> Uploads: </span> 0
@@ -900,372 +882,33 @@
                                               </div>
                                               <div>
                                                   <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  <span class="approve_img"><img src="assets/icons/approve.png"></span>
-                                                  <span class="approve_img"><img src="assets/icons/decline.png"></span>
+                                                  <a href="<?php echo $exscontributors[$i]['id_file']?>" target="_blank" > Passport ID.jpg </a>
+                                                  <?php
+                                                   if($exscontributors[$i]['id_status'] == 'Approved'){ 
+                                                     echo $exscontributors[$i]['id_status']; 
+                                                     } else {
+                                                        echo "<a href='".base_url('/index.php/admin/approve_id/'.$exscontributors[$i]['user_id'])."'>
+                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/approve.png')."'></span>
+                                                  </a>
+                                                  <a href='".base_url('/index.php/admin/decline_id/'.$exscontributors[$i]['user_id'])."'>
+                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/decline.png')."'></span>
+                                                  </a>"; 
+                                                    if($exscontributors[$i]['id_status'] !== 'Uploaded'){
+                                                      echo $exscontributors[$i]['id_status'];   
+                                                    }                                                 
+                                                    
+                                                     } ?>
                                               </div>
 
                                      </div>
                                   </div>
                              </div>
-                             <div class="report_item">
-                                  <div class="row">
-                                     <div class="large-2 column report_col">
-                                        <input type="checkbox" name="" class="select_file">
-                                        Jane Makali
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         jmakali@gmail.com
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         +254 723 112233
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         30th Dec 2015
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (100) </a>
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (5) </a>
-                                     </div>
-                                  </div>
-                                  <div class="row more_details">
-                                     <div class="large-2 column report_col">
-                                            <img src="assets/img/user_avatar.png">
-                                     </div>
-                                     <div class="large-4 column report_col">
-                                          <div>
-                                              <span class="strong"> Name: </span>  George Ngechu
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Email: </span> jmakali@gmail.com
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Tel No: </span> +254 723 112233
-                                          </div>                                                        
-                                          <div>
-                                              <span class="strong"> Mode of Payment: </span> Bank
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Address: </span> 38540-00100
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Country: </span> Kenya
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Town: </span> Nairobi
-                                          </div> 
-                                     </div>
-                                   
-
-                                     <div class="large-4 column report_col pull-left">
-                                              <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Uploads: </span> 0
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> New Uploads: </span> 5
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  <span class="approve_img"><img src="assets/icons/approve.png"></span>
-                                                  <span class="approve_img"><img src="assets/icons/decline.png"></span>
-                                              </div>
-
-                                     </div>
-                                  </div>
-                             </div>
-                             <div class="report_item">
-                                  <div class="row">
-                                     <div class="large-2 column report_col">
-                                        <input type="checkbox" name="" class="select_file">
-                                        Jane Makali
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         jmakali@gmail.com
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         +254 723 112233
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         30th Dec 2015
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (100) </a>
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (5) </a>
-                                     </div>
-                                  </div>
-                                   <div class="row more_details">
-                                     <div class="large-2 column report_col">
-                                            <img src="assets/img/user_avatar.png">
-                                     </div>
-                                     <div class="large-4 column report_col">
-                                          <div>
-                                              <span class="strong"> Name: </span>  George Ngechu
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Email: </span> jmakali@gmail.com
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Tel No: </span> +254 723 112233
-                                          </div>                                                        
-                                          <div>
-                                              <span class="strong"> Mode of Payment: </span> Bank
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Address: </span> 38540-00100
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Country: </span> Kenya
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Town: </span> Nairobi
-                                          </div> 
-                                     </div>
-                                   
-
-                                     <div class="large-4 column report_col pull-left">
-                                              <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Uploads: </span> 0
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> New Uploads: </span> 5
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  <span class="approve_img"><img src="assets/icons/approve.png"></span>
-                                                  <span class="approve_img"><img src="assets/icons/decline.png"></span>
-                                              </div>
-
-                                     </div>
-                                  </div>
-                             </div>
-                             <div class="report_item">
-                                  <div class="row">
-                                     <div class="large-2 column report_col">
-                                        <input type="checkbox" name="" class="select_file">
-                                        Jane Makali
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         jmakali@gmail.com
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         +254 723 112233
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         30th Dec 2015
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (100) </a>
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (5) </a>
-                                     </div>
-                                  </div>
-                                 <div class="row more_details">
-                                     <div class="large-2 column report_col">
-                                            <img src="assets/img/user_avatar.png">
-                                     </div>
-                                     <div class="large-4 column report_col">
-                                          <div>
-                                              <span class="strong"> Name: </span>  George Ngechu
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Email: </span> jmakali@gmail.com
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Tel No: </span> +254 723 112233
-                                          </div>                                                        
-                                          <div>
-                                              <span class="strong"> Mode of Payment: </span> Bank
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Address: </span> 38540-00100
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Country: </span> Kenya
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Town: </span> Nairobi
-                                          </div> 
-                                     </div>
-                                   
-
-                                     <div class="large-4 column report_col pull-left">
-                                              <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Uploads: </span> 0
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> New Uploads: </span> 5
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  <span class="approve_img"><img src="assets/icons/approve.png"></span>
-                                                  <span class="approve_img"><img src="assets/icons/decline.png"></span>
-                                              </div>
-
-                                     </div>
-                                  </div>
-                             </div>
-                             <div class="report_item">
-                                  <div class="row">
-                                     <div class="large-2 column report_col">
-                                        <input type="checkbox" name="" class="select_file">
-                                        Jane Makali
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         jmakali@gmail.com
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         +254 723 112233
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         30th Dec 2015
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (100) </a>
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (5) </a>
-                                     </div>
-                                  </div>
-                                   <div class="row more_details">
-                                     <div class="large-4 column report_col">
-                                         <div class="large-4 columns">
-                                            <img src="assets/img/user_avatar.png">
-                                         </div>
-                                         <div class="large-8 columns">
-                                              <div>
-                                                  <span class="strong"> Name: </span>  George Ngechu
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Email: </span> jmakali@gmail.com
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Tel No: </span> +254 723 112233
-                                              </div>                                                        
-                                              <div>
-                                                  <span class="strong"> Mode of Payment: </span> Bank
-                                              </div> 
-                                              <div>
-                                                  <span class="strong"> Address: </span> 38540-00100
-                                              </div> 
-                                              <div>
-                                                  <span class="strong"> Country: </span> Kenya
-                                              </div> 
-                                              <div>
-                                                  <span class="strong"> Town: </span> Nairobi
-                                              </div> 
-                                         </div>
-                                     </div>
-                                     
-                                     <div class="large-4 column report_col pull-left">
-                                              <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Uploads: </span> 0
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> New Uploads: </span> 5
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Identification: </span> 
-                                                    <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  
-                                              </div>
-
-                                     </div>
-                                  </div>
-                             </div>
-                             <div class="report_item">
-                                  <div class="row">
-                                     <div class="large-2 column report_col">
-                                        <input type="checkbox" name="" class="select_file">
-                                        Jane Makali
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         jmakali@gmail.com
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         +254 723 112233
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                         30th Dec 2015
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (100) </a>
-                                     </div>
-                                     <div class="large-2 column report_col">
-                                          <a href=""> (5) </a>
-                                     </div>
-                                  </div>
-                                  <div class="row more_details">
-                                     <div class="large-2 column report_col">
-                                            <img src="assets/img/user_avatar.png">
-                                     </div>
-                                     <div class="large-4 column report_col">
-                                          <div>
-                                              <span class="strong"> Name: </span>  George Ngechu
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Email: </span> jmakali@gmail.com
-                                          </div>
-                                          <div>
-                                              <span class="strong"> Tel No: </span> +254 723 112233
-                                          </div>                                                        
-                                          <div>
-                                              <span class="strong"> Mode of Payment: </span> Bank
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Address: </span> 38540-00100
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Country: </span> Kenya
-                                          </div> 
-                                          <div>
-                                              <span class="strong"> Town: </span> Nairobi
-                                          </div> 
-                                     </div>
-                                   
-
-                                     <div class="large-4 column report_col pull-left">
-                                              <div>
-                                                  <span class="strong"> Date Joined: </span> 30th Dec 2015 
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Uploads: </span> 0
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> New Uploads: </span> 5
-                                              </div>
-                                              <div>
-                                                  <span class="strong"> Identification: </span> 
-                                                  <a href=""> Passport ID.jpg </a>
-                                                  <span class="approve_img"><img src="assets/icons/approve.png"></span>
-                                                  <span class="approve_img"><img src="assets/icons/decline.png"></span>
-                                              </div>
-
-                                     </div>
-                                  </div>
-                             </div>
+                             <?php 
+                                }
+                              ?>
                         </div>                       
                     </div>
+             
                     <div class="tabs-panel" id="tluploads">
                         <div class="row">
                            <div class="large-5 columns medium-5 columns pull-left">

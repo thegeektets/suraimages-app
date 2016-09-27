@@ -7,6 +7,7 @@ class admin extends CI_Controller {
        parent::__construct();
        $this->load->model('user_model');
        $this->load->model('admin_model');
+       $this->load->model('contributor_model');
    	}
 	public function index()
 	{
@@ -19,11 +20,14 @@ class admin extends CI_Controller {
 		if (isset($data['user_session']['logged_in'])) {
 			if($data['user_session']['logged_in'] === TRUE ){
 				$data['user_details'] = $this->fetch_user_details();
+				$id = $data['user_details'][0]['user_id'];
+				$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
+				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
 				$data['rf_pricing'] = $this->fetch_rf_pricing();
 	     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
 	     	   	$data['members'] = $this->fetch_member_users();
-	     	   	$data['newcontributors'] = $this->fetch_contributor_users();
-	     	   	$data['exscontributors'] = $this->fetch_contributor_users();
+	     	   	$data['newcontributors'] = $this->fetch_newcontributor_users();
+	     	   	$data['exscontributors'] = $this->fetch_excontributor_users();
 	     	   	$this->load->view('admin/header' , $data);
 				$this->load->view('admin/index' , $data);
 				$this->load->view('admin/footer');
@@ -47,7 +51,7 @@ class admin extends CI_Controller {
 	public function fetch_user_details() {
    		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;
-		return $this->user_model->get_user_details($data['user_session']['user_meta']['0']['id']);
+		return $this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
 	}
 	public function update_account() {
 	    $this->load->library('session');
@@ -208,8 +212,11 @@ class admin extends CI_Controller {
 	public function fetch_member_users(){
 		return $this->admin_model->get_member_users();
 	}
-	public function fetch_contributor_users(){
-		return $this->admin_model->get_contributor_users();
+	public function fetch_newcontributor_users(){
+		return $this->admin_model->get_newcontributor_users();
+	}
+	public function fetch_excontributor_users(){
+		return $this->admin_model->get_excontributor_users();
 	}
 	public function approve_id($id){
 		$this->admin_model->update_user_idstatus($id,'Approved');
@@ -218,5 +225,54 @@ class admin extends CI_Controller {
 	public function decline_id($id){
 		$this->admin_model->update_user_idstatus($id,'Declined');
 		$this->index();
+	}
+	public function start_file_approval($user_id){
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();;
+		$id = $data['user_session']['user_meta']['0']['id'];
+		$data['user_session']['approval_file'] = $user_id;
+		$data['user_session']['edit_status'] = TRUE;
+		$this->session->set_userdata($data['user_session']);
+		$this->index();
+	}
+	public function edit_uploaded_files(){
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();;
+		$id = $data['user_session']['user_meta']['0']['id'];
+    	$i = 0;
+    	$size = sizeof($_POST['file_id']);
+    	$success = 0;
+    	$contributor_status = 0;
+    	$file_user = $_POST['file_user']['0'];
+    	while($i < $size) {
+    		$file_id = $_POST['file_id'][$i];
+    		$file_name = $_POST['file_name'][$i];
+    		$file_keywords = $_POST['file_keywords'][$i];
+    		$file_price_large = $_POST['file_price_large'][$i];
+    		// $file_category = $_POST['file_category'][$i];
+    		$file_license = $_POST['file_license'][$i];
+    		$file_type = $_POST['file_type'][$i];
+    		$file_subtype = $_POST['file_subtype'][$i];
+    		$file_orientation = $_POST['file_orientation'][$i];
+    		$file_people = $_POST['file_people'][$i];
+    		$file_status = $_POST['file_status'][$i];
+    		if($file_status == 1) {
+    			$contributor_status = 1;
+    		}
+    		$this->admin_model->update_uploaded_files( $file_id,
+				$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,
+				$file_orientation,$file_people);	
+    		$i++;
+    		$success = 1;
+    	}
+    	
+    	$this->admin_model->update_contributor_status($file_user,$contributor_status);
+    	if($success === 1){
+    		$data['user_session']['edit_status'] = FALSE;
+    		$this->session->set_userdata($data['user_session']);
+    		echo $success;
+    	}
+    	
+		
 	}
 }	

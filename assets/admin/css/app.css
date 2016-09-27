@@ -937,6 +937,21 @@ button.slick-next.slick-arrow {
 .upload_id {
    margin-bottom: 30px;
 }
+.btn_upload {
+    background-color: #f8991c;
+    color: #fff;
+    display: block;
+    float: right;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.btn_upload:hover , .btn_upload:active , .btn_upload:focus {
+  border:1px solid #f8991c;
+  color: #f8991c;
+  background: #fff;
+}
 .btn_upload_id {
     background-color: #f8991c;
     color: #fff;
@@ -1571,10 +1586,12 @@ button.slick-next.slick-arrow {
     position: absolute;
     right: 0px;
     top: 15px;
+    display: inline-block;
   }
   .approve_img > img {
       padding: 5px;
       width: 25px;
+      display: block;
   }
   .resource_item {
     margin-top:35px;

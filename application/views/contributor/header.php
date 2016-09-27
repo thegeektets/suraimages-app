@@ -19,11 +19,12 @@
     <link href="<?php echo base_url('/assets/contributor/filer/css/jquery.filer.css')?>" type="text/css" rel="stylesheet" />
     <link href="<?php echo base_url('/assets/contributor/filer/css/themes/jquery.filer-dragdropbox-theme.css')?>" type="text/css" rel="stylesheet" />
     <link href="<?php echo base_url('/assets/flags/flags.css')?>" type="text/css" rel="stylesheet" />
+    <link href="<?php echo base_url('/assets/contributor/css/popup.css')?>" type="text/css" rel="stylesheet" />
     
   </head>
     <?php
-    /*error_reporting(0);
-    ini_set('display_errors', 0);*/
+    error_reporting(0);
+    ini_set('display_errors', 0);
    ?>
 
    <body class="inside_page_body">

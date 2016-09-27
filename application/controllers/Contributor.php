@@ -96,9 +96,7 @@ class contributor extends CI_Controller {
 		      $data['message'] = 'Upload successfull';
 		      $id = $data['user_session']['user_meta']['0']['id'];
 		      $this->user_model->update_user_idfile($id);
-		      $this->load->view('contributor/header', $data);
-		      $this->load->view('contributor/index', $data);
-		      $this->load->view('contributor/footer', $data);
+		      $this->index();
 		   	} else {
 		   	   $data['success'] = FALSE;
 		       $data['message'] = $this->upload->display_errors();
@@ -145,9 +143,7 @@ class contributor extends CI_Controller {
             $data['message'] = 'Upload successfull';
             $id = $data['user_session']['user_meta']['0']['id'];
             $this->user_model->update_user_avatar($id);
-            $this->load->view('contributor/header', $data);
-            $this->load->view('contributor/index', $data);
-            $this->load->view('contributor/footer', $data);
+            $this->index();
         }
 
 		 
@@ -191,8 +187,46 @@ class contributor extends CI_Controller {
 		}
 		if($success === 1){
 			$this->user_model->update_edit_status($id,TRUE);
+			$this->user_model->update_upload_status($id,FALSE);
 		}
 		echo $success;
+	}
+	public function edit_contributor_images() {
+		$this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));	
+		$this->load->library('form_validation');
+	    $data['user_session']=$this->session->all_userdata();
+	    $id = $data['user_session']['user_meta']['0']['id'];
+	    
+	    	$i = 0;
+	    	$size = sizeof($_POST['file_id']);
+	    	$success = 0;
+	    	
+	    	while($i < $size) {
+	    		$file_id = $_POST['file_id'][$i];
+	    		$file_name = $_POST['file_name'][$i];
+	    		$file_keywords = $_POST['file_keywords'][$i];
+	    		$file_price_large = $_POST['file_price_large'][$i];
+	    		$file_price_medium =$_POST['file_price_medium'][$i];
+	    		$file_price_small =$_POST['file_price_small'][$i];
+	    		// $file_category = $_POST['file_category'][$i];
+	    		$file_type = $_POST['file_type'][$i];
+	    		$file_subtype = $_POST['file_subtype'][$i];
+	    		$file_orientation = $_POST['file_orientation'][$i];
+	    		$file_people = $_POST['file_people'][$i];
+	    		$file_shoot = $_POST['file_shoot'][$i];
+				$this->contributor_model->edit_contributor_images( $file_id,
+					$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+					$file_orientation,$file_people,$file_shoot );	
+	    		$i++;
+	    		$success = 1;
+	    	}
+	    	if($success === 1){
+	    		$this->user_model->update_edit_status($id,FALSE);
+	    		$this->user_model->update_upload_status($id,TRUE);
+	    	}
+	    	echo $success;
 	}
 	public function add_model(){
 	    $this->load->helper('url'); 
@@ -230,7 +264,7 @@ class contributor extends CI_Controller {
 			}
 	    }	
 	}
-	public function replace_model($email){
+	public function replace_model(){
 	    $this->load->helper('url'); 
 		$this->load->library('session');
 		$this->load->helper(array('form', 'url'));	
@@ -241,7 +275,7 @@ class contributor extends CI_Controller {
 	    	echo 2;
 	    } else {
 	    	$id = $data['user_session']['user_meta']['0']['id'];
-		    $this->contributor_model->replace_contributor_model($id,$email);
+		    $this->contributor_model->replace_contributor_model($id);
 			echo 1;	
 	    }			
 	}

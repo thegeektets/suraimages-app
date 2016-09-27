@@ -115,9 +115,7 @@ class member extends CI_Controller {
             $data['message'] = 'Upload successfull';
             $id = $data['user_session']['user_meta']['0']['id'];
             $this->user_model->update_user_avatar($id);
-            $this->load->view('member/header', $data);
-            $this->load->view('member/index', $data);
-            $this->load->view('member/footer', $data);
+            $this->index();
         }
 	}
 	public function change_password() {

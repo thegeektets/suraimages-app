@@ -110,6 +110,15 @@ class User_model extends CI_Model {
              $this->db->escape(md5($password)) ." WHERE id = ".$this->db->escape($id);
              $this->db->query($sql);        
         }
+        public function update_approve_status($email){
+            $sql = "UPDATE users SET approve_status = TRUE WHERE email = ".$this->db->escape($email);
+             $this->db->query($sql);           
+        }
+        public function update_approve_code($code,$email){
+            $sql = "UPDATE users SET approve_code = ".
+             $this->db->escape($code) ." WHERE email = ".$this->db->escape($email);
+             $this->db->query($sql);           
+        }
         public function update_user_login($email, $account) {
            $sql = "UPDATE users SET login = TRUE , account =  ".
             $this->db->escape($account)." WHERE email = ".$this->db->escape($email);
@@ -139,6 +148,19 @@ class User_model extends CI_Model {
                 foreach ($query->result() as $row)
                     {
                     return $row->password;
+                    }
+        }
+        public function get_code_user($code) {
+                $query = $this->db->query("select * from users where approve_code = '".$code."'");
+                return $query->result_array();
+        }
+
+        public function get_user_approval() {
+                $email = $this->input->post("txt_email");
+                $query = $this->db->query("select * from users where email = '".$email ."'");
+                foreach ($query->result() as $row)
+                    {
+                    return $row->approve_status;
                     }
         }
         public function get_user_smeta($email) {

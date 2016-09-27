@@ -44,7 +44,7 @@ class registration extends CI_Controller {
     					
     					if(strlen($result) == 13 ){
     						$data['message'] = 	'Registration Successfull <br/>
-    											 A welcome email has been send to your account';
+    											 An email has been sent to your email address please confirm your email before you can proceed';
     					} else {
     					  $data['message'] = 	'Registration Successfull <br/>
     											 Failed to send email <br/>';
@@ -100,15 +100,26 @@ class registration extends CI_Controller {
 	    } else {
 	       $user_pass = $this->user_model->get_user_pass();
 	       $user_meta = $this->user_model-> get_user_meta();
+	       $user_approval = $this->user_model-> get_user_approval();
 
 		       if(md5($this->input->post("txt_password")) === $user_pass) {
-		        $newdata = array(
-		                'user_meta'  => $user_meta,
-		                'logged_in' => TRUE,
-		                );
-		        $this->session->set_userdata($newdata);
-		        $user_session = $this->session->all_userdata();
-		        $this->dashboard();
+			       	if($user_approval == TRUE ){
+			       		$newdata = array(
+			       		        'user_meta'  => $user_meta,
+			       		        'logged_in' => TRUE,
+			       		        );
+			       		$this->session->set_userdata($newdata);
+			       		$user_session = $this->session->all_userdata();
+			       		$this->dashboard();	
+			       	} else {
+			       	   $result = $this->send_welcome_email(set_value('txt_email'),set_value('txt_email'));
+			       	   $data['success'] = FALSE;
+				 	   $data['message'] =  'An email has been sent to your email address please confirm your email before you can proceed';
+				 	   $this->load->view('registration/header', $data);
+				       $this->load->view('registration/login',$data);
+				       $this->load->view('registration/footer');   
+			       	}
+		        
 		        } else {
 			 	   $data['success'] = FALSE;
 			 	   $data['message'] =  'Login failed , email or password is incorrect';
@@ -147,10 +158,26 @@ class registration extends CI_Controller {
 	       $this->load->view('registration/footer');   
 	  }
    	}
+   	public function approve_email($code){
+   		$this->load->helper(array('form', 'url'));
+   		$this->load->library('session');
+   		$code_user = $this->user_model-> get_code_user($code);
+   		if(count($code_user)>0){
+   			$this->user_model->update_approve_status($code_user[0]['email']);
+   			$data['success'] = TRUE;
+			$data['message'] =  'Email address approved login to access your account';
+   		} else {
+   			$data['success'] = FALSE;
+			$data['message'] =  'Failed to approve email please check your email and try again';
+		}
+
+   		$this->load->view('registration/header', $data);
+   		$this->load->view('registration/login' , $data);
+   		$this->load->view('registration/footer');
+   	}
    	public function choose_account() {
    		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;
-   		
    		$this->load->view('registration/header', $data);
 		$this->load->view('registration/choose',$data);
 		$this->load->view('registration/footer');   	
@@ -193,8 +220,8 @@ class registration extends CI_Controller {
 	   
 	   	if ($user_session['user_meta']['0']['login'] == FALSE) {
 			$this->user_model->update_user_login($user_session['user_meta']['0']['email'], 'member');
+			$result = $this->send_member_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
 		}
-		$result = $this->send_member_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
 		
 		if(strlen($result) == 13 ){
 			$data['message'] = 	'Registration Successfull <br/>
@@ -213,8 +240,9 @@ class registration extends CI_Controller {
 		
 		if ($user_session['user_meta']['0']['login'] == FALSE) {
 			$this->user_model->update_user_login($user_session['user_meta']['0']['email'], 'contributor');
+			$result = $this->send_contributor_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
+			
 		}
-		$result = $this->send_contributor_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
 		
 		if(strlen($result) == 13 ){
 			$data['message'] = 	'Registration Successfull <br/>
@@ -239,27 +267,37 @@ class registration extends CI_Controller {
 	public function logout() 
 	{
 		$this->load->library('session');
-		$newdata = array(
-		                'logged_in' => FALSE,
-		                );
-        $this->session->set_userdata($newdata);
+		$this->session->sess_destroy();
         $this->login();
 	}
 
 	public function initializemail() {
 	    $this->load->library('email');
-	     $config['protocol'] = "smtp"; 
-	     $config['smtp_host'] = "ssl://smtp.googlemail.com"; 
-	     $config['smtp_port'] = "465"; 
-	     $config['smtp_user'] = " suraimagesbackend@gmail.com"; 
-	     $config['smtp_pass'] = "Sura@Images"; 
-	     $config['mailtype'] = "html"; 
-	     $config['charset'] = "iso-8859-1"; 
-  	     $config['newline'] = "\r\n";
+		 $config['useragent'] = 'CodeIgniter';
+		 $config['mailpath']  = "/usr/bin/sendmail";
+		 $config['protocol'] = ""; 
+		 $config['smtp_host'] = ""; 
+		 $config['smtp_port'] = ""; 
+		 $config['smtp_user'] = "suraimagesbackend@gmail.com"; 
+		 $config['smtp_pass'] = "Sura@Images"; 
+		 $config['smtp_timeout'] = 5;
+		 $config['wordwrap'] = TRUE;
+		 $config['wrapchars'] = 76;
+		 $config['mailtype'] = 'html';
+		 $config['charset'] = 'utf-8';
+		 $config['validate'] = FALSE;
+		 $config['priority'] = 3;
+		 $config['crlf'] = "\r\n";
+		 $config['newline'] = "\r\n";
+		 $config['bcc_batch_mode'] = FALSE;
+		 $config['bcc_batch_size'] = 200;
 	     $this->email->initialize($config);
 	 } 
 
 	public function send_welcome_email($email , $username) {
+		 $code = $this->generate_random_password();
+		 $this->user_model->update_approve_code($code,$email);
+
 	     $this->load->helper(array('form', 'url'));
 	     $name = $username;
 	     $html = "<head>
@@ -379,7 +417,7 @@ class registration extends CI_Controller {
 				  <spacer size='16'></spacer>
 				  <spacer size='16'></spacer>
 				  <br/><br/>
-				  Click the <a href='".base_url('index.php/registration/choose_account')."'> Link </a> to Continue.
+				  Click the <a href='".base_url('index.php/registration/approve_email/'.$code)."'> Link </a> to Continue.
 				  </p>
 				</columns>
 				</row>

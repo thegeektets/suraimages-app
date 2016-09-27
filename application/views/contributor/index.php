@@ -52,7 +52,7 @@
         <div class="contributor_tab">
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
               <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
-              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (0)</a></li>
+              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images); ?>)</a></li>
               <li class="tabs-title" id="sales_link"><a href="#sales">Sales History (0)</a></li>
             </ul>
         </div>
@@ -514,13 +514,12 @@
           </div>
           <div class="tabs-panel contributor_panel" id="uploads">
                   <ul class="tabs inner_contributor_tabs" data-tabs id="upload-tabs">
-                        <li class="tabs-title is-active"><a href="#images" aria-selected="true"> My Images (0) </a></li>
+                        <li class="tabs-title is-active"><a href="#images" aria-selected="true"> My Images (<?php echo count($contributor_images); ?>) </a></li>
                         <li class="tabs-title"><a href="#videos">My Videos (0) </a></li>
                         <li class="tabs-title"><a href="#releases"> Releases (0) </a></li>
                   </ul>
-
-          <?php if($user_details[0]['upload_status'] == FALSE ) { ?>
-                  <div class="tabs-content" data-tabs-content="upload-tabs">
+                    <div class="tabs-content" data-tabs-content="upload-tabs">
+                    <?php if($user_details[0]['upload_status'] == FALSE ) { ?>
                        <?php if($user_details[0]['edit_status'] == FALSE ) { ?>
                        <div class="tabs-panel is-active" id="images">
                           <div class="alert_message">
@@ -550,10 +549,11 @@
                             <div style="clear: both"></div>        
                        </div>
                         <?php } else {
-
-                        require_once('edit_image_files.php');
+                         require_once('edit_image_files.php');
                         }?>
-                        
+                        <?php } else {
+                          require_once('image_file_status.php');
+                        } ?>
                         <div class="tabs-panel" id="videos">
                               <div class="alert_message">
                               <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
@@ -597,7 +597,7 @@
                         </div>
                   </div>
                  
-                <?php }  ?>
+                
           </div>
           <div class="tabs-panel contributor_panel" id="sales">
                 <div class="tab_header">

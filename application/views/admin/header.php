@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?php echo base_url('/assets/admin/css/responsive.css')?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/admin/filer/css/jquery.filer.css')?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/admin/filer/css/themes/jquery.filer-dragdropbox-theme.css')?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/admin/multiselect/multiple-select.css')?>" />
 
   </head>
    <?php
