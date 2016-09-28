@@ -580,11 +580,10 @@ class registration extends CI_Controller {
 				      Sura Images.
 				      <br/>
 				      <br/>
-				      You can now start enjoying our vast collections of authentic African
-				      content be it images, footage or illustrations at affordable prices.
+				      Turn your work into a cash cow by easily uploading to Sura images, set your own price, sit back and money will start flowing in.
 				      <br/>
 				      <br/>
-				      Jump  <a href='".base_url()."/index.php/contributor/'> over</a> and enjoy the ride!
+				      Now you can hit the <a href='".base_url()."/index.php/contributor/'> jackpot! </a>
 				  </p>
 				</columns>
 				</row>
