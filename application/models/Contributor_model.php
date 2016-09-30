@@ -22,13 +22,36 @@ class Contributor_model extends CI_Model {
             $image = $query->result_array();
             return array_reverse($image);
         }
-        public function add_contributor_model($id){
+        public function add_contributor_model(){
             $model = $this->input->post("all_model_notification");
-            $user_id = $id;
             $query = $this->db->query("     
-            REPLACE INTO contributor_models (model_email,user_id)
-            VALUES(".$this->db->escape($model).",".$this->db->escape($user_id).")");
+            REPLACE INTO contributor_models (model_email)
+            VALUES(".$this->db->escape($model).")");
         }
+        public function get_model_id($model){
+            $query = $this->db->query("SELECT model_id FROM contributor_models WHERE model_email = ".$this->db->escape($model)."");   
+            foreach ($query->result() as $row)
+                {
+                return $row->model_id;
+            }
+        }
+                
+        public function add_file_model($file_id,$user_id,$model){
+            $model_id = $this->get_model_id($model);
+            if($model_id !== NULL){
+                $query = 
+                $this->db->query(" INSERT INTO contributor_image_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            } else {
+                $query = $this->db->query("     
+                REPLACE INTO contributor_models (model_email)
+                VALUES(".$this->db->escape($model).")");
+                $model_id = $this->get_model_id($model);
+                $this->db->query(" INSERT INTO contributor_image_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            }
+        }
+        // replace per user images
         public function find_contributor_model($id){
             $model = $this->input->post("model_email");
             $user_id = $id;

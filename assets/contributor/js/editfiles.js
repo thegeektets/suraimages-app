@@ -19,7 +19,19 @@
     applyaction();
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
-        $(this).find("textarea[name='file_keywords[]']" ).text($( "textarea[name='all_keyword']" ).val());
+        var trimkeyword = $.trim($(this).find("textarea[name='file_keywords[]']").val());
+        var newkeyword = $.trim($("textarea[name='all_keyword']" ).val());
+        
+        $(this).find("textarea[name='file_keywords[]']").text(trimkeyword);
+        
+        if( trimkeyword == newkeyword+"," ){
+            // do nothing
+            console.log('doing nothing because'+newkeyword+trimkeyword);
+            // include if for substring 
+        } else {
+            $(this).find("textarea[name='file_keywords[]']" ).append(newkeyword+",");  
+        }
+        
       }
     });
     return false; 
@@ -91,6 +103,27 @@
        });
     return false;  
   }
+  $(".add_model").click(function(){
+      var newmodel = $(this).parents('#model_notification').find("input[name='file_model_notification']").val();
+      var oldmodel = $(this).parents('#model_notification').find("input[name='file_models[]']").val();
+      console.log(oldmodel);
+      if ($.trim(newmodel) === $.trim(oldmodel) || $.trim(newmodel) === ''){
+          // do nothing
+      } else {
+          // add new model
+          if($.trim(oldmodel) !== ''){
+              var model = oldmodel+","+newmodel;
+          } else {
+              var model = newmodel;
+          }
+         
+          $(this).parents('#model_notification').find("input[name='file_models[]']").val(model);
+          $(this).parents('#model_notification').find(".model").append(newmodel+'<br/>');
+      }
+
+      return false;
+  });
+
   function delete_items(){
     applyaction();
     $('.popup').show();

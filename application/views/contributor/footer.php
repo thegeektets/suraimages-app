@@ -44,6 +44,12 @@
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
               sessionStorage.setItem('onReload', 'activateUpload');
               location.reload();
+              
+        } else if (data === '0') {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').append("Failed to submit, make sure all required fields are filled"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
         } else {
           $('.message').attr("class" ,"message alert-box warning");
           $('.message').append(""+data); 
@@ -61,6 +67,31 @@
   return false;
   }
   function add_model(){
+    applyaction();
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+  
+          var newmodel = $("input[name='all_model_notification']").val();
+          var oldmodel = $(this).find("input[name='file_models[]']").val();
+          console.log(oldmodel);
+          if ($.trim(newmodel) === $.trim(oldmodel) || $.trim(newmodel) === ''){
+              // do nothing
+          } else {
+              // add new model
+              if($.trim(oldmodel) !== ''){
+                  var model = oldmodel+","+newmodel;
+              } else {
+                  var model = newmodel;
+              }
+             
+              $(this).find("input[name='file_models[]']").val(model);
+              $(this).find(".model").append(newmodel+'<br/>');
+
+          }
+      }
+  
+    });
+
     $.ajax({
     type: 'post',
     url:'<?php echo base_url("/index.php/contributor/add_model")?>',

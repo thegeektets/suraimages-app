@@ -216,11 +216,27 @@ class contributor extends CI_Controller {
 	    		$file_orientation = $_POST['file_orientation'][$i];
 	    		$file_people = $_POST['file_people'][$i];
 	    		$file_shoot = $_POST['file_shoot'][$i];
-				$this->contributor_model->edit_contributor_images( $file_id,
-					$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-					$file_orientation,$file_people,$file_shoot );	
-	    		$i++;
-	    		$success = 1;
+	    		$file_model = $_POST['file_models'][$i];
+	    		$model_array = explode(",", $file_model);
+	    		
+	    		if(trim($file_name) === "" || trim($file_keywords) === "" || trim($file_type) === "" || trim($file_subtype) === ""
+	    		   || trim($file_orientation) === ""){
+
+	    			// validation error
+	    			echo $success;
+	    			return false;
+	    			
+	    		} else {
+		    		for ($t=0; $t < count($model_array) ; $t++) { 
+		    			$this->add_file_model($file_id,$id,$model_array[$t],$file_price_large);
+		    		}
+					    $this->contributor_model->edit_contributor_images( $file_id,
+						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+						$file_orientation,$file_people,$file_shoot );	
+		    		$i++;
+		    		$success = 1;	
+	    		}
+	    		
 	    	}
 	    	if($success === 1){
 	    		$this->user_model->update_edit_status($id,FALSE);
@@ -240,9 +256,16 @@ class contributor extends CI_Controller {
 	    	echo 0;
 	    } else {
 	    	$id = $data['user_session']['user_meta']['0']['id'];
-			$this->contributor_model->add_contributor_model($id);
+			$this->contributor_model->add_contributor_model();
 			echo 1;
 	    }	
+	}
+	public function add_file_model($file_id,$user_id,$model_email,$price){
+		$this->load->library('session');
+		$this->contributor_model->add_file_model($file_id,$user_id,$model_email);
+		// send email to model with details of the file and photographer and price if set
+		
+
 	}
 	public function find_model(){
 	    $this->load->helper('url'); 

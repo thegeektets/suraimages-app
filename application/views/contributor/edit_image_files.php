@@ -309,9 +309,13 @@
                 </div>
               </form>
             </div>
+             <div class="pull-right">
+                <button onclick="return editimagecontributor();" class="button btn_upload">Submit For Approval </button>  
+            </div>
         </div>
         <div style="clear: both"></div>
     </div>
+    
     <div class="report_header">
        <div class="row">
           <div class="large-12 columns">
@@ -334,7 +338,7 @@
                         <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_images[$i]['upload_id']; ?>">
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_images[$i]['file_name']; ?>">
                         <label> Key Words : <span class="required_asteric">*</span></label>
-                        <textarea  required="required"   name="file_keywords[]" class="file_keywords" type="text" placeholder="0000">
+                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000">
                                 <?php echo $contributor_images[$i]['file_keywords']?>
                         </textarea>
                 </div>
@@ -486,7 +490,7 @@
                       </div>
 
                      
-                      <div class="large-12 columns">
+                      <div class="large-12 columns" id="model_notification">
                            <div class="row collapse">
                                Model Notification 
                                <span class="question_wrap">
@@ -503,11 +507,15 @@
                             </span>
                         </span>
                              <div class="small-10 columns">
-
-                               <input type="text" name="file_model_notification" placeholder="Model Email Address">
+                               <input type="email" name="file_model_notification" placeholder="Model Email Address">
                              </div>
                              <div class="small-2 columns">
-                               <a href="#" class="button postfix">Add</a>
+                               <a href="#" id="add_model" class="button postfix add_model">Add</a>
+                             </div>
+                             <div class="small-12 columns">
+                                <input type="hidden" name="file_models[]">
+                                <div class="model">
+                                </div>
                              </div>
                       </div>
                 </div>
