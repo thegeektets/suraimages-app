@@ -1,3 +1,10 @@
+  $('select[type="hidden"]').each(function(){
+    $(this).hide();
+  });
+  $('textarea[type="hidden"]').each(function(){
+    $(this).hide();
+  });
+  
   function applyaction(){
     $('.message').hide();
     $('.message').attr("class" ,"message alert-box secondary");
@@ -5,25 +12,27 @@
     $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
     $('.message').show();
     $("#submit_changes").show();
+    $(".submit_changes").show();
   }
   function applytitleall(){
     applyaction();
+    var all_title = $('.tabs-panel .is-active').find("input[name='all_title']").val();
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
-        $(this).find("input[name='file_name[]']").val($( "input[name='all_title']" ).val());
+        $(this).find("input[name='file_name[]']").val(all_title);
       }
     });
     return false;
   }
   function applykeywordall(){
     applyaction();
+    var all_keyword = $('.tabs-panel .is-active').find("textarea[name='all_keyword']").val();
+    var newkeyword = $.trim(all_keyword);
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
         var trimkeyword = $.trim($(this).find("textarea[name='file_keywords[]']").val());
-        var newkeyword = $.trim($("textarea[name='all_keyword']" ).val());
         
         $(this).find("textarea[name='file_keywords[]']").text(trimkeyword);
-        
         if( trimkeyword == newkeyword+"," ){
             // do nothing
             console.log('doing nothing because'+newkeyword+trimkeyword);
@@ -38,19 +47,21 @@
   }
   function applypriceall(){
     applyaction();
+    var all_price = $('.tabs-panel .is-active').find("input[name='all_price']").val();
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
-        $(this).find("input[name='file_price_large[]']" ).val($( "input[name='all_price']" ).val());
+        $(this).find("input[name='file_price_large[]']" ).val(all_price);
        }
     });
     return false; 
   }
   function applycategoryall(){
     applyaction();
+    var all_category = $('.tabs-panel .is-active').find("select[name='all_category']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-        $(this).find("select[name='file_category[]']" ).val($("select[name='all_category']").val()).change();
-        var value = $("select[name='all_category']").val();
+        $(this).find("select[name='file_category[]']" ).val(all_category).change();
+        var value = all_category;
         $(this).find("select[name='file_category[]'] option[value='"+value+"']").attr('selected', 'selected');
         $(this).find("select[name='file_category[]'] option[value='"+value+"']").prop('selected', 'selected');
       }
@@ -59,18 +70,20 @@
   }
   function applyimagetypeall(){
     applyaction();
+    var all_image_type = $('.tabs-panel .is-active').find("select[name='all_image_type']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-       $(this).find("select[name='file_type[]']" ).val($("select[name='all_image_type']").val()).change();
+       $(this).find("select[name='file_type[]']" ).val(all_image_type).change();
       }
    });
    return false;  
   }
   function applyimagesubtypeall(){
     applyaction();
+    var all_image_subtype = $('.tabs-panel .is-active').find("select[name='all_image_subtype']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-       $(this).find("select[name='file_subtype[]']" ).val($("select[name='all_image_subtype']").val()).change();
+       $(this).find("select[name='file_subtype[]']" ).val(all_image_subtype).change();
       }
    });
 
@@ -78,27 +91,30 @@
   }
   function applyorientationeall(){
     applyaction();
+    var all_orientation = $('.tabs-panel .is-active').find("select[name='all_orientation']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-       $(this).find("select[name='file_orientation[]']" ).val($("select[name='all_orientation']").val()).change();
+       $(this).find("select[name='file_orientation[]']" ).val(all_orientation).change();
       }
    });
    return false;  
   }
   function applypeopleall(){
     applyaction();
+    var all_people = $('.tabs-panel .is-active').find("select[name='all_people']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-       $(this).find("select[name='file_people[]']" ).val($("select[name='all_people']").val()).change();
+       $(this).find("select[name='file_people[]']" ).val(all_people).change();
       }
    });
    return false;  
   }
   function applysameshoot(){
     applyaction();
+    var all_shoot = $('.tabs-panel .is-active').find("input[name='all_shoot']").val();
     $('.edit_item').each(function () { 
          if ( $(this).find("input[name='file_select']").prop('checked') ){
-           $(this).find("input[name='file_shoot[]']" ).val($("input[name='all_shoot']").val()).change();
+           $(this).find("input[name='file_shoot[]']" ).val(all_shoot);
           }
        });
     return false;  
@@ -147,11 +163,12 @@
 
   function add_release(){
     applyaction();
+    var newrelease = $('.tabs-panel .is-active').find("select[name='all_file_release']").val();
+    var newreleasetxt = $('.tabs-panel .is-active').find("select[name='all_file_release'] option[value='"+newrelease+"']").text();
+    
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
     
-           var newrelease = $("select[name='all_file_release']").val();
-           var newreleasetxt = $("select[name='all_file_release'] option[value='"+newrelease+"']").text();
            var oldrelease = $(this).find("input[name='file_releases[]']").val();
            console.log(oldrelease);
            if ($.trim(newrelease) === $.trim(oldrelease) || $.trim(newrelease) === ''){

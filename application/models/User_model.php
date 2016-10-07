@@ -210,6 +210,18 @@ class User_model extends CI_Model {
                      $this->db->escape($status) ." WHERE user_id = ".$this->db->escape($id);
                      $this->db->query($sql);                     
         }
+        public function update_video_upload_status($id , $status){
+                $user_id = $id;
+                $sql = "UPDATE user_details SET video_upload_status = ".
+                     $this->db->escape($status) ." WHERE user_id = ".$this->db->escape($id);
+                     $this->db->query($sql);                     
+        }
+        public function update_video_edit_status($id , $status){
+                $user_id = $id;
+                $sql = "UPDATE user_details SET video_edit_status = ".
+                     $this->db->escape($status) ." WHERE user_id = ".$this->db->escape($id);
+                     $this->db->query($sql);                     
+        }
         public function update_payment_details($id){
                 $payment_mode = $this->input->post("slc_payment");
                 $bank_name = $this->input->post("bank_name");

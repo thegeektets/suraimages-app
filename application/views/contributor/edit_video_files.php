@@ -12,7 +12,7 @@
         <div class="large-12 columns">
           <div class="large-4 columns medium-5 columns pull-left">
               <form class="reports_search">
-               <select class="inside_search_slc" id="edit_slc">
+               <select class="inside_search_slc edit_slc" id="edit_slc">
                    <option value=""> Action </option>
                    <option value="Title"> Add Title </option>
                    <option value="Keywords"> Add Keywords </option>
@@ -314,7 +314,7 @@
               </form>
             </div>
              <div class="pull-right">
-                <button onclick="return editimagecontributor();" class="button btn_upload">Submit For Approval </button>  
+                <button onclick="return editvideocontributor();" class="button btn_upload">Submit For Approval </button>  
             </div>
         </div>
         <div style="clear: both"></div>
@@ -328,22 +328,27 @@
           <div style="clear: both"></div>
        </div>
     </div> 
-    <form  name="edit_image_contributor" id="edit_image_contributor" onsubmit="return editimagecontributor();">
+    <form  name="edit_video_contributor" id="edit_video_contributor" onsubmit="return editvideocontributor();">
       <div class="edit_content">
-        <?php for($i=0; $i< count($contributor_images); $i++) { ?>
+        <?php for($i=0; $i< count($contributor_videos); $i++) { ?>
           <div class="edit_item">
              <div class="row">
                 <div class="large-2 column">
                   <input type="checkbox" name="file_select" class="select_file">
-                  <img src="<?php echo $contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                  <article class="video">
+                      <figure>
+                          <a target="iframe-name" class ="thumbnails" href="<?php echo $contributor_videos[$i]['file_url']; ?>"><img class="videoThumb" src="<?php echo base_url('assets/contributor/img/video_default.png')?>"></a>
+                      </figure>
+                  </article>
+
                 </div>
                 <div class="large-4 column">
                         <label>Title : <span class="required_asteric">*</span></label>
-                        <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_images[$i]['upload_id']; ?>">
-                        <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_images[$i]['file_name']; ?>">
+                        <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_videos[$i]['upload_id']; ?>">
+                        <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_videos[$i]['file_name']; ?>">
                         <label> Key Words : <span class="required_asteric">*</span></label>
                         <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000">
-                                <?php echo $contributor_images[$i]['file_keywords']?>
+                                <?php echo $contributor_videos[$i]['file_keywords']?>
                         </textarea>
                 </div>
                 <div class="large-3 column">
@@ -364,13 +369,13 @@
                       </div>
                       <div class="row collapse">
                           <div class="large-4 columns">
-                                <input type="text" name="file_price_large[]" placeholder="Price" value="<?php echo $contributor_images[$i]['file_price_large']?>" class="file_price_large">
+                                <input type="text" name="file_price_large[]" placeholder="Price" value="<?php echo $contributor_videos[$i]['file_price_large']?>" class="file_price_large">
                           </div>
                           <div class="large-4 columns">
-                                <input type="text" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $contributor_images[$i]['file_price_medium']?>" class="form_group">
+                                <input type="text" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $contributor_videos[$i]['file_price_medium']?>" class="form_group">
                           </div>
                           <div class="large-4 columns">
-                                <input type="text" name="file_price_small[]" value="<?php echo $contributor_images[$i]['file_price_small']?>" readonly="readonly" placeholder="Low" class="form_group">
+                                <input type="text" name="file_price_small[]" value="<?php echo $contributor_videos[$i]['file_price_small']?>" readonly="readonly" placeholder="Low" class="form_group">
                           </div>
                       </div>
                       <div class="row">
@@ -381,38 +386,38 @@
                                   <select multiple="multiple" class="slc_category"
                                   name="file_category[]">
                                     <option>Select Categories</option>
-                                     <option value="Abstract" <?php if($contributor_images[$i]['file_category'] == "Abstract" ) echo 'selected = "selected"'?> >Abstract</option>
+                                     <option value="Abstract" <?php if($contributor_videos[$i]['file_category'] == "Abstract" ) echo 'selected = "selected"'?> >Abstract</option>
                                      <option value="Agriculture/Farming"
-                                      <?php if($contributor_images[$i]['file_category'] == "Agriculture/Farming" ) echo 'selected = "selected"'?> >Agriculture/ Farming </option>
+                                      <?php if($contributor_videos[$i]['file_category'] == "Agriculture/Farming" ) echo 'selected = "selected"'?> >Agriculture/ Farming </option>
                                      <option value="Animals/Livestock"
-                                     <?php if($contributor_images[$i]['file_category'] == "Animals/Livestock" ) echo 'selected = "selected"'?>>Animals/ Livestock </option>
+                                     <?php if($contributor_videos[$i]['file_category'] == "Animals/Livestock" ) echo 'selected = "selected"'?>>Animals/ Livestock </option>
                                      <option value="Arts/Entertainment"
-                                     <?php if($contributor_images[$i]['file_category'] == "Arts/Entertainment" ) echo 'selected = "selected"'?>>Arts/ Entertainment </option>
+                                     <?php if($contributor_videos[$i]['file_category'] == "Arts/Entertainment" ) echo 'selected = "selected"'?>>Arts/ Entertainment </option>
                                      <option value="Beauty/Fashion"
-                                     <?php if($contributor_images[$i]['file_category'] == "Beauty/Fashion" ) echo 'selected = "selected"'?>>Beauty/ Fashion </option>
-                                     <option value="Business" <?php if($contributor_images[$i]['file_category'] == "Business" ) echo 'selected = "selected"'?>>Business </option>
+                                     <?php if($contributor_videos[$i]['file_category'] == "Beauty/Fashion" ) echo 'selected = "selected"'?>>Beauty/ Fashion </option>
+                                     <option value="Business" <?php if($contributor_videos[$i]['file_category'] == "Business" ) echo 'selected = "selected"'?>>Business </option>
                                      <option value="Buildings/Landmarks"
-                                     <?php if($contributor_images[$i]['file_category'] == "Buildings/Landmarks" ) echo 'selected = "selected"'?>>Buildings/ Landmarks </option>
-                                     <option value="Celebrity" <?php if($contributor_images[$i]['file_category'] == "Celebrity" ) echo 'selected = "selected"'?>>Celebrity </option>
-                                     <option value="Education" <?php if($contributor_images[$i]['file_category'] == "Education" ) echo 'selected = "selected"'?>>Education </option>
-                                     <option value="Food/Cuisines" <?php if($contributor_images[$i]['file_category'] == "Food/Cuisines" ) echo 'selected = "selected"'?> >Food/ Cuisines </option>
-                                     <option value="Beverage/Drink" <?php if($contributor_images[$i]['file_category'] == "Beverage/Drink" ) echo 'selected = "selected"'?>>Beverage/ Drink </option>
-                                     <option value="Medical/Healthcare" <?php if($contributor_images[$i]['file_category'] == "Medical/Healthcare" ) echo 'selected = "selected"'?> >Medical/ Healthcare </option>
-                                     <option value="Holiday" <?php if($contributor_images[$i]['file_category'] == "Holiday" ) echo 'selected = "selected"'?> >Holiday </option>
-                                     <option value="Industrial" <?php if($contributor_images[$i]['file_category'] == "Industrial" ) echo 'selected = "selected"'?>>Industrial </option>
-                                     <option value="Interior" <?php if($contributor_images[$i]['file_category'] == "Interior" ) echo 'selected = "selected"'?> >Interior </option>
-                                     <option value="Nature" <?php if($contributor_images[$i]['file_category'] == "Nature" ) echo 'selected = "selected"'?> >Nature </option>
-                                     <option value="Outdoor" <?php if($contributor_images[$i]['file_category'] == "Outdoor" ) echo 'selected = "selected"'?> >Outdoor </option>
-                                     <option value="People" <?php if($contributor_images[$i]['file_category'] == "People" ) echo 'selected = "selected"'?> >People </option>
-                                     <option value="Religion" <?php if($contributor_images[$i]['file_category'] == "Religion" ) echo 'selected = "selected"'?> >Religion </option>
-                                     <option value="Signs/Symbols" <?php if($contributor_images[$i]['file_category'] == "Signs/Symbols" ) echo 'selected = "selected"'?> >Signs/ Symbols </option> 
-                                     <option value="Sports" <?php if($contributor_images[$i]['file_category'] == "Sports" ) echo 'selected = "selected"'?> >Sports </option>
-                                     <option value="ICT/Technology" <?php if($contributor_images[$i]['file_category'] == "ICT/Technology" ) echo 'selected = "selected"'?> >ICT/ Technology </option>
-                                     <option value="Infrastructure" <?php if($contributor_images[$i]['file_category'] == "Infrastructure" ) echo 'selected = "selected"'?>>Infrastructure </option>
-                                     <option value="Vintage"  <?php if($contributor_images[$i]['file_category'] == "Vintage" ) echo 'selected = "selected"'?> >Vintage </option>
-                                     <option value="Telecommunication" <?php if($contributor_images[$i]['file_category'] == "Telecommunication" ) echo 'selected = "selected"'?> >Telecommunication </option>
-                                     <option value="Tourism/Hospitality" <?php if($contributor_images[$i]['file_category'] == "Tourism/Hospitality" ) echo 'selected = "selected"'?>  >Tourism/ Hospitality </option>
-                                     <option value="Wildlife" <?php if($contributor_images[$i]['file_category'] == "Wildlife" ) echo 'selected = "selected"'?> >Wildlife </option>
+                                     <?php if($contributor_videos[$i]['file_category'] == "Buildings/Landmarks" ) echo 'selected = "selected"'?>>Buildings/ Landmarks </option>
+                                     <option value="Celebrity" <?php if($contributor_videos[$i]['file_category'] == "Celebrity" ) echo 'selected = "selected"'?>>Celebrity </option>
+                                     <option value="Education" <?php if($contributor_videos[$i]['file_category'] == "Education" ) echo 'selected = "selected"'?>>Education </option>
+                                     <option value="Food/Cuisines" <?php if($contributor_videos[$i]['file_category'] == "Food/Cuisines" ) echo 'selected = "selected"'?> >Food/ Cuisines </option>
+                                     <option value="Beverage/Drink" <?php if($contributor_videos[$i]['file_category'] == "Beverage/Drink" ) echo 'selected = "selected"'?>>Beverage/ Drink </option>
+                                     <option value="Medical/Healthcare" <?php if($contributor_videos[$i]['file_category'] == "Medical/Healthcare" ) echo 'selected = "selected"'?> >Medical/ Healthcare </option>
+                                     <option value="Holiday" <?php if($contributor_videos[$i]['file_category'] == "Holiday" ) echo 'selected = "selected"'?> >Holiday </option>
+                                     <option value="Industrial" <?php if($contributor_videos[$i]['file_category'] == "Industrial" ) echo 'selected = "selected"'?>>Industrial </option>
+                                     <option value="Interior" <?php if($contributor_videos[$i]['file_category'] == "Interior" ) echo 'selected = "selected"'?> >Interior </option>
+                                     <option value="Nature" <?php if($contributor_videos[$i]['file_category'] == "Nature" ) echo 'selected = "selected"'?> >Nature </option>
+                                     <option value="Outdoor" <?php if($contributor_videos[$i]['file_category'] == "Outdoor" ) echo 'selected = "selected"'?> >Outdoor </option>
+                                     <option value="People" <?php if($contributor_videos[$i]['file_category'] == "People" ) echo 'selected = "selected"'?> >People </option>
+                                     <option value="Religion" <?php if($contributor_videos[$i]['file_category'] == "Religion" ) echo 'selected = "selected"'?> >Religion </option>
+                                     <option value="Signs/Symbols" <?php if($contributor_videos[$i]['file_category'] == "Signs/Symbols" ) echo 'selected = "selected"'?> >Signs/ Symbols </option> 
+                                     <option value="Sports" <?php if($contributor_videos[$i]['file_category'] == "Sports" ) echo 'selected = "selected"'?> >Sports </option>
+                                     <option value="ICT/Technology" <?php if($contributor_videos[$i]['file_category'] == "ICT/Technology" ) echo 'selected = "selected"'?> >ICT/ Technology </option>
+                                     <option value="Infrastructure" <?php if($contributor_videos[$i]['file_category'] == "Infrastructure" ) echo 'selected = "selected"'?>>Infrastructure </option>
+                                     <option value="Vintage"  <?php if($contributor_videos[$i]['file_category'] == "Vintage" ) echo 'selected = "selected"'?> >Vintage </option>
+                                     <option value="Telecommunication" <?php if($contributor_videos[$i]['file_category'] == "Telecommunication" ) echo 'selected = "selected"'?> >Telecommunication </option>
+                                     <option value="Tourism/Hospitality" <?php if($contributor_videos[$i]['file_category'] == "Tourism/Hospitality" ) echo 'selected = "selected"'?>  >Tourism/ Hospitality </option>
+                                     <option value="Wildlife" <?php if($contributor_videos[$i]['file_category'] == "Wildlife" ) echo 'selected = "selected"'?> >Wildlife </option>
                                   </select>
                               </div>
                               <div class="large-5 columns">
@@ -421,8 +426,8 @@
                               <div class="large-7 columns">
                                   <select name="file_type[]" required="required">
                                     <option>Select Image Type</option>
-                                    <option value="Creative Image" <?php if($contributor_images[$i]['file_type'] == "Creative Image" ) echo 'selected = "selected"'?> > Creative Image</option>
-                                    <option value="Editorial Image" <?php if($contributor_images[$i]['file_type'] == "Editorial Image" ) echo 'selected = "selected"'?> > Editorial Image</option>
+                                    <option value="Creative Image" <?php if($contributor_videos[$i]['file_type'] == "Creative Image" ) echo 'selected = "selected"'?> > Creative Image</option>
+                                    <option value="Editorial Image" <?php if($contributor_videos[$i]['file_type'] == "Editorial Image" ) echo 'selected = "selected"'?> > Editorial Image</option>
                                   </select>
                               </div>
                               <div class="large-5 columns">
@@ -431,8 +436,8 @@
                               <div class="large-7 columns">
                                   <select name="file_subtype[]" required="required" class="file_subtype">
                                     <option>Select Image Subtype</option>
-                                    <option value="Photography" <?php if($contributor_images[$i]['file_subtype'] == "Photography" ) echo 'selected = "selected"'?> >Photography </option>
-                                    <option value="Illustration" <?php if($contributor_images[$i]['file_subtype'] == "Illustration" ) echo 'selected = "selected"'?> >Illustration</option>
+                                    <option value="Photography" <?php if($contributor_videos[$i]['file_subtype'] == "Photography" ) echo 'selected = "selected"'?> >Photography </option>
+                                    <option value="Illustration" <?php if($contributor_videos[$i]['file_subtype'] == "Illustration" ) echo 'selected = "selected"'?> >Illustration</option>
                                     <option value="All">All</option>
                                   </select>
                               </div>
@@ -442,8 +447,8 @@
                               <div class="large-7 columns">
                                   <select name="file_orientation[]" required="required" class="file_orientation">
                                     <option>Select Orientation</option>
-                                    <option value="Landscape" <?php if($contributor_images[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                                    <option value="Potrait" <?php if($contributor_images[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                    <option value="Landscape" <?php if($contributor_videos[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
+                                    <option value="Potrait" <?php if($contributor_videos[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
                                   </select>
                               </div>
                               <div class="large-5 columns">
@@ -452,16 +457,16 @@
                               <div class="large-7 columns">
                                   <select name="file_people[]" required="required" class="file_people">
                                   <option>Select number of people </option>
-                                  <option value="1" <?php if($contributor_images[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
-                                  <option value="2" <?php if($contributor_images[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
-                                  <option value="3" <?php if($contributor_images[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
-                                  <option value="4" <?php if($contributor_images[$i]['file_people'] == "4" ) echo 'selected = "selected"'?>  >4</option>
-                                  <option value="5" <?php if($contributor_images[$i]['file_people'] == "5" ) echo 'selected = "selected"'?>  >5</option>
-                                  <option value="6" <?php if($contributor_images[$i]['file_people'] == "6" ) echo 'selected = "selected"'?>  >6</option>
-                                  <option value="7" <?php if($contributor_images[$i]['file_people'] == "7" ) echo 'selected = "selected"'?>  >7</option>
-                                  <option value="8" <?php if($contributor_images[$i]['file_people'] == "8" ) echo 'selected = "selected"'?>  >8</option>
-                                  <option value="9" <?php if($contributor_images[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
-                                  <option value="10" <?php if($contributor_images[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
+                                  <option value="1" <?php if($contributor_videos[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
+                                  <option value="2" <?php if($contributor_videos[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
+                                  <option value="3" <?php if($contributor_videos[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
+                                  <option value="4" <?php if($contributor_videos[$i]['file_people'] == "4" ) echo 'selected = "selected"'?>  >4</option>
+                                  <option value="5" <?php if($contributor_videos[$i]['file_people'] == "5" ) echo 'selected = "selected"'?>  >5</option>
+                                  <option value="6" <?php if($contributor_videos[$i]['file_people'] == "6" ) echo 'selected = "selected"'?>  >6</option>
+                                  <option value="7" <?php if($contributor_videos[$i]['file_people'] == "7" ) echo 'selected = "selected"'?>  >7</option>
+                                  <option value="8" <?php if($contributor_videos[$i]['file_people'] == "8" ) echo 'selected = "selected"'?>  >8</option>
+                                  <option value="9" <?php if($contributor_videos[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
+                                  <option value="10" <?php if($contributor_videos[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
                                   </select>
                               </div>
                           </div>
@@ -500,9 +505,9 @@
                              <input type="hidden" name="file_releases[]">
                              <div class="releases">
                                 <?php 
-                                for($m = 0 ; $m < count($contributor_images[$i]['releases']); $m++){
-                                      $release = $contributor_images[$i]['releases'][$m]['release_name'];
-                                      $release_url = $contributor_images[$i]['releases'][$m]['release_url'];
+                                for($m = 0 ; $m < count($contributor_videos[$i]['releases']); $m++){
+                                      $release = $contributor_videos[$i]['releases'][$m]['release_name'];
+                                      $release_url = $contributor_videos[$i]['releases'][$m]['release_url'];
                                       if(strlen($release)> 0){
                                           echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
                                       }
@@ -540,8 +545,8 @@
                                 <input type="hidden" name="file_models[]">
                                 <div class="model">
                                     <?php 
-                                    for($m = 0 ; $m < count($contributor_images[$i]['models']); $m++){
-                                          $email = $contributor_images[$i]['models'][$m]['model_email'];
+                                    for($m = 0 ; $m < count($contributor_videos[$i]['models']); $m++){
+                                          $email = $contributor_videos[$i]['models'][$m]['model_email'];
                                           if(strlen($email)> 0){
                                               echo $email.'<br/>';
                                           }
@@ -567,7 +572,7 @@
                       </span>
                            <div class="small-5 columns pull-right">
                              <input type="text" name="file_shoot[]" class="file_shoot"
-                              value="<?php echo $contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                              value="<?php echo $contributor_videos[$i]['file_same_shoot_code']?>" placeholder="">
                            </div>
                            
                     </div>

@@ -47,6 +47,19 @@ class Contributor_model extends CI_Model {
             $image = $query->result_array();
             return array_reverse($image);
         }
+        public function get_contributor_videos($id) {
+            $query = $this->db->query("SELECT * FROM contributor_video_uploads WHERE user_id = ".$this->db->escape($id)."");   
+            $video = $query->result_array();
+            return array_reverse($video);
+        }
+        public function get_video_models($file_id){
+            $query = $this->db->query("SELECT * FROM contributor_video_models, contributor_models WHERE contributor_models.model_id = contributor_video_models.model_id  AND file_id =  ".$this->db->escape($file_id)."");   
+            return $query->result_array();
+        }
+        public function get_video_releases($file_id){
+            $query = $this->db->query("SELECT * FROM contributor_video_releases, contributor_releases WHERE contributor_releases.release_id = contributor_video_releases.release_id  AND file_id =  ".$this->db->escape($file_id)."");   
+            return $query->result_array();
+        }
         public function get_image_models($file_id){
             $query = $this->db->query("SELECT * FROM contributor_image_models, contributor_models WHERE contributor_models.model_id = contributor_image_models.model_id  AND file_id =  ".$this->db->escape($file_id)."");   
             return $query->result_array();
@@ -68,7 +81,21 @@ class Contributor_model extends CI_Model {
                 return $row->model_id;
             }
         }
-                
+        public function add_video_model($file_id,$user_id,$model){
+            $model_id = $this->get_model_id($model);
+            if($model_id !== NULL){
+                $query = 
+                $this->db->query(" INSERT INTO contributor_video_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            } else {
+                $query = $this->db->query("     
+                REPLACE INTO contributor_models (model_email)
+                VALUES(".$this->db->escape($model).")");
+                $model_id = $this->get_model_id($model);
+                $this->db->query(" INSERT INTO contributor_video_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            }
+        }       
         public function add_file_model($file_id,$user_id,$model){
             $model_id = $this->get_model_id($model);
             if($model_id !== NULL){
@@ -106,6 +133,11 @@ class Contributor_model extends CI_Model {
         public function edit_contributor_images($file_id,$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
                     $file_orientation,$file_people,$file_shoot){
             $this->db->query("UPDATE contributor_image_uploads SET 
+            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
+        }
+        public function edit_contributor_videos($file_id,$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+                    $file_orientation,$file_people,$file_shoot){
+            $this->db->query("UPDATE contributor_video_uploads SET 
             file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
 

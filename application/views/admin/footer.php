@@ -34,6 +34,38 @@
 <script src="<?php echo base_url('/assets/contributor/js/editfiles.js')?>"></script>
 <script src="<?php echo base_url('/assets/admin/multiselect/multiple-select.js')?>"></script>    
 <script type="text/javascript">
+    function editvideoadmin(){
+     $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/admin/edit_uploaded_videos")?>',
+      data:$('#edit_video_contributor').serialize(),
+      success:
+        function(data){
+          console.log(data); 
+          if (data === '1'){
+             $('.message').attr("class" ,"message alert-box success");
+             $('.message').text("Files have been edited successfully!"); 
+             $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                sessionStorage.setItem('onReload', 'activateContributor');
+                window.location.href = "<?php echo base_url('index.php/admin');?>";
+                
+          } else {
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text(""+data); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            
+          }
+          $('.message').show();
+          
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    return false;
+    }
     function editimageadmin(){
      $.ajax({
       type: 'post',

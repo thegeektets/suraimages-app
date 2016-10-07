@@ -31,6 +31,41 @@
 <script src="<?php echo base_url('/assets/contributor/multiselect/multiple-select.js')?>"></script>
 
 <script type="text/javascript">
+  function editvideocontributor(){
+   $.ajax({
+    type: 'post',
+    url:'<?php echo base_url("/index.php/contributor/edit_contributor_videos")?>',
+    data:$('#edit_video_contributor').serialize(),
+    success:
+      function(data){
+        if (data === '1'){
+           $('.message').attr("class" ,"message alert-box success");
+           $('.message').text("Videos have been submitted successfully!"); 
+           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+              sessionStorage.setItem('onReload', 'activateUpload');
+              location.reload();
+              
+        } else if (data === '0') {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').append("Failed to submit, make sure all required fields are filled"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
+        } else {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').append(""+data); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
+        }
+        $('.message').show();
+      },
+    fail:
+      function(data){
+        console.log(data);
+      }
+
+  });
+  return false;
+  }
   function editimagecontributor(){
    $.ajax({
     type: 'post',

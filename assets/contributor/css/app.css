@@ -1157,7 +1157,7 @@ ul#menu_account::before {
   .jFiler-items.jFiler-row {
       border-top: 1px solid;
       padding-top: 10px;
-      width: 70vw;
+      width: 65vw;
   }
   /*Edit Files */
   .edit_content {
@@ -1655,4 +1655,7 @@ a.close-reveal-modal {
     font-size: 25px;
     padding: 4px;
     color: #fff;
+}
+figure {
+    margin: 2px;
 }

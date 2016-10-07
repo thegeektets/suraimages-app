@@ -23,7 +23,16 @@ class contributor extends CI_Controller {
 			$data['payment_details'] = $this->fetch_payment_details();
 			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
 			$data['contributor_releases'] = $this->contributor_model->get_contributor_releases($id);
-		
+			$data['contributor_videos'] = $this->contributor_model->get_contributor_videos($id);
+			for($f = 0; $f < count($data['contributor_videos']); $f++){
+				
+				$file_id = $data['contributor_videos'][$f]['upload_id'];
+				$models = $this->contributor_model->get_video_models($file_id);
+				$releases= $this->contributor_model->get_video_releases($file_id);
+				$data['contributor_videos'][$f]['models']=$models;
+				$data['contributor_videos'][$f]['releases']=$releases;
+			}
+
 			for($f = 0; $f < count($data['contributor_images']); $f++){
 				
 				$file_id = $data['contributor_images'][$f]['upload_id'];
@@ -195,6 +204,10 @@ class contributor extends CI_Controller {
          	    }
 		    $i++;
 		}
+		if($success === 1){
+			$this->user_model->update_video_edit_status($id,TRUE);
+			$this->user_model->update_video_upload_status($id,FALSE);
+		}
 		echo $success;
 	}
 	public function upload_contributor_images() {
@@ -279,6 +292,62 @@ class contributor extends CI_Controller {
 		}
 		echo $success;
 	}
+	public function edit_contributor_videos() {
+		$this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));	
+		$this->load->library('form_validation');
+	    $data['user_session']=$this->session->all_userdata();
+	    $id = $data['user_session']['user_meta']['0']['id'];
+	    	$i = 0;
+	    	$size = sizeof($_POST['file_id']);
+	    	$success = 0;
+	    	
+	    	while($i < $size) {
+	    		$file_id = $_POST['file_id'][$i];
+	    		$file_name = $_POST['file_name'][$i];
+	    		$file_keywords = $_POST['file_keywords'][$i];
+	    		$file_price_large = $_POST['file_price_large'][$i];
+	    		$file_price_medium =$_POST['file_price_medium'][$i];
+	    		$file_price_small =$_POST['file_price_small'][$i];
+	    		// $file_category = $_POST['file_category'][$i];
+	    		$file_type = $_POST['file_type'][$i];
+	    		$file_subtype = $_POST['file_subtype'][$i];
+	    		$file_orientation = $_POST['file_orientation'][$i];
+	    		$file_people = $_POST['file_people'][$i];
+	    		$file_shoot = $_POST['file_shoot'][$i];
+	    		$file_model = $_POST['file_models'][$i];
+	    		$file_release = $_POST['file_releases'][$i];
+	    		$model_array = explode(",", $file_model);
+	    		$release_array= explode(",", $file_release);
+	    		
+	    		if(trim($file_name) === "" || trim($file_keywords) === ""){
+
+	    			// validation error
+	    			echo $success;
+	    			return false;
+	    			
+	    		} else {
+		    		for ($t=0; $t < count($model_array) ; $t++) { 
+		    			$this->add_video_model($file_id,$id,$model_array[$t],$file_price_large);
+		    		}
+		    		for ($r=0; $r < count($release_array); $r++) {
+		    			$this->add_file_release($file_id,$id,$release_array[$r]);
+		    		}
+					    $this->contributor_model->edit_contributor_videos( $file_id,
+						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+						$file_orientation,$file_people,$file_shoot );	
+		    		$i++;
+		    		$success = 1;	
+	    		}
+	    		
+	    	}
+	    	if($success === 1){
+	    		$this->user_model->update_video_edit_status($id,FALSE);
+	    		$this->user_model->update_video_upload_status($id,TRUE);
+	    	}
+	    	echo $success;
+	}
 	public function edit_contributor_images() {
 		$this->load->helper('url'); 
 		$this->load->library('session');
@@ -353,6 +422,14 @@ class contributor extends CI_Controller {
 			echo 1;
 	    }	
 	}
+	public function add_video_model($file_id,$user_id,$model_email,$price){
+		$this->load->library('session');
+		if(strlen(trim($model_email)) > 0){
+			$this->contributor_model->add_file_model($file_id,$user_id,$model_email);
+		}
+		// send email to model with details of the file and photographer and price if set
+	}
+	
 	public function add_file_model($file_id,$user_id,$model_email,$price){
 		$this->load->library('session');
 		if(strlen(trim($model_email)) > 0){

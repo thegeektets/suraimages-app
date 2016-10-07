@@ -30,6 +30,15 @@ class admin extends CI_Controller {
 					$data['all_contributor_images'][$f]['models']=$models;
 					$data['all_contributor_images'][$f]['releases']=$releases;
 				}
+				$data['all_contributor_videos'] = $this->admin_model->get_contributor_videos();
+				for($f = 0; $f < count($data['all_contributor_videos']); $f++){
+					
+					$file_id = $data['all_contributor_videos'][$f]['upload_id'];
+					$models = $this->contributor_model->get_video_models($file_id);
+					$releases= $this->contributor_model->get_video_releases($file_id);
+					$data['all_contributor_videos'][$f]['models']=$models;
+					$data['all_contributor_videos'][$f]['releases']=$releases;
+				}
 				
 				$data['rf_pricing'] = $this->fetch_rf_pricing();
 	     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
@@ -49,6 +58,10 @@ class admin extends CI_Controller {
 	     	   		$this->admin_model->get_all_image_uploads($user_id);
 	     	   		$data['exscontributors'][$i]['new_uploads']=
 	     	   		$this->admin_model->get_new_image_uploads($user_id);
+	     	   		$data['exscontributors'][$i]['video_uploads']=
+	     	   		$this->admin_model->get_all_video_uploads($user_id);
+	     	   		$data['exscontributors'][$i]['new_video_uploads']=
+	     	   		$this->admin_model->get_new_video_uploads($user_id);
 	     	   	}
 	     	   	$this->load->view('admin/header' , $data);
 				$this->load->view('admin/index' , $data);
@@ -248,12 +261,24 @@ class admin extends CI_Controller {
 		$this->admin_model->update_user_idstatus($id,'Declined');
 		$this->index();
 	}
+
+	public function start_video_approval($user_id){
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();;
+		$id = $data['user_session']['user_meta']['0']['id'];
+		$data['user_session']['approval_file'] = $user_id;
+		$data['user_session']['edit_status'] = FALSE;
+		$data['user_session']['edit_video_status'] = TRUE;
+		$this->session->set_userdata($data['user_session']);
+		$this->index();
+	}
 	public function start_file_approval($user_id){
 		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;
 		$id = $data['user_session']['user_meta']['0']['id'];
 		$data['user_session']['approval_file'] = $user_id;
 		$data['user_session']['edit_status'] = TRUE;
+		$data['user_session']['edit_video_status'] = FALSE;
 		$this->session->set_userdata($data['user_session']);
 		$this->index();
 	}
@@ -294,7 +319,42 @@ class admin extends CI_Controller {
     		$this->session->set_userdata($data['user_session']);
     		echo $success;
     	}
-    	
-		
+    }
+		public function edit_uploaded_videos(){
+			$this->load->library('session');
+			$data['user_session']=$this->session->all_userdata();;
+			$id = $data['user_session']['user_meta']['0']['id'];
+	    	$i = 0;
+	    	$size = sizeof($_POST['file_id']);
+	    	$success = 0;
+	    	$contributor_status = 0;
+	    	$file_user = $_POST['file_user']['0'];
+	    	while($i < $size) {
+	    		$file_id = $_POST['file_id'][$i];
+	    		$file_name = $_POST['file_name'][$i];
+	    		$file_keywords = $_POST['file_keywords'][$i];
+	    		$file_price_large = $_POST['file_price_large'][$i];
+	    		// $file_category = $_POST['file_category'][$i];
+	    		$file_license = $_POST['file_license'][$i];
+	    		$file_type = $_POST['file_type'][$i];
+	    		$file_subtype = $_POST['file_subtype'][$i];
+	    		$file_orientation = $_POST['file_orientation'][$i];
+	    		$file_people = $_POST['file_people'][$i];
+	    		$file_status = $_POST['file_status'][$i];
+	    		if($file_status == 1) {
+	    			$contributor_status = 1;
+	    		}
+	    		$this->admin_model->update_uploaded_videos( $file_id,
+					$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,
+					$file_orientation,$file_people);	
+	    		$i++;
+	    		$success = 1;
+	    	}
+	    	
+	    	if($success === 1){
+	    		$data['user_session']['edit_video_status'] = FALSE;
+	    		$this->session->set_userdata($data['user_session']);
+	    		echo $success;
+	    	}
 	}
 }	

@@ -5,19 +5,20 @@
           Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
       </div>
     </div>
-    <form id="trial_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_trial_images();">
+    <form id="video_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_videos();">
       <div class="row">
           <div class="large-10 columns pull-right">
-             Upload high resolution JPEG images each with a minimum file size of 8MB and maximum of 10 images
-          per upload.
+             Upload HD 1080p videos with each file not exceeding 3G in size and maximum of 10 files per upload.(select more than one to upload multiple files)
            </div>
            <div class="large-2 columns pull-left">   
-                  <input type="file" name="trialfiles[]"  class="more_filer" multiple="multiple">
-           </div>
+              <input type="file" name="videofiles[]"  class="video_filer" multiple="multiple">
+            </div>
           
       </div>
-      <div class="tab_content" id="continue_tab">
-            <button class="button btn_upload_multi" type="submit"> Continue </button>
+      <div class="tab_content" id="upload_video">
+           <div class="message pull-left">
+           </div>
+           <button class="button btn_upload_multi" type="submit"> Continue </button>
       </div>
       </form>
    <div style="clear: both"></div> 
@@ -59,8 +60,6 @@
              </form>
          </div>
          <div class="large-4 columns">
-             <div class="message">
-             </div>
          </div>
          <div class="large-4 columns medium-4 columns pull-right">
                <span class="search_pagination"> 
@@ -323,7 +322,7 @@
              </form>
            </div>
            <div class="large-4 columns pull-right">
-              <button class="button btn_upload" id="submit_changes" onclick="return trigger_submit()" >Submit Changes </button>
+              <button class="button btn_upload submit_changes" id="submit_changes" onclick="return editvideocontributor()" >Submit Changes </button>
            </div>
        </div>
        <div style="clear: both"></div>
@@ -360,82 +359,86 @@
       </div>
    </div> 
    <div class="edit_content">
-      <form name="edit_image_contributor" id="edit_image_contributor" onsubmit="return editimagecontributor();">
+      <form name="edit_video_contributor" id="edit_video_contributor" onsubmit="return editvideocontributor();">
       
-          <?php for($i=0; $i< count($contributor_images); $i++) { ?>
+          <?php for($i=0; $i< count($contributor_videos); $i++) { ?>
           <div class="report_item edit_item">
             <div class="row collapse">
               <div class="large-1 column report_col">
                   <input type="checkbox" name="file_select" class="select_file">
-                  <img src="<?php echo $contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                  <article class="video">
+                      <figure>
+                          <a target="iframe-name" class ="thumbnails" href="<?php echo $contributor_videos[$i]['file_url']; ?>"><img class="videoThumb" src="<?php echo base_url('assets/contributor/img/video_default.png')?>"></a>
+                      </figure>
+                  </article>
               </div>
               <div class="large-1 column report_col">
-                  <?php echo $contributor_images[$i]['upload_id']; ?>
-                  <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_images[$i]['upload_id']; ?>">
+                  <?php echo $contributor_videos[$i]['upload_id']; ?>
+                  <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_videos[$i]['upload_id']; ?>">
               </div>
               <div class="large-2 column report_col">
-                  <?php echo $contributor_images[$i]['file_name']; ?>
-                  <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_images[$i]['file_name']; ?>">
+                  <?php echo $contributor_videos[$i]['file_name']; ?>
+                  <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_videos[$i]['file_name']; ?>">
               </div>
 
               <div class="large-2 column report_col">
-                  <p> <?php $keys = explode(",", $contributor_images[$i]['file_keywords']); 
+                  <p> <?php $keys = explode(",", $contributor_videos[$i]['file_keywords']); 
                             for($k=0; $k < count($keys); $k++ ) {
                                 echo $keys[$k].", ";
                             }
                       ?> </p>
                   <textarea  required="required"  type="hidden" name="file_keywords[]" class="file_keywords"  placeholder="0000">
-                          <?php echo $contributor_images[$i]['file_keywords']?>
+                          <?php echo $contributor_videos[$i]['file_keywords']?>
                   </textarea>
               </div>
               <div class="large-1 column report_col">
-                  <?php echo $contributor_images[$i]['file_price_large']; ?>
+                  <?php echo $contributor_videos[$i]['file_price_large']; ?>
 
-                  <input  type="hidden" name="file_price_large[]" placeholder="Price" value="<?php echo $contributor_images[$i]['file_price_large']?>" class="file_price_large">
+                  <input  type="hidden" name="file_price_large[]" placeholder="Price" value="<?php echo $contributor_videos[$i]['file_price_large']?>" class="file_price_large">
                   
-                  <input  type="hidden" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $contributor_images[$i]['file_price_medium']?>" class="form_group">
+                  <input  type="hidden" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $contributor_videos[$i]['file_price_medium']?>" class="form_group">
                   
-                  <input  type="hidden" name="file_price_small[]" value="<?php echo $contributor_images[$i]['file_price_small']?>" readonly="readonly" placeholder="Low" class="form_group">
+                  <input  type="hidden" name="file_price_small[]" value="<?php echo $contributor_videos[$i]['file_price_small']?>" readonly="readonly" placeholder="Low" class="form_group">
                   <select name="file_type[]" style="display:none;" required="required" class="file_type">
                     <option>Select Image Type</option>
-                    <option value="Creative Image" <?php if($contributor_images[$i]['file_type'] == "Creative Image" ) echo 'selected = "selected"'?> > Creative Image</option>
-                    <option value="Editorial Image" <?php if($contributor_images[$i]['file_type'] == "Editorial Image" ) echo 'selected = "selected"'?> > Editorial Image</option>
+                    <option value="Creative Image" <?php if($contributor_videos[$i]['file_type'] == "Creative Image" ) echo 'selected = "selected"'?> > Creative Image</option>
+                    <option value="Editorial Image" <?php if($contributor_videos[$i]['file_type'] == "Editorial Image" ) echo 'selected = "selected"'?> > Editorial Image</option>
                   </select>
                   <select name="file_subtype[]" style="display:none;" required="required" class="file_subtype">
                     <option>Select Image Subtype</option>
-                    <option value="Photography" <?php if($contributor_images[$i]['file_subtype'] == "Photography" ) echo 'selected = "selected"'?> >Photography </option>
-                    <option value="Illustration" <?php if($contributor_images[$i]['file_subtype'] == "Illustration" ) echo 'selected = "selected"'?> >Illustration</option>
+                    <option value="Photography" <?php if($contributor_videos[$i]['file_subtype'] == "Photography" ) echo 'selected = "selected"'?> >Photography </option>
+                    <option value="Illustration" <?php if($contributor_videos[$i]['file_subtype'] == "Illustration" ) echo 'selected = "selected"'?> >Illustration</option>
                     <option value="All">All</option>
                   </select>
                   <select name="file_orientation[]" type="hidden" required="required" class="file_orientation">
                     <option>Select Orientation</option>
-                    <option value="Landscape" <?php if($contributor_images[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                    <option value="Potrait" <?php if($contributor_images[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                    <option value="Landscape" <?php if($contributor_videos[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
+                    <option value="Potrait" <?php if($contributor_videos[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
                   </select>
                   
                   <select name="file_people[]" style="display:none;" required="required" class="file_people">
                     <option>Select number of people </option>
-                    <option value="1" <?php if($contributor_images[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
-                    <option value="2" <?php if($contributor_images[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
-                    <option value="3" <?php if($contributor_images[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
-                    <option value="4" <?php if($contributor_images[$i]['file_people'] == "4" ) echo 'selected = "selected"'?>  >4</option>
-                    <option value="5" <?php if($contributor_images[$i]['file_people'] == "5" ) echo 'selected = "selected"'?>  >5</option>
-                    <option value="6" <?php if($contributor_images[$i]['file_people'] == "6" ) echo 'selected = "selected"'?>  >6</option>
-                    <option value="7" <?php if($contributor_images[$i]['file_people'] == "7" ) echo 'selected = "selected"'?>  >7</option>
-                    <option value="8" <?php if($contributor_images[$i]['file_people'] == "8" ) echo 'selected = "selected"'?>  >8</option>
-                    <option value="9" <?php if($contributor_images[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
-                    <option value="10" <?php if($contributor_images[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
+                    <option value="1" <?php if($contributor_videos[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
+                    <option value="2" <?php if($contributor_videos[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
+                    <option value="3" <?php if($contributor_videos[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
+                    <option value="4" <?php if($contributor_videos[$i]['file_people'] == "4" ) echo 'selected = "selected"'?>  >4</option>
+                    <option value="5" <?php if($contributor_videos[$i]['file_people'] == "5" ) echo 'selected = "selected"'?>  >5</option>
+                    <option value="6" <?php if($contributor_videos[$i]['file_people'] == "6" ) echo 'selected = "selected"'?>  >6</option>
+                    <option value="7" <?php if($contributor_videos[$i]['file_people'] == "7" ) echo 'selected = "selected"'?>  >7</option>
+                    <option value="8" <?php if($contributor_videos[$i]['file_people'] == "8" ) echo 'selected = "selected"'?>  >8</option>
+                    <option value="9" <?php if($contributor_videos[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
+                    <option value="10" <?php if($contributor_videos[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
                   </select>
                   <input  type="hidden" name="file_shoot[]" class="file_shoot"
-                  value="<?php echo $contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                  value="<?php echo $contributor_videos[$i]['file_same_shoot_code']?>" placeholder="">
                   
               </div>
               <div class="large-2 column report_col">
-                    <?php if( $contributor_images[$i]['file_status'] == 0 ) { ?>
+                    <?php if( $contributor_videos[$i]['file_status'] == 0 ) { ?>
                       <span class="status_waiting"> 
                           Waiting
                       </span>
-                    <?php } else if ($contributor_images[$i]['file_status'] == 1 ) { ?>
+                    <?php } else if ($contributor_videos[$i]['file_status'] == 1 ) { ?>
                       <span class="status_approved"> 
                           Approved
                       </span>
@@ -450,7 +453,7 @@
                       <a href=""> View</a>
               </div>
               <div class="large-2 column report_col">
-               <?php  echo date("F j, Y", strtotime($contributor_images[$i]['date_uploaded']));   ?>
+               <?php  echo date("F j, Y", strtotime($contributor_videos[$i]['date_uploaded']));   ?>
               </div>
              </div>
           </div>

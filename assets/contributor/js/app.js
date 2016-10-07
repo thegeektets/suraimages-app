@@ -1,18 +1,18 @@
 $(document).foundation()
 
 $(document).ready(function(){
+	$("#upload_video").hide();
+	$(".video_filer").click(function(){
+		$("#upload_video").show();
+	});
 	$("#upload_release").hide();
 	$(".release_filer").click(function(){
 		$("#upload_release").show();
 	});
-	$('select[type="hidden"]').each(function(){
-		$(this).hide();
-	});
-	$('textarea[type="hidden"]').each(function(){
-		$(this).hide();
-	});
+	
 
 	$("#submit_changes").hide();
+	$(".submit_changes").hide();
 	$("#continue_tab").hide();
 	$(".more_filer").click(function(){
 		console.log('ouch');
@@ -260,6 +260,224 @@ $(".set_price").hide();
 $(".delete_items").hide();
 
 $("#edit_slc").on('change',function(){
+	if($(this).val().length > 1) {
+		
+		if($(this).val() === 'Title'){
+			
+			$(".title").show();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+		}
+
+		if($(this).val() === 'Keywords'){
+			
+			$(".title").hide();
+			$(".add_keywords").show();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+				
+		}
+		
+		if($(this).val() === 'Price'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").show();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+			
+		}
+		if($(this).val() === 'Category'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".category").show();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Image Type'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").show();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+				
+		}
+		if($(this).val() === 'Image Subtype'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").show();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Orientation'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").show();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+            $(".category").hide();		
+            $(".delete_items").hide();			
+				
+		}
+		if($(this).val() === 'People'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").show();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Attach Release'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").show();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+				
+		}
+		if($(this).val() === 'Same Shoot'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").show();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Model Notification'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").show();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Delete'){
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").show();	
+		}
+		
+
+
+	} else {
+		$(".title").hide();
+		$(".add_keywords").hide();
+		$(".set_price").hide();
+		$(".image_type").hide();
+		$(".image_subtype").hide();
+		$(".orientation").hide();
+		$(".attach_release").hide();
+		$(".same_shoot").hide();
+		$(".model_notification").hide();
+		$(".people").hide();
+		$(".set_price").hide();
+		$(".category").hide();
+	}
+
+});
+$(".edit_slc").on('change',function(){
 	if($(this).val().length > 1) {
 		
 		if($(this).val() === 'Title'){

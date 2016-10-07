@@ -591,7 +591,7 @@
                     <li class="tabs-title is-active"><a href="#nwcontributors" aria-selected="true"> New Contributors (<?php echo sizeof($newcontributors) ?>) </a></li>
                     <li class="tabs-title"><a href="#excontributors" aria-selected="true"> Existing Contributors
                     (<?php echo sizeof($exscontributors)?>) </a></li>
-                    <li class="tabs-title"><a href="#tluploads" aria-selected="true"> Total Uploads(750)</a></li>
+                    <li class="tabs-title"><a href="#tluploads" aria-selected="true"> Total Uploads(<?php echo count($all_contributor_images) ?>)</a></li>
                     <li class="tabs-title"><a href="#resources" aria-selected="true"> Resources </a></li>
                 </ul>
 
@@ -603,8 +603,13 @@
                             <?php  require_once('file_approval.php'); ?>
                         </div>
                     
-                <?php   }  else { ?>
-                    
+                <?php   }  else if (($user_session['edit_video_status']) === TRUE) { ?>
+                        
+                        <div class="tabs-panel is-active" id="nwcontributors">
+                             <?php  require_once('video_approval.php'); ?>
+                         </div>
+
+                <?php   }  else { ?>    
                     <div class="tabs-panel is-active" id="nwcontributors">
                         <div class="row">
                            <div class="large-4 columns medium-4 columns pull-right">
@@ -746,10 +751,10 @@
                                                      echo $newcontributors[$i]['id_status']; 
                                                      } else {
                                                         echo "<a href='".base_url('/index.php/admin/approve_id/'.$newcontributors[$i]['user_id'])."'>
-                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/approve.png')."'></span>
+                                                  <span class='approve_icon'><img src='".base_url('assets/admin/icons/approve.png')."'></span>
                                                   </a>
                                                   <a href='".base_url('/index.php/admin/decline_id/'.$newcontributors[$i]['user_id'])."'>
-                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/decline.png')."'></span>
+                                                  <span class='approve_icon'><img src='".base_url('assets/admin/icons/decline.png')."'></span>
                                                   </a>"; 
                                                     if($newcontributors[$i]['id_status'] !== 'Uploaded'){
                                                       echo $newcontributors[$i]['id_status'];   
@@ -812,10 +817,16 @@
                                <div class="large-2 column">
                                    Date Joined
                                </div>
-                               <div class="large-2 column">
-                                   Uploads
+                               <div class="large-1 column">
+                                   Image Uploads
                                </div>
-                               <div class="large-2 column">
+                               <div class="large-1 column">
+                                   New Uploads
+                               </div>
+                               <div class="large-1 column">
+                                   Video Uploads
+                               </div>
+                               <div class="large-1 column">
                                    New Uploads
                                </div>
                            </div>
@@ -839,11 +850,11 @@
                                      <div class="large-2 column report_col">
                                          <?php  echo date("F j, Y", strtotime($exscontributors[$i]['date_joined'])); ?>
                                      </div>
-                                      <div class="large-2 column report_col">
+                                      <div class="large-1 column report_col">
                                           (<?php echo $exscontributors[$i]['uploads']
                                                     [0]['image_uploads']; ?>)
                                      </div>
-                                     <div class="large-2 column report_col">
+                                     <div class="large-1 column report_col">
                                         <?php if($exscontributors[$i]['new_uploads']
                                                     [0]['image_uploads'] < 1) { ?>
                                                 (<?php echo $exscontributors[$i]['new_uploads']
@@ -855,7 +866,22 @@
                                           </a>
                                              <?php } ?>
                                      </div>
-                                     
+                                      <div class="large-1 column report_col">
+                                          (<?php echo $exscontributors[$i]['video_uploads']
+                                                    [0]['video_uploads']; ?>)
+                                     </div>
+                                     <div class="large-1 column report_col">
+                                        <?php if($exscontributors[$i]['new_video_uploads']
+                                                    [0]['video_uploads'] < 1) { ?>
+                                                (<?php echo $exscontributors[$i]['new_video_uploads']
+                                                          [0]['video_uploads']; ?>)
+                                            <?php } else { ?>     
+                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_video_approval/'.$exscontributors[$i]['user_id']);?>" >
+                                                (<?php echo $exscontributors[$i]['new_video_uploads']
+                                                          [0]['video_uploads']; ?>)
+                                          </a>
+                                             <?php } ?>
+                                     </div>
                                   </div>
                                   <div class="row more_details">
                                      <div class="large-2 column report_col">
@@ -912,10 +938,10 @@
                                                      echo $exscontributors[$i]['id_status']; 
                                                      } else {
                                                         echo "<a href='".base_url('/index.php/admin/approve_id/'.$exscontributors[$i]['user_id'])."'>
-                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/approve.png')."'></span>
+                                                  <span class='approve_icon'><img src='".base_url('assets/admin/icons/approve.png')."'></span>
                                                   </a>
                                                   <a href='".base_url('/index.php/admin/decline_id/'.$exscontributors[$i]['user_id'])."'>
-                                                  <span class='approve_img'><img src='".base_url('assets/admin/icons/decline.png')."'></span>
+                                                  <span class='approve_icon'><img src='".base_url('assets/admin/icons/decline.png')."'></span>
                                                   </a>"; 
                                                     if($exscontributors[$i]['id_status'] !== 'Uploaded'){
                                                       echo $exscontributors[$i]['id_status'];   
@@ -935,158 +961,308 @@
              
                     <div class="tabs-panel" id="tluploads">
                         <div class="row">
-                           <div class="large-5 columns medium-5 columns pull-left">
-                               <form class="reports_search">
-                                 <select class="inside_search_slc edit_slc">
-                                     <option value=""> Action </option>
-                                     <option value="Title"> Add Title </option>
-                                     <option value="Keywords"> Add Keywords </option>
-                                     <option value="Price"> Set Price </option>
-                                     <option value="Image Type"> Image Type </option>
-                                     <option value="Image Subtype"> Image Subtype </option>
-                                     <option value="Orientation"> Orientation </option>
-                                     <option value="People"> People </option>
-                                     <option value="" class="delete_option"> Hibernate a File </option>
-                                 </select>
-                                 <span class="question_wrap">
-                                     <span class="question_this">
-                                        <img src="assets/icons/question.png">
-                                     </span>
-                                     <span class="question_text">
-                                          <a class="question_close">
-                                              <i class="fa fa-times" aria-hidden="true"></i>
-                                          </a>
-                                          Actions help you apply multiple commands on multiple files all at once. How
-                                          does it work? First select the multiple files you want to Action by clicking on
-                                          checkbox(s) on the left side of each file then choose an action under the
-                                          “Actions” dropdown menu and the click “Apply” button.
-                                          Every action you chose under the dropdown menu has the help message specific
-                                          explaining about that action. Simply move your mouse over the question mark.
-                                     </span>
-                                 </span>
-                                   
-                               </form>
-                           </div>
-                           <div class="large-4 columns medium-4 columns pull-right">
-                                <span class="search_pagination"> 
-                                  <select class="pagination_slc">
-                                       <option value="">Files Per Page</option>
-                                       <option value="50">50</option>
-                                       <option value="100">100</option>
-                                       <option value="150">150</option>
-                                   </select>
-                                  Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
-                                     <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
-                                     <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
-                                </span>
-                           </div>
+                            <div class="large-12 columns">
+                                 <div class="large-4 columns medium-5 columns pull-left">
+                                     <form class="reports_search">
+                                      <select class="inside_search_slc" id="edit_slc">
+                                          <option value=""> Action </option>
+                                          <option value="Title"> Add Title </option>
+                                          <option value="Keywords"> Add Keywords </option>
+                                          <option value="Price"> Set Price </option>
+                                          <option value="Category"> Category </option>
+                                          <option value="Image Type"> Image Type </option>
+                                          <option value="Image Subtype"> Image Subtype </option>
+                                          <option value="Orientation"> Orientation </option>
+                                          <option value="People"> People </option>
+                                          <option value="Delete" class="delete_option"> Hibernate File </option>
+                                      </select>
+                                      <span class="question_wrap">
+                                        <span class="question_this">
+                                           <img src="<?php echo base_url('assets/contributor/icons/question.png')?>">
+                                        </span>
+                                        <span class="question_text">
+                                           <a class="question_close">
+                                               <i class="fa fa-times" aria-hidden="true"></i>
+                                           </a>
+                                           Actions help you apply multiple commands on multiple files all at once. How
+                                           does it work? First select the multiple files you want to Action by clicking on
+                                           checkbox(s) on the left side of each file then choose an action under the
+                                           “Actions” dropdown menu and the click “Apply” button.
+                                           Every action you chose under the dropdown menu has the help message specific
+                                           explaining about that action. Simply move your mouse over the question mark.
+                                        </span>
+                                      </span>
+                                     </form>
+                                 </div>
+                                 <div class="large-4 columns">
+                                     <div class="message">
+                                     </div>
+                                 </div>
+                                 <div class="large-4 columns medium-4 columns pull-right">
+                                       <span class="search_pagination"> 
+                                           <select class="pagination_slc">
+                                                <option value="">Files Per Page</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                                <option value="150">150</option>
+                                            </select>
+                                             Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
+                                                      <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
+                                                      <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
+                                                 </span>
+                                 </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="reports_search large-6 columns pull-left">
-                              <form class="title">
+                            <div class="large-12 columns">
+                                <div class="reports_search large-6 columns pull-left">
+                                  <form class="title" onsubmit="return applytitleall()">
                                       <div class="add_title">
-                                       Add Title  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
+                                        Add Title  : 
+                                        <input type="text" name="all_title" class="inline_input">
+                                        <button type="submit" class="button btn_search">
+                                                   Apply
+                                        </button>
                                       </div>
-                              </form>
-                              <form class="add_keywords">
+                                  </form>
+                                  <form class="add_keywords" onsubmit="return applykeywordall()">
                                       <div class="add_title">
                                        Add Keywords  : 
-                                       <textarea type="text" name="" class="inline_input">
+                                       <textarea type="text" name="all_keyword" class="inline_input">
                                        </textarea> 
                                        <button type="submit" class="button btn_search">
                                            Apply
                                        </button>
                                       </div>
-                              </form>
-                              <form class="set_price">
+                                  </form>
+                                  <form class="set_price" onsubmit="return applypriceall()">
                                       <div class="add_title">
                                        Set Price  : 
-                                       <input type="text" name="" class="inline_input">
+                                       <input type="text" name="all_price" class="inline_input">
                                        <button type="submit" class="button btn_search">
                                            Apply
                                        </button>
                                       </div>
-                              </form>
-                              <form class="image_type">
+                                  </form>
+                                  <form class="category" onsubmit="return applycategoryall()">
+                                    <div class="add_title">
+                                      <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            Category  : 
+                                        </div>
+                                        <div class="large-6 columns">
+                                         <select multiple="multiple" name="all_category" class="slc_category">
+                                             <option value="Abstract">Abstract</option>
+                                             <option value="Agriculture/Farming">Agriculture/ Farming </option>
+                                             <option value="Animals/Livestock">Animals/ Livestock </option>
+                                             <option value="Arts/Entertainment">Arts/ Entertainment </option>
+                                             <option value="Beauty/Fashion">Beauty/ Fashion </option>
+                                             <option value="Business">Business </option>
+                                             <option value="Buildings/Landmarks">Buildings/ Landmarks </option>
+                                             <option value="Celebrity">Celebrity </option>
+                                             <option value="Education">Education </option>
+                                             <option value="Food/Cuisines">Food/ Cuisines </option>
+                                             <option value="Beverage/Drink">Beverage/ Drink </option>
+                                             <option value="Medical/Healthcare">Medical/ Healthcare </option>
+                                             <option value="Holiday">Holiday </option>
+                                             <option value="Industrial">Industrial </option>
+                                             <option value="Interior">Interior </option>
+                                             <option value="Nature">Nature </option>
+                                             <option value="Outdoor">Outdoor </option>
+                                             <option value="People">People </option>
+                                             <option value="Religion">Religion </option>
+                                             <option value="Signs/Symbols">Signs/ Symbols </option> 
+                                             <option value="Sports">Sports </option>
+                                             <option value="ICT/Technology">ICT/ Technology </option>
+                                             <option value="Infrastructure">Infrastructure </option>
+                                             <option value="Vintage">Vintage </option>
+                                             <option value="Telecommunication">Telecommunication </option>
+                                             <option value="Tourism/Hospitality">Tourism/ Hospitality </option>
+                                             <option value="Wildlife">Wildlife </option>
+                                         </select> 
+                                        </div>
+                                        <div class="large-4 columns">
+                                          <button type="submit" class="button btn_search">
+                                               Apply
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </form>
+                                  <form class="image_type" onsubmit="return applyimagetypeall()">
                                       <div class="add_title">
                                        Image Type  : 
-                                       <input type="text" name="" class="inline_input">
+                                       <select  name="all_image_type" class="inline_input">
+                                          <option>Select Image Type</option>
+                                          <option value="Creative Image">Creative Image</option>
+                                          <option value="Editorial Image">Editorial Image</option>
+                                       </select>
                                        <button type="submit" class="button btn_search">
                                            Apply
                                        </button>
                                       </div>
-                              </form>
-                              <form class="image_subtype">
-                                      <div class="add_title">
-                                       Image Subtype  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
-                                      </div>
-                              </form>
-                              <form class="orientation">
-                                      <div class="add_title">
-                                       Orientation  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
-                                      </div>
-                              </form>
-                              <form class="people">
+                                  </form>
+                                  <form class="image_subtype" onsubmit="return applyimagesubtypeall()">
+                                    <div class="add_title">
+                                     Image Subtype  : 
+                                     <select  name="all_image_subtype" class="inline_input">
+                                        <option>Select Image Subtype</option>
+                                        <option value="Photography">Photography </option>
+                                        <option value="Illustration">Illustration</option>
+                                        <option value="All">All</option>
+                                     </select>
+                                     <button type="submit" class="button btn_search">
+                                         Apply
+                                     </button>
+                                    </div>
+                                  </form>
+                                  <form class="orientation" onsubmit="return applyorientationeall()">
+                                    <div class="add_title">
+                                     Orientation  : 
+                                     <select  name="all_orientation" class="inline_input">
+                                        <option>Select Orientation</option>
+                                        <option value="Landscape">Landscape </option>
+                                        <option value="Potrait">Potrait</option>
+                                     </select>
+                                     <button type="submit" class="button btn_search">
+                                         Apply
+                                     </button>
+                                    </div>
+                                  </form>
+                                  <form class="people" onsubmit="return applypeopleall()">
                                       <div class="add_title">
                                        People  : 
-                                       <input type="text" name="" class="inline_input">
+                                       <select  name="all_people" class="inline_input">
+                                            <option>Select number of people </option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                       </select>
                                        <button type="submit" class="button btn_search">
                                            Apply
                                        </button>
                                       </div>
-                              </form>
-                              <form class="attach_release">
-                                      <div class="add_title">
-                                       Attach Release  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
+                                  </form>
+                                  <form class="attach_release">
+                                    <div class="add_title">
+                                     Attach Release  : 
+                                    <select  name="all_release" class="inline_input">
+                                          <option>Select Releases </option>
+                                          
+                                     </select>
+                                     <button type="submit" class="button btn_search">
+                                         Attach
+                                     </button>
+                                    </div>
+                                  </form>
+                                  <form class="same_shoot" onsubmit="return applysameshoot();">
+                                    <div class="add_title">
+                                     Same Shoot  : 
+                                     <div class="row collapse">
+                                       <div class="large-4 columns">
+                                          <button class="button alert" onclick="return generate_unique_code()">
+                                              Generate Same Shoot Code
+                                          </button>
+                                       </div>
+                                       <div class="large-6 columns">
+                                          <input type="text" name="all_shoot" class="all_shoot">
+                                       </div>
+                                       <div class="large-2 columns">
+                                          <button type="submit" class="button btn_search">
+                                              Apply
+                                          </button>
+                                       </div>
+                                     </div>
+                                    </div>
+                                  </form>
+                                  <div class="model_notification">
+                                    <div class="add_title">
+                                      <div class="row collapse">
+                                        <div class="large-4 columns">
+                                         Model Notification  : 
+                                        </div>
+                                        <div class="large-8 columns">
+                                            <form name="new_model" id="new_model" onsubmit="return add_model()">
+                                                <div class="row collapse">
+                                                  <div class="large-10 columns">
+                                                  <input type="email" name="all_model_notification" class="" required="required" placeholder="Enter model’s email address one at a time">
+                                                  </div>
+                                                  <div class="large-2 columns">
+                                                     <button type="submit" class="button btn_search">
+                                                         ADD
+                                                     </button>
+                                                  </div>
+                                                </div>
+                                            </form>
+                                            <form name="find_model_form" id="find_model_form" onsubmit="return find_model()">
+                                                <div class="row collapse">
+                                                  <div class="large-10 columns">
+                                                    <input type="email" name="model_email" id="model_email" class="">
+                                                  </div>
+                                                  <div class="large-2 columns">
+                                                     <button type="submit" class="button postfix">
+                                                         FIND
+                                                     </button>
+                                                  </div>
+                                                </div>
+                                            </form>
+                                            <form name="replace_model_form" id="replace_model_form" onsubmit="return replace_model()">
+                                            <div class="row collapse">
+                                              <div class="large-10 columns">
+                                                <input type="hidden" name="model_email" id="replace_model_email">
+                                                <input type="email" name="replace_email" id="replace_email" class="">
+                                              </div>
+                                              <div class="large-2 columns">
+                                                 <button type="submit" class="button postfix">
+                                                     REPLACE
+                                                 </button>
+                                              </div>
+                                            </div>
+                                            </form>
+                                        </div>
                                       </div>
-                              </form>
-                              <form class="same_shoot">
-                                      <div class="add_title">
-                                       Same Shoot  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
-                                      </div>
-                              </form>
-                              <form class="model_notification">
-                                      <div class="add_title">
-                                       Model Notification  : 
-                                       <input type="text" name="" class="inline_input">
-                                       <button type="submit" class="button btn_search">
-                                           Apply
-                                       </button>
-                                      </div>
-                              </form>
+                                    </div>
+                                  </div>
+                                  <form class="delete_items" onsubmit="return delete_items();">
+                                    <div class="popup">
+                                        <div>
+                                            <div class="content">
+                                                Are you sure you want to delete the selected items ?
+
+                                            </div>
+                                            <button type="submit" class="button success pull-left">
+                                                Cancel Process
+                                            </button>
+                                            <button type="submit" class="button btn_search pull-right">
+                                                Delete Items
+                                            </button>
+                                            <div style="clear: both"></div>
+                                        </div>
+                                    </div>
+                                    <div class="add_title">
+                                     <div class="row collapse">
+                                       <div class="large-5 columns pull-left">
+                                          <button type="submit" class="button btn_search">
+                                              Delete Selected Items
+                                          </button>
+                                         
+                                       </div>
+                                     </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div class="large-4 columns pull-right">
+                                   <button class="button btn_upload" id="submit_changes" onclick="return trigger_submit()" >Submit Changes </button>
+                                </div>
                             </div>
-                             <div class="large-4 columns medium-4 columns pull-right">
-                                <form class="row collapse">
-                                    <div class="small-8 columns pull-left">
-                                       <input type="text" name="search" class="" placeholder="Search by image id">
-                                    </div>
-                                    <div class="small-4 columns pull-left">
-                                       <a class="button btn_search" href="#">
-                                            SEARCH
-                                       </a>
-                                    </div>
-                                </form>
-                           </div> 
+                            <div style="clear: both"></div>
                         </div>
                         <div class="tab_header">  
                             
@@ -1120,136 +1296,93 @@
                                         </div>
                                     </div>
                                 </div> 
-                                <div class="report_content">
-                                    <div class="report_item">
-                                        <div class="row">
-                                            <div class="large-1 column">
-                                                <input type="checkbox" name="" class="select_file">
-                                                <img src="assets/img/search_image.png">
-                                            </div>
-                                            <div class="large-1 column">
-                                                0012354
-                                            </div>
-                                            <div class="large-2 column">
-                                                Equatorial Forest
-                                            </div>
-                                            <div class="large-3 column">
-                                                Evening, Grab, Grabbing, Stretch, Hand, Strecthing, Out,
-                                                Reaching, Sun, Rays, Watch, View, Rooftop, Kenya,
-                                                Nairobi, City, Capital, Nairobi, County, Sun, Sunset, Dusk,
-                                                Rays, Sundowner, Upperhill, City skyline, Buildings, Office
-                                            </div>
-                                            <div class="large-1 column">
-                                                $15
-                                            </div>
-                                            <div class="large-1 column">
-                                                (2)
-                                            </div>
-                                            <div class="large-1 column">
-                                                View
-                                            </div>
-                                            <div class="large-2 column">
-                                                28th Dec, 2015
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="report_item">
-                                        <div class="row">
-                                            <div class="large-1 column">
-                                                <input type="checkbox" name="" class="select_file">
-                                                <img src="assets/img/search_image.png">
-                                            </div>
-                                            <div class="large-1 column">
-                                                0012354
-                                            </div>
-                                            <div class="large-2 column">
-                                                Equatorial Forest
-                                            </div>
-                                            <div class="large-3 column">
-                                                Evening, Grab, Grabbing, Stretch, Hand, Strecthing, Out,
-                                                Reaching, Sun, Rays, Watch, View, Rooftop, Kenya,
-                                                Nairobi, City, Capital, Nairobi, County, Sun, Sunset, Dusk,
-                                                Rays, Sundowner, Upperhill, City skyline, Buildings, Office
-                                            </div>
-                                            <div class="large-1 column">
-                                                $15
-                                            </div>
-                                            <div class="large-1 column">
-                                                (2)
-                                            </div>
-                                            <div class="large-1 column">
-                                                View
-                                            </div>
-                                            <div class="large-2 column">
-                                                28th Dec, 2015
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="report_item">
-                                        <div class="row">
-                                            <div class="large-1 column">
-                                                <input type="checkbox" name="" class="select_file">
-                                                <img src="assets/img/search_image.png">
-                                            </div>
-                                            <div class="large-1 column">
-                                                0012354
-                                            </div>
-                                            <div class="large-2 column">
-                                                Equatorial Forest
-                                            </div>
-                                            <div class="large-3 column">
-                                                Evening, Grab, Grabbing, Stretch, Hand, Strecthing, Out,
-                                                Reaching, Sun, Rays, Watch, View, Rooftop, Kenya,
-                                                Nairobi, City, Capital, Nairobi, County, Sun, Sunset, Dusk,
-                                                Rays, Sundowner, Upperhill, City skyline, Buildings, Office
-                                            </div>
-                                            <div class="large-1 column">
-                                                $15
-                                            </div>
-                                            <div class="large-1 column">
-                                                (2)
-                                            </div>
-                                            <div class="large-1 column">
-                                                View
-                                            </div>
-                                            <div class="large-2 column">
-                                                28th Dec, 2015
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="report_item">
-                                        <div class="row">
-                                            <div class="large-1 column">
-                                                <input type="checkbox" name="" class="select_file">
-                                                <img src="assets/img/search_image.png">
-                                            </div>
-                                            <div class="large-1 column">
-                                                0012354
-                                            </div>
-                                            <div class="large-2 column">
-                                                Equatorial Forest
-                                            </div>
-                                            <div class="large-3 column">
-                                                Evening, Grab, Grabbing, Stretch, Hand, Strecthing, Out,
-                                                Reaching, Sun, Rays, Watch, View, Rooftop, Kenya,
-                                                Nairobi, City, Capital, Nairobi, County, Sun, Sunset, Dusk,
-                                                Rays, Sundowner, Upperhill, City skyline, Buildings, Office
-                                            </div>
-                                            <div class="large-1 column">
-                                                $15
-                                            </div>
-                                            <div class="large-1 column">
-                                                (2)
-                                            </div>
-                                            <div class="large-1 column">
-                                                View
-                                            </div>
-                                            <div class="large-2 column">
-                                                28th Dec, 2015
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>           
+                                <div class="edit_content">
+                                   <form name="edit_image_contributor" id="edit_image_contributor" onsubmit="return editimagecontributor();">
+                                   
+                                       <?php for($i=0; $i< count($all_contributor_images); $i++) { ?>
+                                       <div class="report_item edit_item">
+                                         <div class="row collapse">
+                                           <div class="large-1 column ">
+                                               <input type="checkbox" name="file_select" class="select_file">
+                                                 <img src="<?php echo $all_contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                                           </div>
+                                           <div class="large-1 column ">
+                                               <?php echo $all_contributor_images[$i]['upload_id']; ?>
+                                               <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $all_contributor_images[$i]['upload_id']; ?>">
+                                           </div>
+                                           <div class="large-2 column ">
+                                               <?php echo $all_contributor_images[$i]['file_name']; ?>
+                                               <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $all_contributor_images[$i]['file_name']; ?>">
+                                           </div>
+
+                                           <div class="large-3 column ">
+                                               <p> <?php $keys = explode(",", $all_contributor_images[$i]['file_keywords']); 
+                                                         for($k=0; $k < count($keys); $k++ ) {
+                                                             echo $keys[$k].", ";
+                                                         }
+                                                   ?> </p>
+                                               <textarea  required="required"  type="hidden" name="file_keywords[]" class="file_keywords"  placeholder="0000">
+                                                       <?php echo $all_contributor_images[$i]['file_keywords']?>
+                                               </textarea>
+                                           </div>
+                                           <div class="large-1 column ">
+                                               <?php echo $all_contributor_images[$i]['file_price_large']; ?>
+
+                                               <input  type="hidden" name="file_price_large[]" placeholder="Price" value="<?php echo $all_contributor_images[$i]['file_price_large']?>" class="file_price_large">
+                                               
+                                               <input  type="hidden" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $all_contributor_images[$i]['file_price_medium']?>" class="form_group">
+                                               
+                                               <input  type="hidden" name="file_price_small[]" value="<?php echo $all_contributor_images[$i]['file_price_small']?>" readonly="readonly" placeholder="Low" class="form_group">
+                                               <select name="file_type[]" style="display:none;" required="required" class="file_type">
+                                                 <option>Select Image Type</option>
+                                                 <option value="Creative Image" <?php if($all_contributor_images[$i]['file_type'] == "Creative Image" ) echo 'selected = "selected"'?> > Creative Image</option>
+                                                 <option value="Editorial Image" <?php if($all_contributor_images[$i]['file_type'] == "Editorial Image" ) echo 'selected = "selected"'?> > Editorial Image</option>
+                                               </select>
+                                               <select name="file_subtype[]" style="display:none;" required="required" class="file_subtype">
+                                                 <option>Select Image Subtype</option>
+                                                 <option value="Photography" <?php if($all_contributor_images[$i]['file_subtype'] == "Photography" ) echo 'selected = "selected"'?> >Photography </option>
+                                                 <option value="Illustration" <?php if($all_contributor_images[$i]['file_subtype'] == "Illustration" ) echo 'selected = "selected"'?> >Illustration</option>
+                                                 <option value="All">All</option>
+                                               </select>
+                                               <select name="file_orientation[]" type="hidden" required="required" class="file_orientation">
+                                                 <option>Select Orientation</option>
+                                                 <option value="Landscape" <?php if($all_contributor_images[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
+                                                 <option value="Potrait" <?php if($all_contributor_images[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                               </select>
+                                               
+                                               <select name="file_people[]" style="display:none;" required="required" class="file_people">
+                                                 <option>Select number of people </option>
+                                                 <option value="1" <?php if($all_contributor_images[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
+                                                 <option value="2" <?php if($all_contributor_images[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
+                                                 <option value="3" <?php if($all_contributor_images[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
+                                                 <option value="4" <?php if($all_contributor_images[$i]['file_people'] == "4" ) echo 'selected = "selected"'?>  >4</option>
+                                                 <option value="5" <?php if($all_contributor_images[$i]['file_people'] == "5" ) echo 'selected = "selected"'?>  >5</option>
+                                                 <option value="6" <?php if($all_contributor_images[$i]['file_people'] == "6" ) echo 'selected = "selected"'?>  >6</option>
+                                                 <option value="7" <?php if($all_contributor_images[$i]['file_people'] == "7" ) echo 'selected = "selected"'?>  >7</option>
+                                                 <option value="8" <?php if($all_contributor_images[$i]['file_people'] == "8" ) echo 'selected = "selected"'?>  >8</option>
+                                                 <option value="9" <?php if($all_contributor_images[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
+                                                 <option value="10" <?php if($all_contributor_images[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
+                                               </select>
+                                               <input  type="hidden" name="file_shoot[]" class="file_shoot"
+                                               value="<?php echo $all_contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                                               
+                                           </div>
+                                           <div class="large-1 column ">
+                                                 (<?php echo count($all_contributor_images[$i]['releases'])?>)
+                                           </div>
+
+                                           <div class="large-1 column ">
+                                                   <a href=""> View</a>
+                                           </div>
+                                           <div class="large-2 column ">
+                                            <?php  echo date("F j, Y", strtotime($all_contributor_images[$i]['date_uploaded']));   ?>
+                                           </div>
+                                          </div>
+                                       </div>
+
+                                   <?php } ?>
+                                   </form>
+                                </div>            
                             </div>                
                         </div>
                         <div style="clear: both"></div>

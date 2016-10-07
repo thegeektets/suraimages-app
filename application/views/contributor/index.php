@@ -52,7 +52,7 @@
         <div class="contributor_tab">
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
               <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
-              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_releases); ?>)</a></li>
+              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_releases)+count($contributor_videos); ?>)</a></li>
               <li class="tabs-title" id="sales_link"><a href="#sales">Sales History (0)</a></li>
             </ul>
         </div>
@@ -515,7 +515,7 @@
           <div class="tabs-panel contributor_panel" id="uploads">
                   <ul class="tabs inner_contributor_tabs" data-tabs id="upload-tabs">
                         <li class="tabs-title is-active"><a href="#images" aria-selected="true"> My Images (<?php echo count($contributor_images); ?>) </a></li>
-                        <li class="tabs-title"><a href="#videos">My Videos (0) </a></li>
+                        <li class="tabs-title"><a href="#videos">My Videos (<?php echo count($contributor_videos); ?>) </a></li>
                         <li class="tabs-title"><a href="#releases"> Releases (<?php echo count($contributor_releases); ?>) </a></li>
                   </ul>
                     <div class="tabs-content" data-tabs-content="upload-tabs">
@@ -555,11 +555,13 @@
                           require_once('image_file_status.php');
                         } ?>
                         <div class="tabs-panel" id="videos">
+                          <?php if($user_details[0]['video_upload_status'] == FALSE ) { ?>
+                          <?php if($user_details[0]['video_edit_status'] == FALSE ) { ?>
                               <div class="alert_message">
                               <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
                               Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is
                               worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
-                          </div>
+                              </div>
                           <form id="video_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_videos();">
                           <div class="row">
                           <div class="large-10 columns pull-right">
@@ -577,6 +579,12 @@
                                   <button class="button btn_upload_multi" type="submit"> Continue </button>
                             </div>
                           </form>
+                          <?php } else {
+                           require_once('edit_video_files.php');
+                          }?>
+                          <?php } else {
+                            require_once('video_file_status.php');
+                          } ?>
                           <div style="clear: both"></div>
                         </div>
                         <div class="tabs-panel" id="releases">
