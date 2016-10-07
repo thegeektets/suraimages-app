@@ -117,62 +117,12 @@
               var model = newmodel;
           }
          
-          $(this).parents('#model_notification').find("input[name='file_releases[]']").val(model);
+          $(this).parents('#model_notification').find("input[name='file_models[]']").val(model);
           $(this).parents('#model_notification').find(".model").append(newmodel+'<br/>');
       }
 
       return false;
   });
-    $(".add_release").click(function(){
-      var newrelease = $(this).parents('#releases_files').find("select[name='file_release']").val();
-      var newreleasetxt = $(this).parents('#releases_files').find("select[name='file_release'] option[value='"+newrelease+"']").text();
-      var oldrelease = $(this).parents('#releases_files').find("input[name='file_releases[]']").val();
-      console.log(oldrelease);
-      if ($.trim(newrelease) === $.trim(oldrelease) || $.trim(newrelease) === ''){
-          // do nothing
-      } else {
-          // add new model
-          if($.trim(oldrelease) !== ''){
-              var release = oldrelease+","+newrelease;
-          } else {
-              var release = newrelease;
-          }
-         
-          $(this).parents('#releases_files').find("input[name='file_releases[]']").val(release);
-          $(this).parents('#releases_files').find(".releases").append(newreleasetxt+'<br/>');
-      }
-
-      return false;
-  });
-
-  function add_release(){
-    applyaction();
-    $('.edit_item').each(function () { 
-      if ( $(this).find("input[name='file_select']").prop('checked') ){
-    
-           var newrelease = $("select[name='all_file_release']").val();
-           var newreleasetxt = $("select[name='all_file_release'] option[value='"+newrelease+"']").text();
-           var oldrelease = $(this).find("input[name='file_releases[]']").val();
-           console.log(oldrelease);
-           if ($.trim(newrelease) === $.trim(oldrelease) || $.trim(newrelease) === ''){
-               // do nothing
-           } else {
-               // add new model
-               if($.trim(oldrelease) !== ''){
-                   var release = oldrelease+","+newrelease;
-               } else {
-                   var release = newrelease;
-               }
-              
-               $(this).find("input[name='file_releases[]']").val(release);
-               $(this).find(".releases").append(newreleasetxt+'<br/>');
-           }
-
-      }
-    
-    });
-    return false;
-  }
 
   function delete_items(){
     applyaction();

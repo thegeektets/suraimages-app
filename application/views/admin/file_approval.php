@@ -447,23 +447,38 @@
                   </div>
                 <div class="large-3 columns">
                       <div class="large-12 columns">
-                        <strong> Attach Releases (2) </strong>
+                        <strong> Attach Releases (<?php echo count($all_contributor_images[$i]['releases']); ?>) </strong>
                       </div>
                       <div class="large-12 columns">
                            <div class="row collapse">
-                              <a href="">Jane Release form.jpg</a>
-                              <a href="">Jane’s baby girl release form.pdf</a>
+                              <?php 
+                              for($m = 0 ; $m < count($all_contributor_images[$i]['releases']); $m++){
+                                    $release = $all_contributor_images[$i]['releases'][$m]['release_name'];
+                                    $release_url = $all_contributor_images[$i]['releases'][$m]['release_url'];
+                                    if(strlen($release)> 0){
+                                        echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
+                                    }
+                              }              
+                              ; ?>
                             </div>
                       </div>
 
                      
                       <div class="large-12 columns">
                          <div class="row collapse">
-                           <strong> Model Notification (1)</strong>
+                           <strong> Model Notification (<?php echo count($all_contributor_images[$i]['models']); ?>)</strong>
                          </div>
                       </div>
                       <div class="large-12 columns">
-                          jmakali@gmail.com
+                          <?php 
+                          for($m = 0 ; $m < count($all_contributor_images[$i]['models']); $m++){
+                                $email = $all_contributor_images[$i]['models'][$m]['model_email'];
+                                if(strlen($email)> 0){
+                                    echo $email.'<br/>';
+                                }
+                          }              
+                          ; ?>
+
                       </div>
                       <div class="approve">
                         <a class="approve_img" id="approve" ><img src="<?php echo base_url('assets/admin/icons/approve.png')?>">

@@ -22,6 +22,16 @@ class contributor extends CI_Controller {
 			$id = $data['user_details'][0]['user_id'];
 			$data['payment_details'] = $this->fetch_payment_details();
 			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
+			$data['contributor_releases'] = $this->contributor_model->get_contributor_releases($id);
+		
+			for($f = 0; $f < count($data['contributor_images']); $f++){
+				
+				$file_id = $data['contributor_images'][$f]['upload_id'];
+				$models = $this->contributor_model->get_image_models($file_id);
+				$releases= $this->contributor_model->get_image_releases($file_id);
+				$data['contributor_images'][$f]['models']=$models;
+				$data['contributor_images'][$f]['releases']=$releases;
+			}
 			
 			if(sizeof($data['user_details']) > 0){
 				   $data['code'] = array_search($data['user_details']['0']['country'], $this->countrycodes()); // returns 'US'
@@ -148,6 +158,45 @@ class contributor extends CI_Controller {
 
 		 
 	}
+	public function upload_contributor_videos() {
+		 
+		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
+		 $this->load->helper(array('form', 'url'));
+		 $config['upload_path'] = './assets/uploads/';
+		 $config['allowed_types'] = 'avi|mkv|mp4|flv';
+		 $config['overwrite'] = FALSE; 
+
+		 $this->load->library('upload', $config);
+		 $this->upload->initialize($config);
+
+		 $files = $_FILES;
+		 $count = count($_FILES['videofiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
+
+			 $videofiles = 'videofiles';
+		     $_FILES['videofiles']['name'] = $files['videofiles']['name'][$i];
+		     $_FILES['videofiles']['size'] = $files['videofiles']['size'][$i];
+		     $_FILES['videofiles']['tmp_name'] = $files['videofiles']['tmp_name'][$i];
+		     $_FILES['videofiles']['error'] = $files['videofiles']['error'][$i];
+		     $_FILES['videofiles']['type'] = $files['videofiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($videofiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->contributor_model->upload_contributor_videos($id, $_FILES['videofiles']['name'], $_FILES['videofiles']['size']);
+		           $success = 1;
+         	    }
+		    $i++;
+		}
+		echo $success;
+	}
 	public function upload_contributor_images() {
 		 
 		 $this->load->library('session');
@@ -191,6 +240,45 @@ class contributor extends CI_Controller {
 		}
 		echo $success;
 	}
+	public function upload_contributor_releases() {
+		 
+		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
+		 $this->load->helper(array('form', 'url'));
+		 $config['upload_path'] = './assets/uploads/';
+		 $config['allowed_types'] = 'pdf|jpg|png';
+		 $config['overwrite'] = FALSE; 
+
+		 $this->load->library('upload', $config);
+		 $this->upload->initialize($config);
+
+		 $files = $_FILES;
+		 $count = count($_FILES['releasefiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
+
+			 $releasefiles = 'releasefiles';
+		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
+		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
+		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
+		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
+		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($releasefiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->contributor_model->upload_contributor_releases($id, $_FILES['releasefiles']['name']);
+		           $success = 1;
+         	    }
+		    $i++;
+		}
+		echo $success;
+	}
 	public function edit_contributor_images() {
 		$this->load->helper('url'); 
 		$this->load->library('session');
@@ -216,11 +304,32 @@ class contributor extends CI_Controller {
 	    		$file_orientation = $_POST['file_orientation'][$i];
 	    		$file_people = $_POST['file_people'][$i];
 	    		$file_shoot = $_POST['file_shoot'][$i];
-				$this->contributor_model->edit_contributor_images( $file_id,
-					$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-					$file_orientation,$file_people,$file_shoot );	
-	    		$i++;
-	    		$success = 1;
+	    		$file_model = $_POST['file_models'][$i];
+	    		$file_release = $_POST['file_releases'][$i];
+	    		$model_array = explode(",", $file_model);
+	    		$release_array= explode(",", $file_release);
+	    		
+	    		if(trim($file_name) === "" || trim($file_keywords) === "" || trim($file_type) === "" || trim($file_subtype) === ""
+	    		   || trim($file_orientation) === ""){
+
+	    			// validation error
+	    			echo $success;
+	    			return false;
+	    			
+	    		} else {
+		    		for ($t=0; $t < count($model_array) ; $t++) { 
+		    			$this->add_file_model($file_id,$id,$model_array[$t],$file_price_large);
+		    		}
+		    		for ($r=0; $r < count($release_array); $r++) {
+		    			$this->add_file_release($file_id,$id,$release_array[$r]);
+		    		}
+					    $this->contributor_model->edit_contributor_images( $file_id,
+						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+						$file_orientation,$file_people,$file_shoot );	
+		    		$i++;
+		    		$success = 1;	
+	    		}
+	    		
 	    	}
 	    	if($success === 1){
 	    		$this->user_model->update_edit_status($id,FALSE);
@@ -240,9 +349,24 @@ class contributor extends CI_Controller {
 	    	echo 0;
 	    } else {
 	    	$id = $data['user_session']['user_meta']['0']['id'];
-			$this->contributor_model->add_contributor_model($id);
+			$this->contributor_model->add_contributor_model();
 			echo 1;
 	    }	
+	}
+	public function add_file_model($file_id,$user_id,$model_email,$price){
+		$this->load->library('session');
+		if(strlen(trim($model_email)) > 0){
+			$this->contributor_model->add_file_model($file_id,$user_id,$model_email);
+		}
+		// send email to model with details of the file and photographer and price if set
+	}
+	public function add_file_release($file_id,$user_id,$release_id){
+		$this->load->library('session');
+		$this->contributor_model->add_file_release($file_id,$user_id,$release_id);
+		if(strlen(trim($release_id)) > 0){
+			$this->contributor_model->add_file_release($file_id,$user_id,$release_id);
+		}
+		
 	}
 	public function find_model(){
 	    $this->load->helper('url'); 

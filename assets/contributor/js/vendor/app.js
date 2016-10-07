@@ -1,10 +1,6 @@
 $(document).foundation()
 
 $(document).ready(function(){
-	$("#upload_release").hide();
-	$(".release_filer").click(function(){
-		$("#upload_release").show();
-	});
 	$('select[type="hidden"]').each(function(){
 		$(this).hide();
 	});

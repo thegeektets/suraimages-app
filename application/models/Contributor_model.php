@@ -7,6 +7,16 @@ class Contributor_model extends CI_Model {
                 parent::__construct();
                 $this->load->database(); 
         }
+        public function upload_contributor_videos($id,$name,$size) {
+            $this->load->helper('url');
+            $this->load->library('session');
+            $upload_data = $this->upload->data(); 
+            $ppic =   $upload_data['file_name'];
+            $url = base_url("assets/uploads/".$ppic); 
+            $query = 
+            $this->db->query(" INSERT INTO contributor_video_uploads(user_id,file_url,file_name,file_size) VALUES(".$this->db->escape($id).",".$this->db->escape($url).","
+                .$this->db->escape($name).",".$this->db->escape($size).")");
+        }
         public function upload_contributor_images($id,$name,$size) {
             $this->load->helper('url');
             $this->load->library('session');
@@ -17,18 +27,69 @@ class Contributor_model extends CI_Model {
             $this->db->query(" INSERT INTO contributor_image_uploads(user_id,file_url,file_name,file_size) VALUES(".$this->db->escape($id).",".$this->db->escape($url).","
                 .$this->db->escape($name).",".$this->db->escape($size).")");
         }
+        public function upload_contributor_releases($id,$name) {
+            $this->load->helper('url');
+            $this->load->library('session');
+            $upload_data = $this->upload->data(); 
+            $ppic =   $upload_data['file_name'];
+            $url = base_url("assets/uploads/".$ppic); 
+            $query = 
+            $this->db->query(" INSERT INTO contributor_releases(user_id,release_name,release_url) VALUES(".$this->db->escape($id).",".$this->db->escape($name).","
+                .$this->db->escape($url).")");
+        }
+        public function get_contributor_releases($id) {
+            $query = $this->db->query("SELECT * FROM contributor_releases WHERE user_id = ".$this->db->escape($id)."");   
+            $files = $query->result_array();
+            return array_reverse($files);
+        }
         public function get_contributor_images($id) {
             $query = $this->db->query("SELECT * FROM contributor_image_uploads WHERE user_id = ".$this->db->escape($id)."");   
             $image = $query->result_array();
             return array_reverse($image);
         }
-        public function add_contributor_model($id){
-            $model = $this->input->post("all_model_notification");
-            $user_id = $id;
-            $query = $this->db->query("     
-            REPLACE INTO contributor_models (model_email,user_id)
-            VALUES(".$this->db->escape($model).",".$this->db->escape($user_id).")");
+        public function get_image_models($file_id){
+            $query = $this->db->query("SELECT * FROM contributor_image_models, contributor_models WHERE contributor_models.model_id = contributor_image_models.model_id  AND file_id =  ".$this->db->escape($file_id)."");   
+            return $query->result_array();
         }
+        public function get_image_releases($file_id){
+            $query = $this->db->query("SELECT * FROM contributor_image_releases, contributor_releases WHERE contributor_releases.release_id = contributor_image_releases.release_id  AND file_id =  ".$this->db->escape($file_id)."");   
+            return $query->result_array();
+        }
+        public function add_contributor_model(){
+            $model = $this->input->post("all_model_notification");
+            $query = $this->db->query("     
+            REPLACE INTO contributor_models (model_email)
+            VALUES(".$this->db->escape($model).")");
+        }
+        public function get_model_id($model){
+            $query = $this->db->query("SELECT model_id FROM contributor_models WHERE model_email = ".$this->db->escape($model)."");   
+            foreach ($query->result() as $row)
+                {
+                return $row->model_id;
+            }
+        }
+                
+        public function add_file_model($file_id,$user_id,$model){
+            $model_id = $this->get_model_id($model);
+            if($model_id !== NULL){
+                $query = 
+                $this->db->query(" INSERT INTO contributor_image_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            } else {
+                $query = $this->db->query("     
+                REPLACE INTO contributor_models (model_email)
+                VALUES(".$this->db->escape($model).")");
+                $model_id = $this->get_model_id($model);
+                $this->db->query(" INSERT INTO contributor_image_models(user_id,model_id,file_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($model_id).","
+                    .$this->db->escape($file_id).")");      
+            }
+        }
+        public function add_file_release($file_id,$user_id,$release) {
+            $this->db->query(" INSERT INTO contributor_image_releases(user_id,file_id,release_id) VALUES(".$this->db->escape($user_id).",".$this->db->escape($file_id).","
+                .$this->db->escape($release).")");      
+            
+        }
+        // replace per user images
         public function find_contributor_model($id){
             $model = $this->input->post("model_email");
             $user_id = $id;

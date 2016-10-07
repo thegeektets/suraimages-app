@@ -674,10 +674,20 @@
                                          <?php  echo date("F j, Y", strtotime($newcontributors[$i]['date_joined'])); ?>
                                      </div>
                                      <div class="large-2 column report_col">
-                                          (0)
+                                          (<?php echo $newcontributors[$i]['uploads']
+                                                    [0]['image_uploads']; ?>)
                                      </div>
                                      <div class="large-2 column report_col">
-                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$newcontributors[$i]['user_id']);?>" >(5)</a>
+                                        <?php if($newcontributors[$i]['new_uploads']
+                                                    [0]['image_uploads'] < 1) { ?>
+                                                (<?php echo $newcontributors[$i]['new_uploads']
+                                                          [0]['image_uploads']; ?>)
+                                            <?php } else { ?>     
+                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$newcontributors[$i]['user_id']);?>" >
+                                                (<?php echo $newcontributors[$i]['new_uploads']
+                                                          [0]['image_uploads']; ?>)
+                                          </a>
+                                             <?php } ?>
                                      </div>
                                      
                                   </div>
@@ -721,10 +731,12 @@
                                                   ?>
                                               </div>
                                               <div>
-                                                  <span class="strong"> Uploads: </span> 0
+                                                  <span class="strong"> Uploads: </span> <?php echo $newcontributors[$i]['uploads']
+                                                    [0]['image_uploads']; ?>
                                               </div>
                                               <div>
-                                                  <span class="strong"> New Uploads: </span> 5
+                                                  <span class="strong"> New Uploads: </span> <?php echo $newcontributors[$i]['new_uploads']
+                                                    [0]['image_uploads']; ?>
                                               </div>
                                               <div>
                                                   <span class="strong"> Identification: </span> 
@@ -827,11 +839,21 @@
                                      <div class="large-2 column report_col">
                                          <?php  echo date("F j, Y", strtotime($exscontributors[$i]['date_joined'])); ?>
                                      </div>
-                                     <div class="large-2 column report_col">
-                                          (0)
+                                      <div class="large-2 column report_col">
+                                          (<?php echo $exscontributors[$i]['uploads']
+                                                    [0]['image_uploads']; ?>)
                                      </div>
                                      <div class="large-2 column report_col">
-                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$exscontributors[$i]['user_id']);?>" >(5)</a>
+                                        <?php if($exscontributors[$i]['new_uploads']
+                                                    [0]['image_uploads'] < 1) { ?>
+                                                (<?php echo $exscontributors[$i]['new_uploads']
+                                                          [0]['image_uploads']; ?>)
+                                            <?php } else { ?>     
+                                          <a onclick="set_session();" href="<?php echo base_url('index.php/admin/start_file_approval/'.$exscontributors[$i]['user_id']);?>" >
+                                                (<?php echo $exscontributors[$i]['new_uploads']
+                                                          [0]['image_uploads']; ?>)
+                                          </a>
+                                             <?php } ?>
                                      </div>
                                      
                                   </div>
@@ -875,10 +897,12 @@
                                                   ?>
                                               </div>
                                               <div>
-                                                  <span class="strong"> Uploads: </span> 0
+                                                  <span class="strong"> Uploads: </span>  (<?php echo $exscontributors[$i]['uploads']
+                                                    [0]['image_uploads']; ?>)
                                               </div>
                                               <div>
-                                                  <span class="strong"> New Uploads: </span> 5
+                                                  <span class="strong"> New Uploads: </span>  (<?php echo $exscontributors[$i]['new_uploads']
+                                                    [0]['image_uploads']; ?>)
                                               </div>
                                               <div>
                                                   <span class="strong"> Identification: </span> 

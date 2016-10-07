@@ -52,7 +52,7 @@
         <div class="contributor_tab">
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
               <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
-              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images); ?>)</a></li>
+              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_releases); ?>)</a></li>
               <li class="tabs-title" id="sales_link"><a href="#sales">Sales History (0)</a></li>
             </ul>
         </div>
@@ -516,7 +516,7 @@
                   <ul class="tabs inner_contributor_tabs" data-tabs id="upload-tabs">
                         <li class="tabs-title is-active"><a href="#images" aria-selected="true"> My Images (<?php echo count($contributor_images); ?>) </a></li>
                         <li class="tabs-title"><a href="#videos">My Videos (0) </a></li>
-                        <li class="tabs-title"><a href="#releases"> Releases (0) </a></li>
+                        <li class="tabs-title"><a href="#releases"> Releases (<?php echo count($contributor_releases); ?>) </a></li>
                   </ul>
                     <div class="tabs-content" data-tabs-content="upload-tabs">
                     <?php if($user_details[0]['upload_status'] == FALSE ) { ?>
@@ -531,7 +531,7 @@
                           <div class="row">
                               <div class="large-10 columns pull-right">
                                  Shows us what you are good at by submitting atleast 5 of your best images in JPEG format. Make sure the images are
-                                 of high quality with a minimum file size of 8MB each.
+                                 of high quality with a minimum file size of 8MB each. (select more than one to upload multiple files)
                                </div>
                                <div class="large-2 columns pull-left">   
                                       <input type="file" name="trialfiles[]"  class="impress_image_filer" multiple="multiple">
@@ -560,21 +560,24 @@
                               Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is
                               worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
                           </div>
-
+                          <form id="video_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_videos();">
                           <div class="row">
                           <div class="large-10 columns pull-right">
-                            Upload HD 1080p videos with each file not exceeding 3G in size and maximum of 10 images per upload.
+                            Upload HD 1080p videos with each file not exceeding 3G in size and maximum of 10 files per upload.(select more than one to upload multiple files)
                            </div>
                            
                            <div class="large-2 columns pull-left">   
-                             <form action="/assets/contributor/filer/php/upload.php" method="post" enctype="multipart/form-data">
-                                  <input type="file" name="files[]"  class="image_filer" multiple="multiple">
-                                 
-                             </form>
+                                  <input type="file" name="videofiles[]"  class="video_filer" multiple="multiple">
                            </div>
                            </div>
-                              <div style="clear: both"></div>
-                          
+                           <hr/>
+                            <div class="tab_content">
+                                  <div class="message pull-left">
+                                  </div>
+                                  <button class="button btn_upload_multi" type="submit"> Continue </button>
+                            </div>
+                          </form>
+                          <div style="clear: both"></div>
                         </div>
                         <div class="tabs-panel" id="releases">
                           <div class="alert_message">
@@ -583,21 +586,129 @@
                               worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
                           </div>
 
+                          <form id="release_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_release_forms();">
                           <div class="row">
                               <div class="large-10 columns pull-right">
-                                 Upload all your releases in either PDF, JPEG, PNG or TIFF format. Each release attached should be less than 2MB each.
+                                 Upload all your releases in either PDF, JPEG, PNG or TIFF format. Each release attached should be less than 2MB each.(select more than one to upload multiple files)
                                </div>
                                <div class="large-2 columns pull-left">   
-                                 <form action="contributor/filer/php/upload.php" method="post" enctype="multipart/form-data">
-                                      <input type="file" name="files[]"  class="release_filer" multiple="multiple">
-                                 </form>
+                                      <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
                                </div>
+                          </div>
+                          <hr/>
+                           <div class="tab_content" id="upload_release">
+                                 <div class="message pull-left">
+                                 </div>
+                                 <button class="button btn_upload_multi large-1 column" type="submit"> Save </button>
                            </div>
+                           </form>
                            <div style="clear: both"></div>
-                        </div>
+                           <?php  if (count($contributor_releases) > 0 ) { ?>
+                                     <div style="clear: both"></div> 
+                                     <div class="row">
+                                         <div class="large-12 columns">
+                                           <div class="large-4 columns medium-5 columns pull-left">
+                                               <form class="reports_search">
+                                                <select class="inside_search_slc" id="edit_slc">
+                                                    <option value="Delete" class="delete_option"> Delete </option>
+                                                </select>
+                                                <span class="question_wrap">
+                                                  <span class="question_this">
+                                                     <img src="<?php echo base_url('assets/contributor/icons/question.png')?>">
+                                                  </span>
+                                                  <span class="question_text">
+                                                     <a class="question_close">
+                                                         <i class="fa fa-times" aria-hidden="true"></i>
+                                                     </a>
+                                                     Actions help you apply multiple commands on multiple files all at once. How
+                                                     does it work? First select the multiple files you want to Action by clicking on
+                                                     checkbox(s) on the left side of each file then choose an action under the
+                                                     “Actions” dropdown menu and the click “Apply” button.
+                                                     Every action you chose under the dropdown menu has the help message specific
+                                                     explaining about that action. Simply move your mouse over the question mark.
+                                                  </span>
+                                                </span>
+                                               </form>
+                                           </div>
+                                         </div>
+                                     </div>
+                                     <div class="row">
+                                         <div class="large-12 columns">
+                                             <div class="reports_search large-6 columns pull-left">
+                                               <form class="delete_items" onsubmit="return delete_items();">
+                                                 <div class="popup">
+                                                     <div>
+                                                         <div class="content">
+                                                             Are you sure you want to delete the selected items ?
+
+                                                         </div>
+                                                         <button type="submit" class="button success pull-left">
+                                                             Cancel Process
+                                                         </button>
+                                                         <button type="submit" class="button btn_search pull-right">
+                                                             Delete Items
+                                                         </button>
+                                                         <div style="clear: both"></div>
+                                                     </div>
+                                                 </div>
+                                                 <div class="add_title">
+                                                  <div class="row collapse">
+                                                    <div class="large-5 columns pull-left">
+                                                       <button type="submit" class="button btn_search">
+                                                           Delete Selected Items
+                                                       </button>
+                                                      
+                                                    </div>
+                                                  </div>
+                                                 </div>
+                                               </form>
+                                             </div>
+                                             
+                                         </div>
+                                         <div style="clear: both"></div>
+                                     </div> 
+                                     <div style="clear: both"></div>
+                                     <div class="report_header">
+                                       <div class="row">
+                                        <div class="large-1 column">
+                                          <input type="checkbox" name="" class="select_all">
+                                            File
+                                        </div>
+                                        <div class="large-2 column">
+                                            Name
+                                        </div>
+                                        <div class="large-2 column">
+                                            Date Uploaded
+                                        </div>
+                                      </div>
+                                     </div> 
+                                     <div class="edit_content">
+                                          <form>
+                                          <?php for($i=0; $i< count($contributor_releases); $i++) { ?>
+                                            <div class="report_item edit_item">
+                                              <div class="row collapse">
+                                                <div class="large-1 column report_col">
+                                                    <input type="checkbox" name="file_select" class="select_file">
+                                                    <?php echo $contributor_releases[$i]['release_id']; ?>
+                                                    <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_releases[$i]['release_id']; ?>">
+                                                </div>
+                                                <div class="large-2 column report_col">
+                                                  <a href="<?php echo $contributor_releases[$i]['release_url']; ?>" target="_blank">
+                                                    <?php echo $contributor_releases[$i]['release_name']; ?>
+                                                  </a>
+                                                    <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_releases[$i]['release_name']; ?>">
+                                                </div>
+                                                <div class="large-2 column report_col">
+                                                 <?php  echo date("F j, Y", strtotime($contributor_releases[$i]['date_uploaded']));   ?>
+                                                </div>
+                                               </div>
+                                            </div>
+                                           <?php } ?>
+                                          </form>
+                                     </div>
+                            <?php } ?>
                   </div>
-                 
-                
+              </div>
           </div>
           <div class="tabs-panel contributor_panel" id="sales">
                 <div class="tab_header">

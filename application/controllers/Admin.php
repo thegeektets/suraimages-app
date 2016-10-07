@@ -21,13 +21,35 @@ class admin extends CI_Controller {
 			if($data['user_session']['logged_in'] === TRUE ){
 				$data['user_details'] = $this->fetch_user_details();
 				$id = $data['user_details'][0]['user_id'];
-				$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
 				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
+				for($f = 0; $f < count($data['all_contributor_images']); $f++){
+					
+					$file_id = $data['all_contributor_images'][$f]['upload_id'];
+					$models = $this->contributor_model->get_image_models($file_id);
+					$releases= $this->contributor_model->get_image_releases($file_id);
+					$data['all_contributor_images'][$f]['models']=$models;
+					$data['all_contributor_images'][$f]['releases']=$releases;
+				}
+				
 				$data['rf_pricing'] = $this->fetch_rf_pricing();
 	     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
 	     	   	$data['members'] = $this->fetch_member_users();
 	     	   	$data['newcontributors'] = $this->fetch_newcontributor_users();
+	     	   	for ( $i=0;$i<count($data['newcontributors']);$i++ ) {
+	     	   		$user_id = $data['newcontributors'][$i]['user_id'];
+	     	   		$data['newcontributors'][$i]['uploads']=
+	     	   		$this->admin_model->get_all_image_uploads($user_id);
+	     	   		$data['newcontributors'][$i]['new_uploads']=
+	     	   		$this->admin_model->get_new_image_uploads($user_id);
+	     	   	}
 	     	   	$data['exscontributors'] = $this->fetch_excontributor_users();
+	     	   	for ( $i=0;$i<count($data['exscontributors']);$i++ ) {
+	     	   		$user_id = $data['exscontributors'][$i]['user_id'];
+	     	   		$data['exscontributors'][$i]['uploads']=
+	     	   		$this->admin_model->get_all_image_uploads($user_id);
+	     	   		$data['exscontributors'][$i]['new_uploads']=
+	     	   		$this->admin_model->get_new_image_uploads($user_id);
+	     	   	}
 	     	   	$this->load->view('admin/header' , $data);
 				$this->load->view('admin/index' , $data);
 				$this->load->view('admin/footer');

@@ -44,6 +44,12 @@
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
               sessionStorage.setItem('onReload', 'activateUpload');
               location.reload();
+              
+        } else if (data === '0') {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').append("Failed to submit, make sure all required fields are filled"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
         } else {
           $('.message').attr("class" ,"message alert-box warning");
           $('.message').append(""+data); 
@@ -61,6 +67,31 @@
   return false;
   }
   function add_model(){
+    applyaction();
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+  
+          var newmodel = $("input[name='all_model_notification']").val();
+          var oldmodel = $(this).find("input[name='file_models[]']").val();
+          console.log(oldmodel);
+          if ($.trim(newmodel) === $.trim(oldmodel) || $.trim(newmodel) === ''){
+              // do nothing
+          } else {
+              // add new model
+              if($.trim(oldmodel) !== ''){
+                  var model = oldmodel+","+newmodel;
+              } else {
+                  var model = newmodel;
+              }
+             
+              $(this).find("input[name='file_models[]']").val(model);
+              $(this).find(".model").append(newmodel+'<br/>');
+
+          }
+      }
+  
+    });
+
     $.ajax({
     type: 'post',
     url:'<?php echo base_url("/index.php/contributor/add_model")?>',
@@ -69,12 +100,12 @@
       function(data){
         if (data === '1'){
            $('.message').addClass("alert-box success");
-           $('.message').append("Success model added"); 
+           $('.message').text("Success model added"); 
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
           $('.message').addClass("alert-box warning");
-          $('.message').append("Failed to add model , thats all we know"); 
+          $('.message').text("Failed to add model , thats all we know"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         }
         $('.message').show();
@@ -96,15 +127,15 @@
       function(data){
         if (data === '1'){
            $('.message').addClass("alert-box success");
-           $('.message').append("Model found"); 
+           $('.message').text("Model found"); 
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         } else if (data === '0'){
           $('.message').addClass("alert-box warning");
-          $('.message').append("Model email not found , add new"); 
+          $('.message').text("Model email not found , add new"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         } else {
           $('.message').addClass("alert-box warning");
-          $('.message').append("Internal server error , thats all we know"); 
+          $('.message').text("Internal server error , thats all we know"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         }
         $('.message').show();
@@ -129,15 +160,15 @@
       function(data){
         if (data === '1'){
            $('.message').addClass("alert-box success");
-           $('.message').append("Model Replaced"); 
+           $('.message').text("Model Replaced"); 
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         } else if (data === '0'){
           $('.message').addClass("alert-box warning");
-          $('.message').append("Model replacement failed"); 
+          $('.message').text("Model replacement failed"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         } else {
           $('.message').addClass("alert-box warning");
-          $('.message').append("Internal server error , thats all we know"); 
+          $('.message').text("Internal server error , thats all we know"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
 
         }
@@ -161,27 +192,27 @@
     function(data){
       if (data === '1'){
          $('.message').attr("class" ,"message alert-box success");
-         $('.message').append("<strong>Success!</strong> Changes has been saved successfully!"); 
+         $('.message').text("<strong>Success!</strong> Changes has been saved successfully!"); 
          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '0'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').append("<strong>Validation Error!</strong> All fields are required"); 
+        $('.message').text("<strong>Validation Error!</strong> All fields are required"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '3'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').append("<strong>Error!</strong> Old password is incorrect, please check and try again"); 
+        $('.message').text("<strong>Error!</strong> Old password is incorrect, please check and try again"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '2'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').append("<strong>Error!</strong> Password does not match confirmation password"); 
+        $('.message').text("<strong>Error!</strong> Password does not match confirmation password"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else {
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').append("Internal server error, please try again"); 
+        $('.message').text("Internal server error, please try again"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       }
@@ -206,17 +237,17 @@ function update_account(){
     function(data){
       if (data === '1') {
          $('#message').attr("class" ,"alert-box success");
-         $('#message').append("<strong>Success!</strong> Changes has been saved successfully!"); 
+         $('#message').text("<strong>Success!</strong> Changes has been saved successfully!"); 
          $('#message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '0') {
         $('#message').attr("class" ,"alert-box warning");
-        $('#message').append("<strong>Validation Error!</strong> All fields are required"); 
+        $('#message').text("<strong>Validation Error!</strong> All fields are required"); 
         $('#message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else {
         $('#message').attr("class" ,"alert-box warning");
-        $('#message').append("Internal server error, please try again"); 
+        $('#message').text("Internal server error, please try again"); 
         $('#message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       }
@@ -237,7 +268,7 @@ function submit_trial_images(){
     if($( ".jFiler-item" ).length < 1){
 
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').append("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         $('.message').show();
     
@@ -290,13 +321,13 @@ function submit_trial_images(){
             function(data){
               if (data === '1'){
                  $('.message').attr("class" ,"message alert-box success");
-                 $('.message').append("<strong>Success!</strong> Images have been uploaded successfully!"); 
+                 $('.message').text("Images have been uploaded successfully!"); 
                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                     sessionStorage.setItem('onReload', 'activateUpload');
                     location.reload();
               } else {
                 $('.message').attr("class" ,"message alert-box warning");
-                $('.message').append(""+data); 
+                $('.message').text(""+data); 
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                 
               }
@@ -312,7 +343,176 @@ function submit_trial_images(){
     }
     return false;
 }
+function submit_release_forms(){
+    var success = "FALSE";
+    if($( ".jFiler-item" ).length < 1){
 
+        $('.message').attr("class" ,"message alert-box warning");
+        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+        $('.message').show();
+    
+    } else {
+        $( ".jFiler-item" ).each(function( index ) {
+           success = "FALSE";
+           var text = $( this ).text();
+           var size = text.substring(text.lastIndexOf("size:"), text.indexOf('type:'));
+               size = $.trim(size);
+           var type = text.substring(text.indexOf('type:'));
+               type = $.trim(type);
+           if(size.includes("KB")){
+              var tstr = type.substring(6);
+              tstr = tstr.toUpperCase();
+              tstr = $.trim(tstr);
+              
+              if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                 $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                 $(this ).append('File format not allowed');
+                 return false;
+              } else {
+                success = "TRUE";
+              }
+           } else {
+                var mbsize = size.substring(6,size.indexOf('M'));
+                if(mbsize > 2 ){
+                  $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                  $( this ).append('Release form file should not be more than 2MB');
+                  return false
+                } else {
+                  var tstr = type.substring(6);
+                  tstr = tstr.toUpperCase();
+                  tstr = $.trim(tstr);
+                  
+                  if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                     $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                     $(this ).append('File format not allowed');
+                     return false;
+                  } else {
+                    success = "TRUE";
+                  }
+                }
+           }
+        });
+    }
+
+    if(success === "TRUE"){
+          var form = document.getElementById('release_form');
+          var myfd = new FormData(form);
+          $.ajax({
+          type: 'post',
+          url:'<?php echo base_url("/index.php/contributor/upload_contributor_releases")?>',
+          data:myfd,
+          processData: false,
+          contentType:false,
+          success:
+            function(data){
+              if (data === '1'){
+                 $('.message').attr("class" ,"message alert-box success");
+                 $('.message').text("Release files have been uploaded successfully!"); 
+                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    sessionStorage.setItem('onReload', 'activateUpload');
+                    location.reload();
+              } else {
+                $('.message').attr("class" ,"message alert-box warning");
+                $('.message').text(""+data); 
+                $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                
+              }
+              $('.message').show();
+            },
+          fail:
+            function(data){
+              console.log(data);
+            }
+
+        });
+
+    }
+    return false;
+}
+function submit_videos(){
+    var success = "FALSE";
+    if($( ".jFiler-item" ).length < 1){
+
+        $('.message').attr("class" ,"message alert-box warning");
+        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+        $('.message').show();
+    
+    } else {
+        $( ".jFiler-item" ).each(function( index ) {
+           success = "FALSE";
+           var text = $( this ).text();
+           var size = text.substring(text.lastIndexOf("size:"), text.indexOf('type:'));
+               size = $.trim(size);
+           var type = text.substring(text.indexOf('type:'));
+               type = $.trim(type);
+           if (size.includes("KB")) {
+              $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+              $( this ).append('File is too small');
+              return false ;
+           } else if (size.includes("GB")) {
+              $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+              $( this ).append('File is too large');
+              return false ;
+           } else {
+                var mbsize = size.substring(6,size.indexOf('M'));
+                if(mbsize < 1 ){
+                  $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                  $( this ).append('File should not be less than 1MB');
+                  return false
+                } else {
+                  var tstr = type.substring(6);
+                  tstr = tstr.toUpperCase();
+                  tstr = $.trim(tstr);
+                  
+                  if (tstr !== "AVI" && tstr !== "MP4" && tstr !== "FLV" && tstr !== "MKV") {
+                     $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                     $(this ).append('File format not allowed');
+                     return false;
+                  } else {
+                    success = "TRUE";
+                  }
+                }
+           }
+        });
+    }
+
+    if(success === "TRUE"){
+          var form = document.getElementById('video_form');
+          var myfd = new FormData(form);
+          $.ajax({
+          type: 'post',
+          url:'<?php echo base_url("/index.php/contributor/upload_contributor_videos")?>',
+          data:myfd,
+          processData: false,
+          contentType:false,
+          success:
+            function(data){
+              if (data === '1'){
+                 $('.message').attr("class" ,"message alert-box success");
+                 $('.message').text("Video files have been uploaded successfully!"); 
+                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    sessionStorage.setItem('onReload', 'activateUpload');
+                    location.reload();
+              } else {
+                $('.message').attr("class" ,"message alert-box warning");
+                $('.message').text(""+data); 
+                $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                
+              }
+              $('.message').show();
+            },
+          fail:
+            function(data){
+              console.log(data);
+            }
+
+        });
+
+    }
+    return false;
+}
 $('.close').click(
   function(){
    console.log('something');
