@@ -4,7 +4,7 @@
   $('textarea[type="hidden"]').each(function(){
     $(this).hide();
   });
-  
+
   function applyaction(){
     $('.message').hide();
     $('.message').attr("class" ,"message alert-box secondary");
@@ -190,7 +190,32 @@
     });
     return false;
   }
+  
+  $('.delete_file').click(function(){
 
+    $(this).parents('.edit_item').find("input[name='file_select']").prop('checked' , true);
+    $(".title").hide();
+    $(".add_keywords").hide();
+    $(".set_price").hide();
+    $(".image_type").hide();
+    $(".image_subtype").hide();
+    $(".orientation").hide();
+    $(".attach_release").hide();
+    $(".same_shoot").hide();
+    $(".model_notification").hide();
+    $(".people").hide();
+    $(".set_price").hide();
+    $(".category").hide();
+    $(".delete_items").show();
+    $('.popup').show();   
+    return false;
+  });
+
+
+  function cancel_delete(){
+    $('.popup').hide();
+    return false;
+  }
   function delete_items(){
     applyaction();
     $('.popup').show();

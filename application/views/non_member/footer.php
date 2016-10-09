@@ -1,3 +1,4 @@
+     <div style="clear: both"></div>
      <footer class="footer-bar">
       <div class="row">  
           <div class="large-5 columns medium-7 columns">
@@ -34,9 +35,11 @@
     </footer>
 
     <script src="<?php echo base_url('/assets/non_member/js/vendor/jquery.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/jquery.mosaicflow.js')?>"></script>    
     <script src="<?php echo base_url('/assets/non_member/js/vendor/what-input.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/vendor/foundation.js')?>"></script>
-    <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>    
-
+    <script src="<?php echo base_url('/assets/non_member/js/vendor/slick.min.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>
+    
   </body>
 </html>

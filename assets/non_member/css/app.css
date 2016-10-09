@@ -32,7 +32,10 @@ body {
 .top-bar , .top-bar ul {
 	background-color: #262134;	
 }
-
+.bottom_search {
+    position: fixed !important;
+    bottom: 30px !important;
+}
 .top-bar {
 	padding: 0px;
   position: fixed;
@@ -55,6 +58,7 @@ body {
 }
 .inside_body {
 	padding-top: 90px;
+  padding-bottom: 40px;
 }
 .title-bar {
     background: #262134;
@@ -149,7 +153,6 @@ body {
 	width: 10%;
 	background: #f8991c;
   text-align: center;
-  padding-top: 6px;
 }
 
 .footer-bar {
@@ -232,14 +235,14 @@ body {
  	border: none;
  }
 
- .accordion-content > ul > li > a {
+ .accordion-content > form > ul > li > a {
  	font-family: 'Calibri';
  	font-weight: 300;
  	color: #807f83;
  	font-size: 14px;
  	padding-left: 15px;
  }
- .accordion-content > ul > li {
+ .accordion-content > form > ul > li {
  	background-color: #ede8e3;
  	margin-bottom: 5px;
  }
@@ -433,15 +436,9 @@ body {
    margin-bottom: 4px;
 }
 .search_results_img {
-  min-width: 200px;
-  max-width: 280px;
-  position: relative;
-  display: inline-block;
-  margin-bottom:2px;
   
 }
 .search_img {
-	border: 1px solid #807f82;
 }
 .search_img > img  , .search_img {
     width: 100%;
@@ -451,7 +448,7 @@ body {
     position: absolute;
     bottom: 0px;
     background: rgba(0,0,0,0.6);
-    width: 96%;
+    width: 100%;
 }
 .search_img_exclusive {
     position: absolute;
@@ -465,9 +462,10 @@ body {
 }
 .search_img_title {
     color: #fff;
-    font-size: 10px;
+    font-size: 14px;
     width: 70%;
     font-family: 'Calibri';
+    font-weight: 300;
     float: left;
     padding-left: 5px;
     padding-right: 5px;
@@ -496,7 +494,7 @@ body {
     width: 70%;
     background: #231f20;
     z-index: 1;
-    top: 100px;
+    top: 80px;
     padding-right: 5%;
     padding-left: 5%;
     padding-bottom: 5%;
@@ -511,6 +509,7 @@ body {
   padding-left: 0px;	
   position: relative;
   padding-bottom: 0px;
+  max-height: 300px;
 }
 .search_popup_details {
     font-size: 14px;
@@ -519,6 +518,7 @@ body {
     float: left;
     color: #807f83;
     padding-bottom: 10px;
+    padding-top: 10px;
 }
 .search_popup_title {
     width: 50%;
@@ -687,8 +687,7 @@ hr {
 	margin-top: 5px;
 }
 .slick-slider {
-  margin-left: 50px;
-  margin-right: 50px;
+  
 }
 button.slick-prev.slick-arrow {
     position: absolute;
@@ -768,3 +767,15 @@ li.search_bar_item.accordion-item.is-active {
     text-align: right;
     padding-right: 20px;
 }
+.no_results {
+    text-align: center;
+    font-size: 18px;
+    color: #262134;
+    padding-top: 60px;
+}
+.home_logo.result {
+    margin: 0 auto;
+    padding-bottom: 10px;
+    margin-bottom: 0px;
+}
+

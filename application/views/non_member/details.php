@@ -1,19 +1,3 @@
-<!doctype html>
-<html class="no-js" lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sura Images | Details </title>
-
-    <link rel="stylesheet" href="assets/css/foundation.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/slick.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/font.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/calibri.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
-   
-  </head>
   <body class="inside_page_body">
 
     <div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
@@ -21,26 +5,26 @@
       <div class="title-bar-title">Sura Images </div>
     </div>
 
-    <div class="top-bar" id="main-menu">
-        <div class="top-bar-left">
-            <div class="home_logo">
-        </div>
-        </div>
-        <div class="top-bar-right inside-page">
-          <ul class="menu" data-responsive-menu="medium-dropdown">
-              <li class="menu-text menu-divider"> <a href="#">Sign in  </a></li>
-              <li class="menu-text menu-divider"><a href="#"> Register </a></li>
-              <li class="menu-text"><a href="#" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (2)</a></li>
-              
-          </ul>
-        </div>
-     
+   <div class="top-bar" id="main-menu">
+          <div class="row">
+            <div class="top-bar-left">
+                <div class="home_logo">
+            </div>
+            </div>
+             <div class="top-bar-right">
+                  <ul class="menu" data-responsive-menu="medium-dropdown">
+                    <li class="menu-text menu-divider"> <a href="<?php echo base_url('/index.php/registration/login')?>">Sign in  </a></li>
+                    <li class="menu-text menu-divider"><a href="#"> <a href="<?php echo base_url('/index.php/registration')?>">Register </a></li>
+                    <li class="menu-text"><a href="#" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (2)</a></li>
+                  </ul>
+              </div>
+           </div>
     </div>
 
  
 
   <div class="inside_body">
-      <div class="row">
+      <div class="row collapse">
             <div class="large-6 columns pull-left">
                     <form class="inside_search_frm">
                       <input type="text" name="search" placeholder="Forest" class="inside_search_txt">
@@ -55,31 +39,35 @@
                     </form>
             </div>
        </div>
-       <div class="row">
+       <div class="row collapse">
             <div class="large-6 columns pull-left">
-                <img src="assets/img/search_image.png" class="search_display_img">
-                
-                <div class="search_img_exclusive">
-                   Available for purchase from 5th September, 2016
-                </div>
-                
+                <img src="<?php echo $all_results[0]['file_url'] ?>" class="search_display_img">
+                 <div class="similar_links pull-right">
+                   <a href="search_page.html"> Download Sample Image </a> 
+                 </div>
                 <div class="search_popup_details">
 
                     <div class="search_popup_title">Title 
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content">Equitorial Forest</div>
+                    <div class="search_popup_content"><?php echo $all_results[0]['file_name'] ?></div>
 
                     <div class="search_popup_title">Image ID 
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content">SuraImage-000111</div>
+                    <div class="search_popup_content"><?php echo $all_results[0]['upload_id'] ?></div>
 
                     <div class="search_popup_title" >Release Information 
                       <span class="pull-right">:</span>
                     </div>
                     
-                    <div class="search_popup_content">Yes</div>
+                    <div class="search_popup_content">
+                        <?php if(count($all_results[0]['releases']) > 0) { ?>
+                                Yes
+                        <?php }  else { ?>
+                                No
+                        <?php } ?>
+                    </div>
 
 
 
@@ -90,12 +78,12 @@
                     <div class="search_popup_title">License Type 
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content"> Royalty Free </div>
+                    <div class="search_popup_content"> <?php echo $all_results[0]['file_license'] ?> </div>
 
                     <div class="search_popup_title">Image Type
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content">Creative Image</div>
+                    <div class="search_popup_content"><?php echo $all_results[0]['file_type'] ?></div>
 
 
 
@@ -107,24 +95,36 @@
                     <div class="search_popup_title">Photographer 
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content">William Miriga Ngari</div>
-
+                    <div class="search_popup_content">
+                      <?php echo $all_results[0]['firstname']." ".$all_results[0]['middlename']." ".$all_results[0]['surname'] ?> 
+                    </div>
                     <div class="search_popup_title">Copyrights
                       <span class="pull-right">:</span>
                     </div>
-                    <div class="search_popup_content">William Miriga Ngari  </div>
-
+                    <div class="search_popup_content">
+                       <?php echo $all_results[0]['firstname']." ".$all_results[0]['middlename']." ".$all_results[0]['surname'] ?> 
+                    </div>
                     <div class="search_popup_title" > Categories
                       <span class="pull-right">:</span>
                     </div>
                     
-                    <div class="search_popup_content">Buildings/Landmarks , Outdoor , People , Infrastructure </div>
+                    <div class="search_popup_content">
+                        <?php echo $all_results[0]['file_category'] ?> 
+                    </div>
 
                     <div class="search_popup_title" > Keywords
                       <span class="pull-right">:</span>
                     </div>
                     
-                    <div class="search_popup_content"> <a href="">Evening</a>  , <a href="">Grab</a></div>
+                    <div class="search_popup_content">
+                 <?php $keys = explode(",", $all_results[0]['file_keywords']); 
+                     for($k=0; $k < count($keys); $k++ ) {
+                        if(strlen(trim($keys[$k]))){
+                           ?>
+                           <a href="<?php echo base_url('/index.php/main/search/'.trim($keys[$k])); ?>">     <?php echo $keys[$k]; ?>
+                                                    </a> ,
+                 <?php } }  ?> 
+                    </div>
 
 
                 </div>
@@ -158,10 +158,22 @@
                                             <input type="radio" name="quality"> Small
                                           </div>
                                           <div class="desc_column">
-                                              <p>500x250px | 6x4cm | 72dpi | 500KB</p>
+                                              <p>
+                                                 <span class="file_dimensions">
+                                                  <?php
+                                                    list($width, $height) = getimagesize($all_results[0]['file_url']);
+                                                    echo round(($width/3),0).' x '.round(($height/3),0).'px';
+
+                                                  ?>
+                                                  |
+                                                </span>
+                                                <span class="file_s_size"> 
+                                                  <?php echo ($all_results[0]['file_size']/3)?>
+                                                </span>
+                                              </p>
                                           </div>
                                           <div class="price_column">
-                                            <span class="price">$35</span>
+                                             <span class="price">$<?php echo round(($all_results[0]['file_price_large']/3),2)?></span>
                                           </div>
                                       </div>
                                       <hr style="border-top: solid 1px;" />
@@ -170,10 +182,21 @@
                                             <input type="radio" name="quality"> Medium
                                           </div>
                                           <div class="desc_column">
-                                             <p>1200x750px | 13x8.5cm | 150dpi | 2MB</p>
+                                             <p>
+                                               <span class="file_dimensions">
+                                                 <?php
+                                                   list($width, $height) = getimagesize($all_results[0]['file_url']);
+                                                   echo round(($width/2),0).' x '.round(($height/2),0).'px';
+                                                 ?>
+                                                 |
+                                               </span>
+                                               <span class="file_m_size"> 
+                                                 <?php echo ($all_results[0]['file_size']/2)?>
+                                               </span>
+                                             </p>
                                           </div>
                                           <div class="price_column">
-                                             <span class="price">$85</span>
+                                             <span class="price">$<?php echo round(($all_results[0]['file_price_large']/2),2)?></span>
                                           </div>
                                       </div>
                                       <hr style="border-top: solid 1px;" />
@@ -182,10 +205,21 @@
                                             <input type="radio" name="quality"> Large
                                           </div>
                                           <div class="desc_column">
-                                            <p>5000x3200px | 22x14cm | 300dpi | 14MB</p>
+                                            <p>
+                                              <span class="file_dimensions">
+                                                <?php
+                                                  list($width, $height) = getimagesize($all_results[0]['file_url']);
+                                                  echo $width.' x '.$height.'px';
+                                                ?>
+                                                |
+                                              </span>
+                                              <span class="file_l_size"> 
+                                                <?php echo $all_results[0]['file_size']?>
+                                              </span>
+                                            </p>
                                           </div>
                                           <div class="price_column">
-                                            <span class="price">$190</span>
+                                            <span class="price">$<?php echo $all_results[0]['file_price_large']?></span>
                                           </div>
                                       </div>
                                       <div class="price_footer">
@@ -194,13 +228,9 @@
                                       <div class="price_footer">
                                             <button class="button success"> Add to Basket</button>
                                       </div>
-                                      <div class="search_price_exclusive">
-                                         Available for purchase from 5th September, 2016
-                                      </div>
-
                                   </div>
                                   <div class="tabs-panel" id="panel2">
-                                    <p>Exclusive license search_price_exclusivemeans that the licensee/ the buyer has exclusive rights to the content (Images, Videos) they
+                                    <p>Exclusive license means that the licensee/ the buyer has exclusive rights to the content (Images, Videos) they
                                       buy for a speci ed period of time. Meaning, the licensee will be the only person to use the content s for the
                                       stipulated period of time and within that period the content s will be inactive for purchase from any other
                                       licensee until the duration of the license e pires. See our Exclusivity & Control page for more information.</p>
@@ -280,78 +310,22 @@ region and sub region to help licensee understand the distribution of the conten
                   
             </div>
             <div class="row">
-                  <div class="similar_links">
-                    Same Shoot | <a href="search_page.html"> View All </a> 
-                  </div>
-                  <div class="large-11 columns similar-images">
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                      <div class="large-2 columns">
-                        <img src="assets/img/search_image.png" class="search_img">
-
-                      </div>
-                  </div>  
+                <?php 
+                if(is_array($all_results[0]['same_shoots'])){ ?>
+                <div class="similar_links">
+                  Same Shoot | <a href="<?php echo base_url('index.php/main/shoot/'.$all_results[0]['file_same_shoot_code']); ?>" target="_blank"> View All </a> 
+                </div>
+                <div class="large-12 columns similar-images">
+                    <?php for($s=0; $s < count($all_results[0]['same_shoots']); $s++ ){ ?>
+                    <div class="large-2 columns">
+                      <img src="<?php echo $all_results[0]['same_shoots'][$s]['file_url'] ?>" class="search_img" onerror="this.style.display='none'">
+                    </div>
+                    <?php } ?>
+                </div>  
+                <?php } ?>
+                </div>
             </div>
             
        </div>
-       <footer class="large-12 columns inside-footer-bar">
-     
-          <div class="large-6 columns medium-7 columns">
-            <div class="footer-menu">
-
-              <ul class="menu">
-                  <li class="menu-text menu-divider"> <a href="#"> Home </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> About Us </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Terms & Conditions </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Contact Us </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Resources </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> FAQs </a></li>
-                  <li class="menu-text"><a href="#"> Blog </a></li>
-              </ul>
-              
-            </div>
-
-          </div>
-          <div class="large-6 columns medium-3 columns">
-              <span class="copyright"> Copyright &copy; 2016 SuraImages </span>
-
-          </div>
-         
-
-      
-    </footer>
-
 
     
-    <script src="assets/js/vendor/jquery.js"></script>
-    <script src="assets/js/vendor/what-input.js"></script>
-    <script src="assets/js/vendor/foundation.js"></script>
-    <script src="assets/js/vendor/fontAwesome.js"></script>
-    <script src="assets/js/vendor/slick.min.js"></script>
-    <script src="assets/js/app.js"></script>    
-  </body>
-</html>

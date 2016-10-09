@@ -30,16 +30,16 @@
 
     <div class="row">
         <div class="home_search">
-          <form class="frm_home_search">
-              <input type="text" name="search" class="inpt_home_search" placeholder="Search images, videos and illustrations" />
-              <select class="slt_home_search">
-                  <option>Images</option>
-                  <option>Videos</option>
-                  <option>Illustrations</option>
+          <form class="frm_home_search" on" <?php echo form_open('main/start_search'); ?>
+              <input type="text" name="search_term" class="inpt_home_search" placeholder="Search images, videos and illustrations" required="required" />
+              <select class="slt_home_search" required="required" name="search_cat">
+                  <option value="image">Images</option>
+                  <option value="video">Videos</option>
+                  <option value="illustration">Illustrations</option>
               </select>
-              <a class="btn_home_search" href="search_page.html">
+              <button class="btn_home_search" type="submit">
                   <i class="fa fa-search fa-2x" aria-hidden="true"></i>
-              </a>
+              </button>
                    
           </form>
         </div>

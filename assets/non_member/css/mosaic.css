@@ -1,0 +1,27 @@
+.group:before,
+.group:after {
+	content:" ";
+	display:table;
+	}
+.group:after {
+	clear:both;
+	}
+
+
+.mosaicflow {
+	 margin-bottom: 60px;
+	}
+
+.mosaicflow__column {
+	float:left;
+	}
+
+.mosaicflow__item {
+	position:relative;
+	}
+	.mosaicflow__item img {
+		display:block;
+		width:100%;
+		max-width:500px;
+		height:auto;
+		}

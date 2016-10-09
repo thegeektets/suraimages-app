@@ -26,7 +26,7 @@
        <div class="large-12 columns">
          <div class="large-4 columns medium-5 columns pull-left">
              <form class="reports_search">
-              <select class="inside_search_slc" id="edit_slc">
+              <select class="inside_search_slc edit_slc" id="edit_slc">
                   <option value=""> Action </option>
                   <option value="Title"> Add Title </option>
                   <option value="Keywords"> Add Keywords </option>
@@ -300,12 +300,12 @@
                            Are you sure you want to delete the selected items ?
 
                        </div>
-                       <button type="submit" class="button success pull-left">
-                           Cancel Process
-                       </button>
-                       <button type="submit" class="button btn_search pull-right">
-                           Delete Items
-                       </button>
+                       <button type="submit" class="button success pull-left" onclick="return cancel_delete() ">
+                            Cancel Process
+                        </button>
+                        <button type="submit" class="button btn_search pull-right" onclick="return submit_video_delete()">
+                            Delete Items
+                        </button>
                        <div style="clear: both"></div>
                    </div>
                </div>
@@ -431,6 +431,8 @@
                   </select>
                   <input  type="hidden" name="file_shoot[]" class="file_shoot"
                   value="<?php echo $contributor_videos[$i]['file_same_shoot_code']?>" placeholder="">
+                  <input type="hidden" name="file_models[]">
+                  <input type="hidden" name="file_releases[]">
                   
               </div>
               <div class="large-2 column report_col">

@@ -75,19 +75,19 @@
       function(data){
         if (data === '1'){
            $('.message').attr("class" ,"message alert-box success");
-           $('.message').append("<strong>Success!</strong> Images have been uploaded successfully!"); 
+           $('.message').text("Images have been edited successfully!"); 
            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
               sessionStorage.setItem('onReload', 'activateUpload');
               location.reload();
               
         } else if (data === '0') {
           $('.message').attr("class" ,"message alert-box warning");
-          $('.message').append("Failed to submit, make sure all required fields are filled"); 
+          $('.message').text("Failed to submit, make sure all required fields are filled"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
           $('.message').attr("class" ,"message alert-box warning");
-          $('.message').append(""+data); 
+          $('.message').text(""+data); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         }
@@ -227,22 +227,22 @@
     function(data){
       if (data === '1'){
          $('.message').attr("class" ,"message alert-box success");
-         $('.message').text("<strong>Success!</strong> Changes has been saved successfully!"); 
+         $('.message').text("Changes has been saved successfully!"); 
          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '0'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong>Validation Error!</strong> All fields are required"); 
+        $('.message').text("All fields are required"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '3'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong>Error!</strong> Old password is incorrect, please check and try again"); 
+        $('.message').text("Old password is incorrect, please check and try again"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '2'){
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong>Error!</strong> Password does not match confirmation password"); 
+        $('.message').text("Password does not match confirmation password"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else {
@@ -272,12 +272,12 @@ function update_account(){
     function(data){
       if (data === '1') {
          $('#message').attr("class" ,"alert-box success");
-         $('#message').text("<strong>Success!</strong> Changes has been saved successfully!"); 
+         $('#message').text("Changes has been saved successfully!"); 
          $('#message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else if (data === '0') {
         $('#message').attr("class" ,"alert-box warning");
-        $('#message').text("<strong>Validation Error!</strong> All fields are required"); 
+        $('#message').text("All fields are required"); 
         $('#message').append('<a href="#"" class="close" id="close">&times;</a>');
         
       } else {
@@ -303,7 +303,7 @@ function submit_trial_images(){
     if($( ".jFiler-item" ).length < 1){
 
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').text("Make sure the number of files uploaded is not less than one"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         $('.message').show();
     
@@ -383,7 +383,7 @@ function submit_release_forms(){
     if($( ".jFiler-item" ).length < 1){
 
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').text("Make sure the number of files uploaded is not less than one"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         $('.message').show();
     
@@ -470,7 +470,7 @@ function submit_videos(){
     if($( ".jFiler-item" ).length < 1){
 
         $('.message').attr("class" ,"message alert-box warning");
-        $('.message').text("<strong> warning!</strong> make sure the number of files uploaded is not less than one"); 
+        $('.message').text("Make sure the number of files uploaded is not less than one"); 
         $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         $('.message').show();
     
@@ -548,6 +548,102 @@ function submit_videos(){
     }
     return false;
 }
+function submit_video_delete(){
+    $('.popup').hide();
+    var success = false;
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+    
+         var file_id = $(this).find("input[name='file_id[]']").val();
+           $.ajax({
+           type: 'post',
+           url:'<?php echo base_url("/index.php/contributor/delete_video_file/")?>'+file_id,
+           data:$('#edit_image_contributor').serialize(),
+           success:
+             function(data){
+               if (data === '1') {
+                  success = true; 
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Files have been deleted"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               } else {
+                  success = false;
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text("Failed to delete file"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               }
+               $('#message').show();
+             },
+           fail:
+             function(data){
+               console.log(data);
+             }
+
+         });
+          $(this).hide();
+
+      }
+    
+    });
+
+    return false;
+  }
+function submit_delete(){
+    $('.popup').hide();
+    var success = false;
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+    
+         var file_id = $(this).find("input[name='file_id[]']").val();
+           $.ajax({
+           type: 'post',
+           url:'<?php echo base_url("/index.php/contributor/delete_image_file/")?>'+file_id,
+           data:$('#edit_image_contributor').serialize(),
+           success:
+             function(data){
+               if (data === '1') {
+                  success = true; 
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Files have been deleted"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               } else {
+                  success = false;
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text("Failed to delete file"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               }
+               $('#message').show();
+             },
+           fail:
+             function(data){
+               console.log(data);
+             }
+
+         });
+          $(this).hide();
+
+      }
+    
+    });
+
+    return false;
+  }
 $('.close').click(
   function(){
    console.log('something');

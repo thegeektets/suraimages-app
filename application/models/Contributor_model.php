@@ -42,6 +42,18 @@ class Contributor_model extends CI_Model {
             $files = $query->result_array();
             return array_reverse($files);
         }
+        public function delete_contributor_image($file_id) {
+                $this->db->query("     
+                DELETE from  contributor_image_uploads WHERE upload_id = ".$this->db->escape($file_id) ."");      
+        }
+        public function delete_contributor_video($file_id) {
+                $this->db->query("     
+                DELETE from  contributor_video_uploads WHERE upload_id = ".$this->db->escape($file_id) ."");      
+        }
+        public function delete_contributor_release($file_id) {
+                $this->db->query("     
+                DELETE from  contributor_releases WHERE release_id = ".$this->db->escape($file_id) ."");      
+        }
         public function get_contributor_images($id) {
             $query = $this->db->query("SELECT * FROM contributor_image_uploads WHERE user_id = ".$this->db->escape($id)."");   
             $image = $query->result_array();

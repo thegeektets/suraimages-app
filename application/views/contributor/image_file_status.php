@@ -301,12 +301,12 @@
                            Are you sure you want to delete the selected items ?
 
                        </div>
-                       <button type="submit" class="button success pull-left">
-                           Cancel Process
-                       </button>
-                       <button type="submit" class="button btn_search pull-right">
-                           Delete Items
-                       </button>
+                       <button type="submit" class="button success pull-left" onclick="return cancel_delete() ">
+                            Cancel Process
+                        </button>
+                        <button type="submit" class="button btn_search pull-right" onclick="return submit_delete()">
+                            Delete Items
+                        </button>
                        <div style="clear: both"></div>
                    </div>
                </div>
@@ -428,6 +428,8 @@
                   </select>
                   <input  type="hidden" name="file_shoot[]" class="file_shoot"
                   value="<?php echo $contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                  <input type="hidden" name="file_models[]">
+                  <input type="hidden" name="file_releases[]">
                   
               </div>
               <div class="large-2 column report_col">

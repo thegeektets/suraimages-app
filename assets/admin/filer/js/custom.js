@@ -14,6 +14,9 @@ $(document).ready(function() {
      $('.release_filer').filer({
         showThumbs: true
     });
+    $('.video_filer').filer({
+        showThumbs: true
+    }); 
     
     
     //Example 2

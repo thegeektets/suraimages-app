@@ -292,10 +292,10 @@
                             Are you sure you want to delete the selected items ?
 
                         </div>
-                        <button type="submit" class="button success pull-left">
+                        <button type="submit" class="button success pull-left" onclick="return cancel_delete() ">
                             Cancel Process
                         </button>
-                        <button type="submit" class="button btn_search pull-right">
+                        <button type="submit" class="button btn_search pull-right" onclick="return submit_video_delete()">
                             Delete Items
                         </button>
                         <div style="clear: both"></div>
@@ -579,7 +579,7 @@
                 </div>
                 </div>
                 </div>
-                <div class="close_img">
+                <div class="close_img delete_file">
                     <img src="<?php echo base_url('assets/contributor/img/close.png')?>">
                 </div>
           </div>

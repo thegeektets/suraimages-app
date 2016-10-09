@@ -14,6 +14,7 @@ class contributor extends CI_Controller {
 		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();
 		//var_dump($data['user_session']);
+		$data['success'] = '' ;
 		
 	if (isset($data['user_session']['logged_in'])) {
 		
@@ -92,6 +93,18 @@ class contributor extends CI_Controller {
 	    }
 	}
 
+	public function delete_image_file($file_id){
+		$this->contributor_model->delete_contributor_image($file_id);
+		echo 1;
+	}
+	public function delete_video_file($file_id){
+		$this->contributor_model->delete_contributor_video($file_id);
+		echo 1;
+	}
+	public function delete_release_file($file_id){
+		$this->contributor_model->delete_contributor_release($file_id);
+		echo 1;
+	}
 	public function update_id() {
 		 
 		 $this->load->library('session');
