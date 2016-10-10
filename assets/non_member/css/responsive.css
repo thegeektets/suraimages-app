@@ -66,4 +66,9 @@
 	}
 	
 }
+@media screen and (max-width: 640px) {
+	.inside_body {
+	   padding-top:10px;
+	}
+}
 

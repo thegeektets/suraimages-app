@@ -80,7 +80,7 @@ class Admin_model extends CI_Model {
             ", file_status = ".$this->db->escape($file_status).", file_license = ".$this->db->escape($file_license)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
         public function get_all_image_uploads($user_id){
-            $query = $this->db->query("SELECT count(*) AS image_uploads FROM contributor_image_uploads WHERE file_status != 0 AND user_id = ".$user_id."");
+            $query = $this->db->query("SELECT count(*) AS image_uploads FROM contributor_image_uploads WHERE file_status = 1 AND user_id = ".$user_id."");
               return $query->result_array();
         }
         public function get_new_image_uploads($user_id){
@@ -89,7 +89,7 @@ class Admin_model extends CI_Model {
               return $query->result_array();
         }
         public function get_all_video_uploads($user_id){
-            $query = $this->db->query("SELECT count(*) AS video_uploads FROM contributor_video_uploads WHERE file_status != 0 AND user_id = ".$user_id."");
+            $query = $this->db->query("SELECT count(*) AS video_uploads FROM contributor_video_uploads WHERE file_status = 1 AND user_id = ".$user_id."");
               return $query->result_array();
         }
         public function get_new_video_uploads($user_id){
@@ -104,7 +104,7 @@ class Admin_model extends CI_Model {
             return array_reverse($image);
         }
         public function get_contributor_images() {
-            $query = $this->db->query("SELECT * FROM contributor_image_uploads");   
+            $query = $this->db->query("SELECT * FROM contributor_image_uploads WHERE file_status = 1");   
             $image = $query->result_array();
             return array_reverse($image);
         }
