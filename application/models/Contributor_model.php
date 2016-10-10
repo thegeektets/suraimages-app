@@ -143,14 +143,14 @@ class Contributor_model extends CI_Model {
             $this->db->query("UPDATE contributor_models SET model_email = ".$this->db->escape($model)." WHERE user_id = ".$this->db->escape($user_id)." AND model_email = ".$this->db->escape($email)."");   
         }
         public function edit_contributor_images($file_id,$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-                    $file_orientation,$file_people,$file_shoot){
+                    $file_orientation,$file_people,$file_shoot,$file_category){
             $this->db->query("UPDATE contributor_image_uploads SET 
-            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
+            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." , file_category = ".$this->db->escape($file_category).", file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
         public function edit_contributor_videos($file_id,$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-                    $file_orientation,$file_people,$file_shoot){
+                    $file_orientation,$file_people,$file_shoot,$file_category){
             $this->db->query("UPDATE contributor_video_uploads SET 
-            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
+            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." ,file_category = ".$this->db->escape($file_category)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
 
 }

@@ -383,9 +383,18 @@
                                   <label>Category:<span class="required_asteric">*</span></label>
                               </div>
                               <div class="large-7 columns">
-                                  <select multiple="multiple" class="slc_category"
-                                  name="file_category[]">
+                                  <select multiple="multiple" class="slc_category file_category"
+                                    name="<?php echo 'file_category'.
+                                  $contributor_images[$i]['upload_id'] ?>[]">
                                     <option>Select Categories</option>
+                                      <?php 
+                                        $categories = explode(",", $contributor_images[$i]['file_category']);
+                                         for($c=0; $c < count($categories); $c++) { 
+                                      ?>
+                                        <option value="<?php echo $categories[$c]; ?>" selected="selected">
+                                          <?php echo $categories[$c];?>
+                                        </option>
+                                        <?php } ?> 
                                      <option value="Abstract" <?php if($contributor_videos[$i]['file_category'] == "Abstract" ) echo 'selected = "selected"'?> >Abstract</option>
                                      <option value="Agriculture/Farming"
                                       <?php if($contributor_videos[$i]['file_category'] == "Agriculture/Farming" ) echo 'selected = "selected"'?> >Agriculture/ Farming </option>

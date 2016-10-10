@@ -323,7 +323,11 @@ class contributor extends CI_Controller {
 	    		$file_price_large = $_POST['file_price_large'][$i];
 	    		$file_price_medium =$_POST['file_price_medium'][$i];
 	    		$file_price_small =$_POST['file_price_small'][$i];
-	    		// $file_category = $_POST['file_category'][$i];
+	    		if(is_array($_POST['file_category'.$file_id])){
+	    			$file_category = implode(', ' ,$_POST['file_category'.$file_id] );
+	    		} else {
+	    			$file_category = $_POST['file_category'.$file_id];
+	    		}
 	    		$file_type = $_POST['file_type'][$i];
 	    		$file_subtype = $_POST['file_subtype'][$i];
 	    		$file_orientation = $_POST['file_orientation'][$i];
@@ -349,7 +353,7 @@ class contributor extends CI_Controller {
 		    		}
 					    $this->contributor_model->edit_contributor_videos( $file_id,
 						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-						$file_orientation,$file_people,$file_shoot );	
+						$file_orientation,$file_people,$file_shoot,$file_category );	
 		    		$i++;
 		    		$success = 1;	
 	    		}
@@ -373,14 +377,20 @@ class contributor extends CI_Controller {
 	    	$size = sizeof($_POST['file_id']);
 	    	$success = 0;
 	    	
+	    	
 	    	while($i < $size) {
+	    		
 	    		$file_id = $_POST['file_id'][$i];
 	    		$file_name = $_POST['file_name'][$i];
 	    		$file_keywords = $_POST['file_keywords'][$i];
 	    		$file_price_large = $_POST['file_price_large'][$i];
 	    		$file_price_medium =$_POST['file_price_medium'][$i];
 	    		$file_price_small =$_POST['file_price_small'][$i];
-	    		// $file_category = $_POST['file_category'][$i];
+	    		if(is_array($_POST['file_category'.$file_id])){
+	    			$file_category = implode(', ' ,$_POST['file_category'.$file_id] );
+	    		} else {
+	    			$file_category = $_POST['file_category'.$file_id];
+	    		}
 	    		$file_type = $_POST['file_type'][$i];
 	    		$file_subtype = $_POST['file_subtype'][$i];
 	    		$file_orientation = $_POST['file_orientation'][$i];
@@ -392,7 +402,7 @@ class contributor extends CI_Controller {
 	    		$release_array= explode(",", $file_release);
 	    		
 	    		if(trim($file_name) === "" || trim($file_keywords) === "" || trim($file_type) === "" || trim($file_subtype) === ""
-	    		   || trim($file_orientation) === ""){
+	    		   || trim($file_orientation) === "" || trim($file_category) === ""){
 
 	    			// validation error
 	    			echo $success;
@@ -407,7 +417,7 @@ class contributor extends CI_Controller {
 		    		}
 					    $this->contributor_model->edit_contributor_images( $file_id,
 						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-						$file_orientation,$file_people,$file_shoot );	
+						$file_orientation,$file_people,$file_shoot,$file_category );	
 		    		$i++;
 		    		$success = 1;	
 	    		}

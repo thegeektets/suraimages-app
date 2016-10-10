@@ -60,10 +60,9 @@
     var all_category = $('.tabs-panel .is-active').find("select[name='all_category']").val();
    $('.edit_item').each(function () { 
      if ( $(this).find("input[name='file_select']").prop('checked') ){
-        $(this).find("select[name='file_category[]']" ).val(all_category).change();
         var value = all_category;
-        $(this).find("select[name='file_category[]'] option[value='"+value+"']").attr('selected', 'selected');
-        $(this).find("select[name='file_category[]'] option[value='"+value+"']").prop('selected', 'selected');
+        $(this).find('.ms-choice').text(''+value+'');
+        $(this).find(".file_category").val(value).change();
       }
    });
    return false;  
