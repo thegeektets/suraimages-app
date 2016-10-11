@@ -32,8 +32,56 @@
 <script src="<?php echo base_url('/assets/admin/js/app.js')?>"></script> 
 <script src="<?php echo base_url('/assets/admin/js/adminfiles.js')?>"></script> 
 <script src="<?php echo base_url('/assets/contributor/js/editfiles.js')?>"></script>
-<script src="<?php echo base_url('/assets/admin/multiselect/multiple-select.js')?>"></script>    
+<script src="<?php echo base_url('/assets/admin/multiselect/multiple-select.js')?>"></script> 
+<?php if (($user_session['single_image_file']) === TRUE || ($user_session['activate_upload']) === TRUE) {?>
+  <script type="text/javascript">
+        $("#account").removeClass('is-active');
+        $("#account_link").removeClass('is-active');
+        $("#contributors").addClass('is-active');
+        $("#uploads_link").addClass('is-active');
+        $("#contributor_link").addClass('is-active');
+        $("#nwcontributors").removeClass('is-active');
+        $("#nwcontributors_link").removeClass('is-active');
+  </script>
+<?php } 
+  
+?>   
 <script type="text/javascript">
+    function editimagecontributor(){
+     $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/contributor/edit_contributor_images")?>',
+      data:$('#edit_image_contributor').serialize(),
+      success:
+        function(data){
+          if (data === '1'){
+             $('.message').attr("class" ,"message alert-box success");
+             $('.message').text("Images have been edited successfully!"); 
+             $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                sessionStorage.setItem('onReload', 'activateUpload');
+                location.reload();
+                
+          } else if (data === '0') {
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text("Failed to submit, make sure all required fields are filled"); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            
+          } else {
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text(""+data); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            
+          }
+          $('.message').show();
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    return false;
+    }
     function editvideoadmin(){
      $.ajax({
       type: 'post',

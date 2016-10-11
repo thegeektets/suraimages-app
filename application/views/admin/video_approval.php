@@ -162,7 +162,7 @@
                  <select  name="all_orientation" class="inline_input">
                     <option>Select Orientation</option>
                     <option value="Landscape">Landscape </option>
-                    <option value="Potrait">Potrait</option>
+                    <option value="Portrait">Portrait</option>
                  </select>
                  <button type="submit" class="button btn_search">
                      Apply
@@ -426,7 +426,7 @@
                                 <select name="file_orientation[]" required="required" class="file_orientation">
                                     <option>Select Orientation</option>
                                     <option value="Landscape" <?php if($all_contributor_videos[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                                    <option value="Potrait" <?php if($all_contributor_videos[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                    <option value="Portrait" <?php if($all_contributor_videos[$i]['file_orentiation'] == "Portrait" ) echo 'selected = "selected"'?> >Portrait</option>
                                   </select>
                             </div>
                             <div class="large-5 columns">

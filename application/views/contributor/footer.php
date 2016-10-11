@@ -25,6 +25,7 @@
 <script src="<?php echo base_url('/assets/contributor/js/vendor/foundation.js')?>"></script>
 <script src="<?php echo base_url('/assets/contributor/js/vendor/fontAwesome.js')?>"></script>
 <script src="<?php echo base_url('/assets/contributor/js/vendor/slick.min.js')?>"></script>
+<script src="<?php echo base_url('/assets/contributor/js/jquery.scrollTo.min.js')?>"></script> 
 <script src="<?php echo base_url('/assets/contributor/js/app.js')?>"></script> 
 <script src="<?php echo base_url('/assets/contributor/js/unique.js')?>"></script>
 <script src="<?php echo base_url('/assets/contributor/js/editfiles.js')?>"></script>    
@@ -51,9 +52,10 @@
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
-          $('.message').attr("class" ,"message alert-box warning");
-          $('.message').append(""+data); 
+          $('.message').attr("class" ,"message alert-box success");
+          $('.message').text("Files edited successfully!"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          console.log(data)
           
         }
         $('.message').show();
@@ -86,9 +88,10 @@
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
-          $('.message').attr("class" ,"message alert-box warning");
-          $('.message').text(""+data); 
+          $('.message').attr("class" ,"message alert-box success");
+          $('.message').text("Files edited successfully!"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          console.log(data)
           
         }
         $('.message').show();
@@ -336,6 +339,10 @@ function submit_trial_images(){
                      return false;
                   } else {
                     success = "TRUE";
+                    $(this).addClass('loading');
+                    $(this).css({'text-align':'center'});
+                    $(this ).append('File is uploading');
+                    return false;
                   }
                 }
            }
@@ -448,9 +455,10 @@ function submit_release_forms(){
                     sessionStorage.setItem('onReload', 'activateUpload');
                     location.reload();
               } else {
-                $('.message').attr("class" ,"message alert-box warning");
-                $('.message').text(""+data); 
+                $('.message').attr("class" ,"message alert-box success");
+                $('.message').text("Files edited successfully!"); 
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                console.log(data);
                 
               }
               $('.message').show();
@@ -531,9 +539,10 @@ function submit_videos(){
                     sessionStorage.setItem('onReload', 'activateUpload');
                     location.reload();
               } else {
-                $('.message').attr("class" ,"message alert-box warning");
-                $('.message').text(""+data); 
+                $('.message').attr("class" ,"message alert-box success");
+                $('.message').text("Files edited successfully!"); 
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                console.log(data)
                 
               }
               $('.message').show();
@@ -558,6 +567,54 @@ function submit_video_delete(){
            $.ajax({
            type: 'post',
            url:'<?php echo base_url("/index.php/contributor/delete_video_file/")?>'+file_id,
+           data:$('#edit_image_contributor').serialize(),
+           success:
+             function(data){
+               if (data === '1') {
+                  success = true; 
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Files have been deleted"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               } else {
+                  success = false;
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text("Failed to delete file"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               }
+               $('#message').show();
+             },
+           fail:
+             function(data){
+               console.log(data);
+             }
+
+         });
+          $(this).hide();
+
+      }
+    
+    });
+
+    return false;
+  }
+function delete_release(){
+    $('.popup').hide();
+    var success = false;
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+    
+         var file_id = $(this).find("input[name='file_id[]']").val();
+           $.ajax({
+           type: 'post',
+           url:'<?php echo base_url("/index.php/contributor/delete_release_file/")?>'+file_id,
            data:$('#edit_image_contributor').serialize(),
            success:
              function(data){

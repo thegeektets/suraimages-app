@@ -43,6 +43,7 @@
           <div style="clear: both"></div>
         </div>
    </div>
+
    <div class="row">
         <div class="contributor_head">
             <div class="active">
@@ -52,20 +53,37 @@
         <div class="contributor_tab">
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
               <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
-              <li class="tabs-title" id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_releases)+count($contributor_videos); ?>)</a></li>
-              <li class="tabs-title" id="sales_link"><a href="#sales">Sales History (0)</a></li>
+              <li class="tabs-title
+                <?php 
+                  if ( (strlen($user_details['0']['id_file']) == 0) || (strlen(trim($user_details['0']['firstname'])) == 0) ) { ;?>
+                   disabled
+                <?php } ?> 
+                " id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_videos); ?>)</a></li>
+              <li class="tabs-title
+                <?php 
+                  if ( (strlen($user_details['0']['id_file']) == 0) || (strlen(trim($user_details['0']['firstname'])) == 0 ) ) { ;?>
+                   disabled
+                <?php } ?>" id="sales_link"><a href="#sales">Sales History (0)</a></li>
             </ul>
         </div>
         <div class="tabs-content" data-tabs-content="contributor-tabs">
           <div class="tabs-panel is-active contributor_panel" id="account">
               <ul class="tabs inner_contributor_tabs" data-tabs id="account-tabs">
                     <li class="tabs-title is-active"><a href="#identification" aria-selected="true"> Identification </a></li>
-                    <li class="tabs-title"><a href="#contact">Contact & Payment Info </a></li>
+                    <li class="tabs-title 
+                    <?php 
+                      if ( strlen($user_details['0']['id_file']) == 0 ) { ;?>
+                       disabled
+                    <?php } ?>
+                    "><a href="#contact">Contact & Payment Info </a></li>
                     <li class="tabs-title"><a href="#password">Change Password </a></li>
               </ul>
               <div class="tabs-content" data-tabs-content="account-tabs">
                   <div class="tabs-panel is-active" id="identification">
-             
+                    <div class="row">
+                       <div class="message">
+                       </div>
+                    </div>
                     <?php 
                       if ( strlen($user_details['0']['id_file']) == 0 ) { ;?>
                       
@@ -613,11 +631,13 @@
                            <div style="clear: both"></div>
                            <?php  if (count($contributor_releases) > 0 ) { ?>
                                      <div style="clear: both"></div> 
+                                     
                                      <div class="row">
                                          <div class="large-12 columns">
                                            <div class="large-4 columns medium-5 columns pull-left">
                                                <form class="reports_search">
-                                                <select class="inside_search_slc" id="edit_slc">
+                                                <select class="inside_search_slc edit_slc" id="edit_slc">
+                                                    <option value=""> Action </option>
                                                     <option value="Delete" class="delete_option"> Delete </option>
                                                 </select>
                                                 <span class="question_wrap">
@@ -638,22 +658,39 @@
                                                 </span>
                                                </form>
                                            </div>
+                                           <div class="large-4 columns">
+                                               <div class="message">
+                                               </div>
+                                           </div>
+                                           <div class="large-4 columns medium-4 columns pull-right">
+                                                 <span class="search_pagination"> 
+                                                     <select class="pagination_slc">
+                                                          <option value="">Files Per Page</option>
+                                                          <option value="50">50</option>
+                                                          <option value="100">100</option>
+                                                          <option value="150">150</option>
+                                                      </select>
+                                                       Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
+                                                                <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
+                                                                <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
+                                                           </span>
+                                           </div>
                                          </div>
                                      </div>
                                      <div class="row">
                                          <div class="large-12 columns">
                                              <div class="reports_search large-6 columns pull-left">
                                                <form class="delete_items" onsubmit="return delete_items();">
-                                                 <div class="popup">
+                                                 <div class="popup" id="popup">
                                                      <div>
                                                          <div class="content">
                                                              Are you sure you want to delete the selected items ?
 
                                                          </div>
-                                                         <button type="submit" class="button success pull-left">
+                                                         <button type="submit" class="button success pull-left" onclick="return cancel_delete() ">
                                                              Cancel Process
                                                          </button>
-                                                         <button type="submit" class="button btn_search pull-right">
+                                                         <button type="submit" class="button btn_search pull-right" onclick="return delete_release()">
                                                              Delete Items
                                                          </button>
                                                          <div style="clear: both"></div>
@@ -671,10 +708,9 @@
                                                  </div>
                                                </form>
                                              </div>
-                                             
                                          </div>
                                          <div style="clear: both"></div>
-                                     </div> 
+                                     </div>
                                      <div style="clear: both"></div>
                                      <div class="report_header">
                                        <div class="row">
@@ -682,7 +718,7 @@
                                           <input type="checkbox" name="" class="select_all">
                                             File
                                         </div>
-                                        <div class="large-2 column">
+                                        <div class="large-5 column">
                                             Name
                                         </div>
                                         <div class="large-2 column">
@@ -700,7 +736,7 @@
                                                     <?php echo $contributor_releases[$i]['release_id']; ?>
                                                     <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_releases[$i]['release_id']; ?>">
                                                 </div>
-                                                <div class="large-2 column report_col">
+                                                <div class="large-5 column report_col">
                                                   <a href="<?php echo $contributor_releases[$i]['release_url']; ?>" target="_blank">
                                                     <?php echo $contributor_releases[$i]['release_name']; ?>
                                                   </a>

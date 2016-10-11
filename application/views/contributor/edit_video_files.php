@@ -173,7 +173,7 @@
                  <select  name="all_orientation" class="inline_input">
                     <option>Select Orientation</option>
                     <option value="Landscape">Landscape </option>
-                    <option value="Potrait">Potrait</option>
+                    <option value="Portrait">Portrait</option>
                  </select>
                  <button type="submit" class="button btn_search">
                      Apply
@@ -184,7 +184,8 @@
                   <div class="add_title">
                    People  : 
                    <select  name="all_people" class="inline_input">
-                        <option>Select number of people </option>
+                        <option value="">Select number of people </option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -385,10 +386,10 @@
                               <div class="large-7 columns">
                                   <select multiple="multiple" class="slc_category file_category"
                                     name="<?php echo 'file_category'.
-                                  $contributor_images[$i]['upload_id'] ?>[]">
+                                  $contributor_videos[$i]['upload_id'] ?>[]">
                                     <option>Select Categories</option>
                                       <?php 
-                                        $categories = explode(",", $contributor_images[$i]['file_category']);
+                                        $categories = explode(",", $contributor_videos[$i]['file_category']);
                                          for($c=0; $c < count($categories); $c++) { 
                                       ?>
                                         <option value="<?php echo $categories[$c]; ?>" selected="selected">
@@ -457,7 +458,7 @@
                                   <select name="file_orientation[]" required="required" class="file_orientation">
                                     <option>Select Orientation</option>
                                     <option value="Landscape" <?php if($contributor_videos[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                                    <option value="Potrait" <?php if($contributor_videos[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                    <option value="Portrait" <?php if($contributor_videos[$i]['file_orentiation'] == "Portrait" ) echo 'selected = "selected"'?> >Portrait</option>
                                   </select>
                               </div>
                               <div class="large-5 columns">
@@ -465,7 +466,8 @@
                               </div>
                               <div class="large-7 columns">
                                   <select name="file_people[]" required="required" class="file_people">
-                                  <option>Select number of people </option>
+                                  <option value="">Select number of people </option>
+                                  <option value="0">0</option>
                                   <option value="1" <?php if($contributor_videos[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
                                   <option value="2" <?php if($contributor_videos[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
                                   <option value="3" <?php if($contributor_videos[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>

@@ -6,7 +6,7 @@
                   <li class="tabs-title is-active" id="account_link" ><a href="#account" aria-selected="true"> Account </a></li>
                   <li class="tabs-title"><a href="#pricing"> Pricing </a></li>
                   <li class="tabs-title"><a href="#members"> Members (<?php  echo sizeof($members)?>)</a></li>
-                  <li class="tabs-title" id="contributors_link" ><a href="#contributors"> Contributors (<?php  echo (sizeof($newcontributors)+sizeof($exscontributors))?>)</a></li>
+                  <li class="tabs-title" id="contributor_link" ><a href="#contributors"> Contributors (<?php  echo (sizeof($newcontributors)+sizeof($exscontributors))?>)</a></li>
                   <li class="tabs-title"><a href="#sales"> Sales History </a></li>
                   
             </ul>
@@ -489,7 +489,7 @@
             </div>
             <div class="tabs-panel admin_panel" id="members">
                   <ul class="tabs inner_admin_tabs" data-tabs id="member-tabs">
-                          <li class="tabs-title is-active"><a href="#accounts" aria-selected="true"> Accounts </a></li>
+                          <li class="tabs-title is-active" id="account_link"><a href="#accounts" aria-selected="true"> Accounts </a></li>
                   </ul>
 
                   <div class="tabs-content" data-tabs-content="member-tabs">
@@ -588,10 +588,10 @@
             </div>
             <div class="tabs-panel admin_panel" id="contributors">
                 <ul class="tabs inner_admin_tabs" data-tabs id="contributor-tabs">
-                    <li class="tabs-title is-active"><a href="#nwcontributors" aria-selected="true"> New Contributors (<?php echo sizeof($newcontributors) ?>) </a></li>
+                    <li class="tabs-title is-active" id="nwcontributors_link"><a href="#nwcontributors" aria-selected="true"> New Contributors (<?php echo sizeof($newcontributors) ?>) </a></li>
                     <li class="tabs-title"><a href="#excontributors" aria-selected="true"> Existing Contributors
                     (<?php echo sizeof($exscontributors)?>) </a></li>
-                    <li class="tabs-title"><a href="#tluploads" aria-selected="true"> Total Uploads(<?php echo count($all_contributor_images) ?>)</a></li>
+                    <li class="tabs-title" id="uploads_link"><a href="#tluploads" aria-selected="true"> Total Uploads(<?php echo count($all_contributor_images) ?>)</a></li>
                     <li class="tabs-title"><a href="#resources" aria-selected="true"> Resources </a></li>
                 </ul>
 
@@ -745,7 +745,7 @@
                                               </div>
                                               <div>
                                                   <span class="strong"> Identification: </span> 
-                                                  <a href="<?php echo $newcontributors[$i]['id_file']?>" target="_blank" > Passport ID.jpg </a>
+                                                  <a href="<?php echo $newcontributors[$i]['id_file']?>" target="_blank" ><?php echo $newcontributors[$i]['id_name']?> </a>
                                                   <?php
                                                    if($newcontributors[$i]['id_status'] == 'Approved'){ 
                                                      echo $newcontributors[$i]['id_status']; 
@@ -958,13 +958,17 @@
                               ?>
                         </div>                       
                     </div>
-             
+                    
+                    <?php if (($user_session['single_image_file']) === TRUE) {
+                          require 'edit_file.php';
+                    } else {
+                    ?>    
                     <div class="tabs-panel" id="tluploads">
                         <div class="row">
                             <div class="large-12 columns">
                                  <div class="large-4 columns medium-5 columns pull-left">
                                      <form class="reports_search">
-                                      <select class="inside_search_slc" id="edit_slc">
+                                      <select class="inside_search_slc edit_slc " id="edit_slc">
                                           <option value=""> Action </option>
                                           <option value="Title"> Add Title </option>
                                           <option value="Keywords"> Add Keywords </option>
@@ -1122,7 +1126,7 @@
                                      <select  name="all_orientation" class="inline_input">
                                         <option>Select Orientation</option>
                                         <option value="Landscape">Landscape </option>
-                                        <option value="Potrait">Potrait</option>
+                                        <option value="Portrait">Portrait</option>
                                      </select>
                                      <button type="submit" class="button btn_search">
                                          Apply
@@ -1133,7 +1137,8 @@
                                       <div class="add_title">
                                        People  : 
                                        <select  name="all_people" class="inline_input">
-                                            <option>Select number of people </option>
+                                            <option value="">Select number of people </option>
+                                            <option value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -1237,12 +1242,12 @@
                                                 Are you sure you want to delete the selected items ?
 
                                             </div>
-                                            <button type="submit" class="button success pull-left">
-                                                Cancel Process
-                                            </button>
-                                            <button type="submit" class="button btn_search pull-right">
-                                                Delete Items
-                                            </button>
+                                            <button type="submit" class="button success pull-left" onclick="return cancel_delete() ">
+                                                 Cancel Process
+                                             </button>
+                                             <button type="submit" class="button btn_search pull-right" onclick="return submit_delete()">
+                                                 Delete Items
+                                             </button>
                                             <div style="clear: both"></div>
                                         </div>
                                     </div>
@@ -1310,13 +1315,15 @@
                                                <?php echo $all_contributor_images[$i]['upload_id']; ?>
                                                <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $all_contributor_images[$i]['upload_id']; ?>">
                                            </div>
-                                           <div class="large-2 column ">
-                                               <?php echo $all_contributor_images[$i]['file_name']; ?>
-                                               <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $all_contributor_images[$i]['file_name']; ?>">
+                                           <div class="large-2 column">
+                                                <div class="file_title">
+                                                   <a href="<?php echo base_url('index.php/admin/single_image_file/'.$all_contributor_images[$i]['upload_id']) ?>"><?php echo $all_contributor_images[$i]['file_name']; ?></a>
+                                                   <input  required="required" type="hidden" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $all_contributor_images[$i]['file_name']; ?>">
+                                                </div>
                                            </div>
 
-                                           <div class="large-3 column ">
-                                               <p> <?php $keys = explode(",", $all_contributor_images[$i]['file_keywords']); 
+                                           <div class="large-3 column">
+                                               <p class="file_keyword"> <?php $keys = explode(",", $all_contributor_images[$i]['file_keywords']); 
                                                          for($k=0; $k < count($keys); $k++ ) {
                                                              echo $keys[$k].", ";
                                                          }
@@ -1325,8 +1332,10 @@
                                                        <?php echo $all_contributor_images[$i]['file_keywords']?>
                                                </textarea>
                                            </div>
-                                           <div class="large-1 column ">
+                                           <div class="large-1 column">
+                                               <div class="file_price">
                                                <?php echo $all_contributor_images[$i]['file_price_large']; ?>
+                                               </div>
 
                                                <input  type="hidden" name="file_price_large[]" placeholder="Price" value="<?php echo $all_contributor_images[$i]['file_price_large']?>" class="file_price_large">
                                                
@@ -1347,7 +1356,7 @@
                                                <select name="file_orientation[]" type="hidden" required="required" class="file_orientation">
                                                  <option>Select Orientation</option>
                                                  <option value="Landscape" <?php if($all_contributor_images[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                                                 <option value="Potrait" <?php if($all_contributor_images[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                                 <option value="Portrait" <?php if($all_contributor_images[$i]['file_orentiation'] == "Portrait" ) echo 'selected = "selected"'?> >Portrait</option>
                                                </select>
                                                
                                                <select name="file_people[]" style="display:none;" required="required" class="file_people">
@@ -1363,16 +1372,103 @@
                                                  <option value="9" <?php if($all_contributor_images[$i]['file_people'] == "9" ) echo 'selected = "selected"'?>  >9</option>
                                                  <option value="10" <?php if($all_contributor_images[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
                                                </select>
+                                               <select type="hidden" style="display:none;" multiple="multiple" class="file_category"
+                                               name="<?php echo 'file_category'.
+                                               $all_contributor_images[$i]['upload_id'] ?>[]">
+                                                 <option>Select Categories</option>
+                                                 <?php 
+                                                   $categories = explode(",", $all_contributor_images[$i]['file_category']);
+                                                    for($c=0; $c < count($categories); $c++) { 
+                                                 ?>
+                                                   <option value="<?php echo $categories[$c]; ?>" selected="selected">
+                                                     <?php echo $categories[$c];?>
+                                                   </option>
+                                                   <?php } ?> 
+                                                  <option value="Abstract" <?php if($all_contributor_images[$i]['file_category'] == "Abstract" ) echo 'selected = "selected"'?> >Abstract</option>
+                                                  <option value="Agriculture/Farming"
+                                                   <?php if($all_contributor_images[$i]['file_category'] == "Agriculture/Farming" ) echo 'selected = "selected"'?> >Agriculture/ Farming </option>
+                                                  <option value="Animals/Livestock"
+                                                  <?php if($all_contributor_images[$i]['file_category'] == "Animals/Livestock" ) echo 'selected = "selected"'?>>Animals/ Livestock </option>
+                                                  <option value="Arts/Entertainment"
+                                                  <?php if($all_contributor_images[$i]['file_category'] == "Arts/Entertainment" ) echo 'selected = "selected"'?>>Arts/ Entertainment </option>
+                                                  <option value="Beauty/Fashion"
+                                                  <?php if($all_contributor_images[$i]['file_category'] == "Beauty/Fashion" ) echo 'selected = "selected"'?>>Beauty/ Fashion </option>
+                                                  <option value="Business" <?php if($all_contributor_images[$i]['file_category'] == "Business" ) echo 'selected = "selected"'?>>Business </option>
+                                                  <option value="Buildings/Landmarks"
+                                                  <?php if($all_contributor_images[$i]['file_category'] == "Buildings/Landmarks" ) echo 'selected = "selected"'?>>Buildings/ Landmarks </option>
+                                                  <option value="Celebrity" <?php if($all_contributor_images[$i]['file_category'] == "Celebrity" ) echo 'selected = "selected"'?>>Celebrity </option>
+                                                  <option value="Education" <?php if($all_contributor_images[$i]['file_category'] == "Education" ) echo 'selected = "selected"'?>>Education </option>
+                                                  <option value="Food/Cuisines" <?php if($all_contributor_images[$i]['file_category'] == "Food/Cuisines" ) echo 'selected = "selected"'?> >Food/ Cuisines </option>
+                                                  <option value="Beverage/Drink" <?php if($all_contributor_images[$i]['file_category'] == "Beverage/Drink" ) echo 'selected = "selected"'?>>Beverage/ Drink </option>
+                                                  <option value="Medical/Healthcare" <?php if($all_contributor_images[$i]['file_category'] == "Medical/Healthcare" ) echo 'selected = "selected"'?> >Medical/ Healthcare </option>
+                                                  <option value="Holiday" <?php if($all_contributor_images[$i]['file_category'] == "Holiday" ) echo 'selected = "selected"'?> >Holiday </option>
+                                                  <option value="Industrial" <?php if($all_contributor_images[$i]['file_category'] == "Industrial" ) echo 'selected = "selected"'?>>Industrial </option>
+                                                  <option value="Interior" <?php if($all_contributor_images[$i]['file_category'] == "Interior" ) echo 'selected = "selected"'?> >Interior </option>
+                                                  <option value="Nature" <?php if($all_contributor_images[$i]['file_category'] == "Nature" ) echo 'selected = "selected"'?> >Nature </option>
+                                                  <option value="Outdoor" <?php if($all_contributor_images[$i]['file_category'] == "Outdoor" ) echo 'selected = "selected"'?> >Outdoor </option>
+                                                  <option value="People" <?php if($all_contributor_images[$i]['file_category'] == "People" ) echo 'selected = "selected"'?> >People </option>
+                                                  <option value="Religion" <?php if($all_contributor_images[$i]['file_category'] == "Religion" ) echo 'selected = "selected"'?> >Religion </option>
+                                                  <option value="Signs/Symbols" <?php if($all_contributor_images[$i]['file_category'] == "Signs/Symbols" ) echo 'selected = "selected"'?> >Signs/ Symbols </option> 
+                                                  <option value="Sports" <?php if($all_contributor_images[$i]['file_category'] == "Sports" ) echo 'selected = "selected"'?> >Sports </option>
+                                                  <option value="ICT/Technology" <?php if($all_contributor_images[$i]['file_category'] == "ICT/Technology" ) echo 'selected = "selected"'?> >ICT/ Technology </option>
+                                                  <option value="Infrastructure" <?php if($all_contributor_images[$i]['file_category'] == "Infrastructure" ) echo 'selected = "selected"'?>>Infrastructure </option>
+                                                  <option value="Vintage"  <?php if($all_contributor_images[$i]['file_category'] == "Vintage" ) echo 'selected = "selected"'?> >Vintage </option>
+                                                  <option value="Telecommunication" <?php if($all_contributor_images[$i]['file_category'] == "Telecommunication" ) echo 'selected = "selected"'?> >Telecommunication </option>
+                                                  <option value="Tourism/Hospitality" <?php if($all_contributor_images[$i]['file_category'] == "Tourism/Hospitality" ) echo 'selected = "selected"'?>  >Tourism/ Hospitality </option>
+                                                  <option value="Wildlife" <?php if($all_contributor_images[$i]['file_category'] == "Wildlife" ) echo 'selected = "selected"'?> >Wildlife </option>
+                                               </select>
                                                <input  type="hidden" name="file_shoot[]" class="file_shoot"
                                                value="<?php echo $all_contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                                            <input type="hidden" name="file_models[]">
+                                            <input type="hidden" name="file_releases[]">
                                                
                                            </div>
                                            <div class="large-1 column ">
-                                                 (<?php echo count($all_contributor_images[$i]['releases'])?>)
+                                                 
+                                                  <span class="question_wrap">
+                                                     <a href="" class="question_this">
+                                                         (<?php echo count($all_contributor_images[$i]['releases'])?>)
+                                                     </a>
+                                                     <span class="question_text">
+                                                        <a class="question_close">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </a>
+                                                       Release: <?php 
+                                                               for($m = 0 ; $m < count($all_contributor_images[$i]['releases']); $m++){
+                                                                     $release = $all_contributor_images[$i]['releases'][$m]['release_name'];
+                                                                     $release_url = $all_contributor_images[$i]['releases'][$m]['release_url'];
+                                                                     if(strlen($release)> 0){
+                                                                         echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
+                                                                     }
+                                                               }              
+                                                               ; ?></br>
+                                                     </span>
+                                                 </span>
                                            </div>
 
                                            <div class="large-1 column ">
-                                                   <a href=""> View</a>
+                                                   <span class="question_wrap">
+                                                      <a href="" class="question_this">View</a>
+                                                      <span class="question_text">
+                                                         <a class="question_close">
+                                                             <i class="fa fa-times" aria-hidden="true"></i>
+                                                         </a>
+                                                         Category: <?php echo $all_contributor_images[$i]['file_category'] ?> </br>
+                                                         Image Type: <?php echo  $all_contributor_images[$i]['file_type'] ?> </br>
+                                                         Image Subtype: <?php echo  $all_contributor_images[$i]['file_subtype'] ?> </br>
+                                                         Orientation: <?php echo $all_contributor_images[$i]['file_orentiation'] ?> </br>
+                                                         People: <?php echo $all_contributor_images[$i]['file_people'] ?> </br>
+                                                         Model Notification: <?php 
+                                                                    for($m = 0 ; $m < count($all_contributor_images[$i]['models']); $m++){
+                                                                          $email = $all_contributor_images[$i]['models'][$m]['model_email'];
+                                                                          if(strlen($email)> 0){
+                                                                              echo $email.'<br/>';
+                                                                          }
+                                                                    }              
+                                                                    ; ?> </br>
+                                                        
+                                                      </span>
+                                                  </span>
                                            </div>
                                            <div class="large-2 column ">
                                             <?php  echo date("F j, Y", strtotime($all_contributor_images[$i]['date_uploaded']));   ?>
@@ -1387,6 +1483,7 @@
                         </div>
                         <div style="clear: both"></div>
                     </div>
+                    <?php } ?>
                     <div class="tabs-panel" id="resources">
                         <div class="tab_header"> 
                            <hr/>

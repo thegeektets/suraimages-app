@@ -282,6 +282,36 @@ class admin extends CI_Controller {
 		$this->session->set_userdata($data['user_session']);
 		$this->index();
 	}
+	public function single_image_file($file_id){
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		$data['user_session']['single_file'] = $file_id;
+		$data['user_session']['single_image_file'] = TRUE;
+		$this->session->set_userdata($data['user_session']);
+		$this->index();
+	}
+	public function edit_image_file(){
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();;
+		$id = $data['user_session']['user_meta']['0']['id'];
+    		$file_id = $this->input->post("file_id");
+    		$file_name = $this->input->post("file_name");
+    		$file_keywords = $this->input->post("file_keywords");
+    		$file_price_large = $this->input->post("file_price_large");
+    		$file_license = $this->input->post("file_license");
+    		$file_type = $this->input->post("file_type");
+    		$file_subtype = $this->input->post("file_subtype");
+    		$file_orientation = $this->input->post("file_orientation");
+    		$file_people = $this->input->post("file_people");
+    		$this->admin_model->update_uploaded_file( $file_id,
+				$file_name,$file_keywords,$file_price_large,$file_license,$file_type,$file_subtype,
+				$file_orientation,$file_people);	
+    		$data['user_session']['single_file'] = $file_id;
+			$data['user_session']['single_image_file'] = FALSE;
+			$this->session->set_userdata($data['user_session']);
+			$this->index();
+    	
+    }
 	public function edit_uploaded_files(){
 		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;
@@ -296,7 +326,11 @@ class admin extends CI_Controller {
     		$file_name = $_POST['file_name'][$i];
     		$file_keywords = $_POST['file_keywords'][$i];
     		$file_price_large = $_POST['file_price_large'][$i];
-    		// $file_category = $_POST['file_category'][$i];
+    		if(is_array($_POST['file_category'.$file_id])){
+	    			$file_category = implode(', ' ,$_POST['file_category'.$file_id] );
+	    		} else {
+	    			$file_category = $_POST['file_category'.$file_id];
+	    		}
     		$file_license = $_POST['file_license'][$i];
     		$file_type = $_POST['file_type'][$i];
     		$file_subtype = $_POST['file_subtype'][$i];
@@ -308,12 +342,13 @@ class admin extends CI_Controller {
     		}
     		$this->admin_model->update_uploaded_files( $file_id,
 				$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,
-				$file_orientation,$file_people);	
+				$file_orientation,$file_people,$file_category);	
     		$i++;
     		$success = 1;
     	}
-    	
-    	$this->admin_model->update_contributor_status($file_user,$contributor_status);
+    	if($contributor_status === 1){
+    		$this->admin_model->update_contributor_status($file_user,$contributor_status);
+    	}
     	if($success === 1){
     		$data['user_session']['edit_status'] = FALSE;
     		$this->session->set_userdata($data['user_session']);

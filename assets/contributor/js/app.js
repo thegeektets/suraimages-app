@@ -696,7 +696,22 @@ $(".edit_slc").on('change',function(){
 
 });
 $('.payment_type').hide();
-$('#bank').show();
+var pay = $("#slc_payment").val();
+if(pay !== ''){
+	if(pay === 'Bank Payment'){
+		$('.payment_type').hide();
+		$('#bank').show();
+	} else if ( pay === 'Mobile Payment'){
+		$('.payment_type').hide();
+		$('#mobile').show();
+	} else {
+		$('.payment_type').hide();
+		$('#email').show();
+	}
+} else {
+	$("#bank").show();
+}
+	
 $("#slc_payment").on('change',function(){
 
 	console.log($(this).val());

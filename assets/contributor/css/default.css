@@ -1,0 +1,10 @@
+.loading {
+	background-image: url(rolling.gif) !important;
+    background-position: center  !important;
+    background-repeat: no-repeat !important;
+    background-color: #d6de23 !important;
+    position: relative !important;
+    font-weight: 300;
+    font-size: 16px;
+
+}

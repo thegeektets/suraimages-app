@@ -1576,3 +1576,6 @@ button.slick-next.slick-arrow {
   text-transform: uppercase;
   border: #f8991c;
 }
+.tabs-title > a[aria-selected='true'] {
+    background: #fff;
+}

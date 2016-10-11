@@ -4,13 +4,30 @@
   $('textarea[type="hidden"]').each(function(){
     $(this).hide();
   });
+  $(".file_price_large").change(function(){
+      $(this).parents('.prices').find('.file_price_medium').val(Math.round($(this).val()/2));
+      $(this).parents('.prices').find('.file_price_small').val(Math.round($(this).val()/3));
+      return false;
+  });
 
+  $(".disabled").click(function(){
+    $('.message').hide();
+    $('.message').attr("class" ,"message alert-box warning");
+    $('.message').text("Your ID and Contact information is required"); 
+    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+    $('.message').show();
+    setTimeout(hidemessage, 3000);
+    return false
+  });
+
+  function hidemessage(){
+    $('.message').hide();
+  }
   function applyaction(){
     $('.message').hide();
     $('.message').attr("class" ,"message alert-box secondary");
     $('.message').text("Select items using the checkbox to apply action , Click Submit to save changes to Database "); 
     $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
-    $('.message').show();
     $("#submit_changes").show();
     $(".submit_changes").show();
   }
@@ -20,6 +37,8 @@
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
         $(this).find("input[name='file_name[]']").val(all_title);
+        $(this).find(".file_title").text(all_title);
+        console.log(all_title);
       }
     });
     return false;
@@ -38,7 +57,8 @@
             console.log('doing nothing because'+newkeyword+trimkeyword);
             // include if for substring 
         } else {
-            $(this).find("textarea[name='file_keywords[]']" ).append(newkeyword+",");  
+            $(this).find("textarea[name='file_keywords[]']" ).append(newkeyword+",");
+            $(this).find(".file_keyword").append(","+newkeyword);  
         }
         
       }
@@ -51,6 +71,9 @@
     $('.edit_item').each(function () { 
       if ( $(this).find("input[name='file_select']").prop('checked') ){
         $(this).find("input[name='file_price_large[]']" ).val(all_price);
+        $(this).find(".file_price" ).text(all_price);
+        $(this).find("input[name='file_price_medium[]']" ).val(Math.round(all_price/2));
+        $(this).find("input[name='file_price_small[]']" ).val(Math.round(all_price/3));
        }
     });
     return false; 
@@ -63,6 +86,16 @@
         var value = all_category;
         $(this).find('.ms-choice').text(''+value+'');
         $(this).find(".file_category").val(value).change();
+      }
+   });
+   return false;  
+  }
+  function applylicenseall(){
+    applyaction();
+    var all_license_type = $('.tabs-panel .is-active').find("select[name='all_license_type']").val();
+   $('.edit_item').each(function () { 
+     if ( $(this).find("input[name='file_select']").prop('checked') ){
+       $(this).find("select[name='file_license[]']" ).val(all_license_type).change();
       }
    });
    return false;  
@@ -206,7 +239,11 @@
     $(".set_price").hide();
     $(".category").hide();
     $(".delete_items").show();
-    $('.popup').show();   
+    $('.popup').show();
+    $('html, body').animate({
+        scrollTop: $("#popup").offset().top - 200
+    }, 1000);
+
     return false;
   });
 

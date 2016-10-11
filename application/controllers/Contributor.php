@@ -7,6 +7,7 @@ class contributor extends CI_Controller {
        parent::__construct();
        $this->load->model('user_model');
        $this->load->model('contributor_model');
+       $this->load->model('admin_model');
    	}
 	public function index()
 	{
@@ -21,7 +22,9 @@ class contributor extends CI_Controller {
 		if(strlen($data['user_session']['user_meta']['0']['email']) > 0 ){
 			$data['user_details'] = $this->fetch_user_details();
 			$id = $data['user_details'][0]['user_id'];
+			$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 			$data['payment_details'] = $this->fetch_payment_details();
+			$data['edit_contributor_images'] = $this->contributor_model->get_edit_contributor_images($id);
 			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
 			$data['contributor_releases'] = $this->contributor_model->get_contributor_releases($id);
 			$data['contributor_videos'] = $this->contributor_model->get_contributor_videos($id);
@@ -41,6 +44,14 @@ class contributor extends CI_Controller {
 				$releases= $this->contributor_model->get_image_releases($file_id);
 				$data['contributor_images'][$f]['models']=$models;
 				$data['contributor_images'][$f]['releases']=$releases;
+			}
+			for($f = 0; $f < count($data['edit_contributor_images']); $f++){
+				
+				$file_id = $data['edit_contributor_images'][$f]['upload_id'];
+				$models = $this->contributor_model->get_image_models($file_id);
+				$releases= $this->contributor_model->get_image_releases($file_id);
+				$data['edit_contributor_images'][$f]['models']=$models;
+				$data['edit_contributor_images'][$f]['releases']=$releases;
 			}
 			
 			if(sizeof($data['user_details']) > 0){
@@ -113,7 +124,7 @@ class contributor extends CI_Controller {
 		 $data['payment_details'] = $this->fetch_payment_details();
 		 $data['user_session']=$this->session->all_userdata();;
 		 $config['upload_path'] = './assets/uploads/';
-		 $config['allowed_types'] = 'gif|jpg|png';
+		 $config['allowed_types'] = 'gif|jpg|png|pdf|docx|doc|odt';
 		 $config['max_size'] = '10000';
 		 $config['max_width']  = '10240';
 		 $config['max_height']  = '7680';
@@ -122,13 +133,15 @@ class contributor extends CI_Controller {
 		 $this->load->library('upload', $config);
 		 $this->upload->initialize($config);
 		 $idfile = 'idfile' ;
+		 $id_name = $_FILES['idfile']['name'];
 		 if ($this->upload->do_upload($idfile)) {
 		      $this->load->library('session');
 		      $data['success'] = TRUE;
 		      $data['message'] = 'Upload successfull';
 		      $id = $data['user_session']['user_meta']['0']['id'];
-		      $this->user_model->update_user_idfile($id);
-		      $this->index();
+		      $this->user_model->update_user_idfile($id,$id_name);
+		      redirect('/contributor/index', 'refresh');
+
 		   	} else {
 		   	   $data['success'] = FALSE;
 		       $data['message'] = $this->upload->display_errors();
@@ -401,9 +414,7 @@ class contributor extends CI_Controller {
 	    		$model_array = explode(",", $file_model);
 	    		$release_array= explode(",", $file_release);
 	    		
-	    		if(trim($file_name) === "" || trim($file_keywords) === "" || trim($file_type) === "" || trim($file_subtype) === ""
-	    		   || trim($file_orientation) === "" || trim($file_category) === ""){
-
+	    		if(trim($file_name) === "" || trim($file_keywords) === "" ) {
 	    			// validation error
 	    			echo $success;
 	    			return false;

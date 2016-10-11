@@ -1659,3 +1659,6 @@ a.close-reveal-modal {
 figure {
     margin: 2px;
 }
+.tabs-title > a[aria-selected='true'] {
+    background: #fff;
+}

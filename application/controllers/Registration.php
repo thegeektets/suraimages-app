@@ -267,8 +267,13 @@ class registration extends CI_Controller {
 	public function logout() 
 	{
 		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
 		$this->session->sess_destroy();
-        $this->login();
+        $data['success']= TRUE ;
+        $data['message'] = 	'You have been logged out';
+		$this->load->view('registration/header', $data);
+		$this->load->view('registration/login' , $data);
+		$this->load->view('registration/footer');
 	}
 
 	public function initializemail() {

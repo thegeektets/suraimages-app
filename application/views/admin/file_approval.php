@@ -4,7 +4,7 @@
         <div class="large-12 columns">
           <div class="large-4 columns medium-5 columns pull-left">
               <form class="reports_search">
-               <select class="inside_search_slc" id="edit_slc">
+               <select class="inside_search_slc edit_slc" id="edit_slc">
                    <option value=""> Action </option>
                    <option value="Title"> Add Title </option>
                    <option value="Keywords"> Add Keywords </option>
@@ -13,6 +13,7 @@
                    <option value="Image Type"> Image Type </option>
                    <option value="Image Subtype"> Image Subtype </option>
                    <option value="Orientation"> Orientation </option>
+                   <option value="License Type"> License Type </option>
                    <option value="People"> People </option>
                    <option value="Delete" class="delete_option"> Delete </option>
                </select>
@@ -63,6 +64,18 @@
                     <button type="submit" class="button btn_search">
                                Apply
                     </button>
+                  </div>
+              </form>
+              <form class="license" onsubmit="return applylicenseall()">
+                  <div class="add_title">
+                    <select  name="all_license_type" class="inline_input">
+                      <option value="">Select License Type</option>
+                      <option value="Royalty Free" selected> Royalty Free </option>
+                      <option value="Right Managed" selected>Right Managed </option>
+                   </select>
+                   <button type="submit" class="button btn_search">
+                       Apply
+                   </button>
                   </div>
               </form>
               <form class="add_keywords" onsubmit="return applykeywordall()">
@@ -162,7 +175,7 @@
                  <select  name="all_orientation" class="inline_input">
                     <option>Select Orientation</option>
                     <option value="Landscape">Landscape </option>
-                    <option value="Potrait">Potrait</option>
+                    <option value="Portrait">Portrait</option>
                  </select>
                  <button type="submit" class="button btn_search">
                      Apply
@@ -173,7 +186,8 @@
                   <div class="add_title">
                    People  : 
                    <select  name="all_people" class="inline_input">
-                        <option>Select number of people </option>
+                        <option value="">Select number of people </option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -328,7 +342,7 @@
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $all_contributor_images[$i]['file_name']; ?>">
                         <label> Key Words : </label>
                         <textarea  required="required"   name="file_keywords[]" class="file_keywords" type="text" placeholder="0000">
-                                <?php echo $all_contributor_images[$i]['file_keywords']?>
+                                <?php echo trim($all_contributor_images[$i]['file_keywords']); ?>
                         </textarea>
                 </div>
                 <div class="large-3 columns">
@@ -345,9 +359,9 @@
                       <div class="large-5 columns">
                           <label>License Type:</label>
                           <select name="file_license[]" required="required">
-                              <option>Select License</option>
+                              <option value="">Select License</option>
                               <option value="Royalty Free" selected> Royalty Free </option>
-                              
+                              <option value="Right Managed" selected>Right Managed </option>
                           </select>
                       </div>
                     </div>
@@ -357,9 +371,18 @@
                             </div>
 
                             <div class="large-7 columns">
-                                <select multiple="multiple" class="slc_category"
-                                  name="file_category[]">
-                                    <option>Select Categories</option>
+                                <select multiple="multiple" class="slc_category file_category"
+                                  name="<?php echo 'file_category'.
+                                  $all_contributor_images[$i]['upload_id'] ?>[]">
+                                    <option value="">Select Categories</option>
+                                    <?php 
+                                      $categories = explode(",", $all_contributor_images[$i]['file_category']);
+                                       for($c=0; $c < count($categories); $c++) { 
+                                    ?>
+                                      <option value="<?php echo $categories[$c]; ?>" selected="selected">
+                                        <?php echo $categories[$c];?>
+                                      </option>
+                                      <?php } ?> 
                                      <option value="Abstract" <?php if($all_contributor_images[$i]['file_category'] == "Abstract" ) echo 'selected = "selected"'?> >Abstract</option>
                                      <option value="Agriculture/Farming"
                                       <?php if($all_contributor_images[$i]['file_category'] == "Agriculture/Farming" ) echo 'selected = "selected"'?> >Agriculture/ Farming </option>
@@ -422,7 +445,7 @@
                                 <select name="file_orientation[]" required="required" class="file_orientation">
                                     <option>Select Orientation</option>
                                     <option value="Landscape" <?php if($all_contributor_images[$i]['file_orentiation'] == "Landscape" ) echo 'selected = "selected"'?> >Landscape </option>
-                                    <option value="Potrait" <?php if($all_contributor_images[$i]['file_orentiation'] == "Potrait" ) echo 'selected = "selected"'?> >Potrait</option>
+                                    <option value="Portrait" <?php if($all_contributor_images[$i]['file_orentiation'] == "Portrait" ) echo 'selected = "selected"'?> >Portrait</option>
                                   </select>
                             </div>
                             <div class="large-5 columns">
@@ -430,7 +453,8 @@
                             </div>
                             <div class="large-7 columns">
                                 <select name="file_people[]" required="required" class="file_people">
-                                  <option>Select number of people </option>
+                                  <option value="">Select number of people </option>
+                                  <option value="0">0</option>
                                   <option value="1" <?php if($all_contributor_images[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
                                   <option value="2" <?php if($all_contributor_images[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
                                   <option value="3" <?php if($all_contributor_images[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>

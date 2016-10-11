@@ -69,18 +69,19 @@ class Admin_model extends CI_Model {
             $sql = "UPDATE user_details SET id_status = ".$this->db->escape($status)." where user_id = '".$id ."'";
             $this->db->query($sql);
         }
-        public function update_uploaded_files($file_id,$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,$file_orientation,$file_people){
-            $this->db->query("UPDATE contributor_image_uploads SET 
-            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).
-            ", file_status = ".$this->db->escape($file_status).", file_license = ".$this->db->escape($file_license)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." WHERE upload_id = ".$this->db->escape($file_id)."");   
+        public function update_uploaded_file($file_id,$file_name,$file_keywords,$file_price_large,$file_license,$file_type,$file_subtype,$file_orientation,$file_people){
+            $this->db->query("UPDATE contributor_image_uploads SET date_uploaded = date_uploaded , file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_license = ".$this->db->escape($file_license)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation).", file_people = ".$this->db->escape($file_people)." WHERE upload_id = ".$this->db->escape($file_id)."");   
+        }
+        public function update_uploaded_files($file_id,$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,$file_orientation,$file_people,$file_category){
+            $this->db->query("UPDATE contributor_image_uploads SET date_uploaded = date_uploaded , file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).
+            ", file_status = ".$this->db->escape($file_status).", file_license = ".$this->db->escape($file_license)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation).", file_category = ".$this->db->escape($file_category)." , file_people = ".$this->db->escape($file_people)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
         public function update_uploaded_videos($file_id,$file_name,$file_keywords,$file_price_large,$file_license,$file_status,$file_type,$file_subtype,$file_orientation,$file_people){
-            $this->db->query("UPDATE contributor_video_uploads SET 
-            file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).
+            $this->db->query("UPDATE contributor_video_uploads SET date_uploaded = date_uploaded , file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).
             ", file_status = ".$this->db->escape($file_status).", file_license = ".$this->db->escape($file_license)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
         public function get_all_image_uploads($user_id){
-            $query = $this->db->query("SELECT count(*) AS image_uploads FROM contributor_image_uploads WHERE file_status = 1 AND user_id = ".$user_id."");
+            $query = $this->db->query("SELECT count(*) AS image_uploads FROM contributor_image_uploads WHERE user_id = ".$user_id."");
               return $query->result_array();
         }
         public function get_new_image_uploads($user_id){
@@ -104,7 +105,7 @@ class Admin_model extends CI_Model {
             return array_reverse($image);
         }
         public function get_contributor_images() {
-            $query = $this->db->query("SELECT * FROM contributor_image_uploads WHERE file_status = 1");   
+            $query = $this->db->query("SELECT * FROM contributor_image_uploads, user_details WHERE user_details.user_id = contributor_image_uploads.user_id");   
             $image = $query->result_array();
             return array_reverse($image);
         }

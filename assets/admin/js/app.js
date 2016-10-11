@@ -211,6 +211,7 @@ $(".model_notification").hide();
 $(".people").hide();
 $(".set_price").hide();
 $(".delete_items").hide();
+$(".license").hide();
 
 $("#edit_slc").on('change',function(){
 	if($(this).val().length > 1) {
@@ -229,6 +230,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 
@@ -246,6 +248,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 				
 		}
@@ -263,6 +266,7 @@ $("#edit_slc").on('change',function(){
 			$(".model_notification").hide();
 			$(".people").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 			
 		}
@@ -279,6 +283,7 @@ $("#edit_slc").on('change',function(){
 			$(".same_shoot").hide();
 			$(".model_notification").hide();
 			$(".people").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 		if($(this).val() === 'Image Type'){
@@ -295,6 +300,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 				
 		}
@@ -312,6 +318,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 		if($(this).val() === 'Orientation'){
@@ -327,7 +334,8 @@ $("#edit_slc").on('change',function(){
 			$(".model_notification").hide();
 			$(".people").hide();
 			$(".set_price").hide();
-            $(".category").hide();		
+            $(".category").hide();
+            $(".license").hide();		
             $(".delete_items").hide();			
 				
 		}
@@ -345,6 +353,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").show();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 		if($(this).val() === 'Attach Release'){
@@ -361,6 +370,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 				
 		}
@@ -378,6 +388,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 		if($(this).val() === 'Model Notification'){
@@ -394,6 +405,7 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").hide();	
 		}
 		if($(this).val() === 'Delete'){
@@ -409,7 +421,24 @@ $("#edit_slc").on('change',function(){
 			$(".people").hide();
 			$(".set_price").hide();
 			$(".category").hide();
+			$(".license").hide();
 			$(".delete_items").show();	
+		}
+		if($(this).val() === 'License Type'){
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();
+			$(".license").show();	
 		}
 		
 	} else {
@@ -429,9 +458,253 @@ $("#edit_slc").on('change',function(){
 
 });
 
-});
-   
+$(".edit_slc").on('change',function(){
+	if($(this).val().length > 1) {
+		
+		if($(this).val() === 'Title'){
+			
+			$(".title").show();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
 
+		if($(this).val() === 'Keywords'){
+			
+			$(".title").hide();
+			$(".add_keywords").show();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+				
+		}
+		
+		if($(this).val() === 'Price'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").show();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+			
+		}
+		if($(this).val() === 'Category'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".category").show();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Image Type'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").show();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+				
+		}
+		if($(this).val() === 'Image Subtype'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").show();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Orientation'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").show();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+            $(".category").hide();
+            $(".license").hide();		
+            $(".delete_items").hide();			
+				
+		}
+		if($(this).val() === 'People'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").show();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Attach Release'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").show();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+				
+		}
+		if($(this).val() === 'Same Shoot'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").show();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Model Notification'){
+			
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").show();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").hide();	
+		}
+		if($(this).val() === 'Delete'){
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".license").hide();
+			$(".delete_items").show();	
+		}
+		if($(this).val() === 'License Type'){
+			$(".title").hide();
+			$(".add_keywords").hide();
+			$(".set_price").hide();
+			$(".image_type").hide();
+			$(".image_subtype").hide();
+			$(".orientation").hide();
+			$(".attach_release").hide();
+			$(".same_shoot").hide();
+			$(".model_notification").hide();
+			$(".people").hide();
+			$(".set_price").hide();
+			$(".category").hide();
+			$(".delete_items").hide();
+			$(".license").show();	
+		}
+		
+	} else {
+		$(".title").hide();
+		$(".add_keywords").hide();
+		$(".set_price").hide();
+		$(".image_type").hide();
+		$(".image_subtype").hide();
+		$(".orientation").hide();
+		$(".attach_release").hide();
+		$(".same_shoot").hide();
+		$(".model_notification").hide();
+		$(".people").hide();
+		$(".set_price").hide();
+		$(".category").hide();
+	}
+
+});
+
+
+});
 
 ;(function($) {
 

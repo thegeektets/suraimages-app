@@ -1068,7 +1068,6 @@ button.slick-next.slick-arrow {
   }
   .edit_file_img {
     width: 150px;
-    padding: 20px;
   }
   .edit_item {
       padding-top: 10px;
@@ -1658,4 +1657,10 @@ button.slick-next.slick-arrow {
       padding: 0 6px 4px;
       position: absolute;
       top: 50%;
+  }
+  .tabs-title > a[aria-selected='true'] {
+      background: #fff;
+  }
+  .file_title {
+    display: block;
   }

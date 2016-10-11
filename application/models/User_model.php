@@ -78,7 +78,7 @@ class User_model extends CI_Model {
              $this->db->escape(md5($password)) ." WHERE email = ".$this->db->escape($useremail);
              $this->db->query($sql);        
         }
-        public function update_user_idfile($id) {
+        public function update_user_idfile($id,$id_name) {
             $this->load->helper('url');
             $this->load->library('session');
             $upload_data = $this->upload->data(); 
@@ -87,10 +87,10 @@ class User_model extends CI_Model {
             $query = $this->db->query("select * from user_details where user_id = '".$id ."'");
             $result = $query->result_array();
             if(sizeof($result) > 0){
-                $sql = "UPDATE user_details SET id_file = '".$pic ."' , id_status = 'Uploaded' where user_id = '".$id ."'";
+                $sql = "UPDATE user_details SET id_file = '".$pic ."' , id_status = 'Uploaded', id_name = '".$id_name."' where user_id = '".$id ."'";
                 $this->db->query($sql);    
             } else {
-                $sql = "INSERT INTO user_details (id_file, id_status , user_id)  VALUES (".$pic.", Uplaoded ,".$id.")";
+                $sql = "INSERT INTO user_details (id_file, id_status , id_name user_id)  VALUES (".$pic.", Uplaoded ,".$id_name.",".$id.")";
                 $this->db->query($sql);    
             }
             
