@@ -537,8 +537,8 @@
                         <li class="tabs-title"><a href="#releases"> Releases (<?php echo count($contributor_releases); ?>) </a></li>
                   </ul>
                     <div class="tabs-content" data-tabs-content="upload-tabs">
-                    <?php if($user_details[0]['upload_status'] == FALSE ) { ?>
-                       <?php if($user_details[0]['edit_status'] == FALSE ) { ?>
+                    <?php if(($user_details[0]['upload_status'] == FALSE ) || (count($contributor_images) === 0)){ ?>
+                       <?php if(($user_details[0]['edit_status'] == FALSE ) || (count($contributor_images) === 0)){ ?>
                        <div class="tabs-panel is-active" id="images">
                           <div class="alert_message">
                               <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">

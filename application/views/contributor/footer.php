@@ -324,7 +324,7 @@ function submit_trial_images(){
                 return false ;
            } else {
                 var mbsize = size.substring(6,size.indexOf('M'));
-                if(mbsize < 2 ){
+                if(mbsize < 8 ){
                   $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
                   $( this ).append('Image should not be smaller than 2MB');
                   return false
@@ -339,10 +339,11 @@ function submit_trial_images(){
                      return false;
                   } else {
                     success = "TRUE";
-                    $(this).addClass('loading');
-                    $(this).css({'text-align':'center'});
-                    $(this ).append('File is uploading');
-                    return false;
+                    $(this).append('<div class ="loading"></div>');
+                    $('.btn_upload_multi').addClass('processing');
+                    $('.processing').removeClass('btn_upload_multi');
+                    $('.processing').removeClass('button');
+                    $('.processing').text("Upload processing ,please wait..");
                   }
                 }
            }
@@ -354,6 +355,31 @@ function submit_trial_images(){
           var form = document.getElementById('trial_form');
           var myfd = new FormData(form);
           $.ajax({
+          xhr: function () {
+              var xhr = new window.XMLHttpRequest();
+              xhr.upload.addEventListener("progress", function (evt) {
+                  if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                    if(percentComplete === 1) {
+                      // $('.loading').addClass('hide');
+                    }
+                  }
+              }, false);
+              xhr.addEventListener("progress", function (evt) {
+                if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                  }
+              }, false);
+              return xhr;
+          },          
           type: 'post',
           url:'<?php echo base_url("/index.php/contributor/upload_contributor_images")?>',
           data:myfd,
@@ -413,6 +439,11 @@ function submit_release_forms(){
                  return false;
               } else {
                 success = "TRUE";
+                $(this).append('<div class ="loading"></div>');
+                    $('.btn_upload_multi').addClass('processing');
+                    $('.processing').removeClass('btn_upload_multi');
+                    $('.processing').removeClass('button');
+                    $('.processing').text("Upload processing ,please wait..");
               }
            } else {
                 var mbsize = size.substring(6,size.indexOf('M'));
@@ -431,6 +462,9 @@ function submit_release_forms(){
                      return false;
                   } else {
                     success = "TRUE";
+                    $(this).addClass('loading');
+                    $(this).css({'text-align':'center'});
+                    $(this ).append('File is uploading');
                   }
                 }
            }
@@ -441,6 +475,31 @@ function submit_release_forms(){
           var form = document.getElementById('release_form');
           var myfd = new FormData(form);
           $.ajax({
+          xhr: function () {
+              var xhr = new window.XMLHttpRequest();
+              xhr.upload.addEventListener("progress", function (evt) {
+                  if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                    if(percentComplete === 1) {
+                      // $('.loading').addClass('hide');
+                    }
+                  }
+              }, false);
+              xhr.addEventListener("progress", function (evt) {
+                if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                  }
+              }, false);
+              return xhr;
+          },          
           type: 'post',
           url:'<?php echo base_url("/index.php/contributor/upload_contributor_releases")?>',
           data:myfd,
@@ -515,6 +574,11 @@ function submit_videos(){
                      return false;
                   } else {
                     success = "TRUE";
+                    $(this).append('<div class ="loading"></div>');
+                    $('.btn_upload_multi').addClass('processing');
+                    $('.processing').removeClass('btn_upload_multi');
+                    $('.processing').removeClass('button');
+                    $('.processing').text("Upload processing ,please wait..");
                   }
                 }
            }
@@ -525,6 +589,29 @@ function submit_videos(){
           var form = document.getElementById('video_form');
           var myfd = new FormData(form);
           $.ajax({
+          xhr: function () {
+              var xhr = new window.XMLHttpRequest();
+              xhr.upload.addEventListener("progress", function (evt) {
+                  if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                  }
+              }, false);
+              xhr.addEventListener("progress", function (evt) {
+                if(evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(percentComplete);
+                    $('.loading').css({
+                        width: percentComplete * 100 + "%"
+                    });
+                  }
+              }, false);
+              return xhr;
+          },          
+          
           type: 'post',
           url:'<?php echo base_url("/index.php/contributor/upload_contributor_videos")?>',
           data:myfd,
@@ -597,7 +684,7 @@ function submit_video_delete(){
              }
 
          });
-          $(this).hide();
+          $(this).remove();
 
       }
     
@@ -645,7 +732,7 @@ function delete_release(){
              }
 
          });
-          $(this).hide();
+          $(this).remove();
 
       }
     

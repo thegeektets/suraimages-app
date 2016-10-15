@@ -230,17 +230,19 @@ class contributor extends CI_Controller {
          	    }
 		    $i++;
 		}
-		if($success === 1){
+		if($success === 1 &&  $count > 0){
 			$this->user_model->update_video_edit_status($id,TRUE);
 			$this->user_model->update_video_upload_status($id,FALSE);
 		}
 		echo $success;
 	}
+	
 	public function upload_contributor_images() {
 		 
 		 $this->load->library('session');
 		 $data['user_session']=$this->session->all_userdata();;
 		 $this->load->helper(array('form', 'url'));
+		 $id = $data['user_session']['user_meta']['0']['id'];
 		 $config['upload_path'] = './assets/uploads/';
 		 $config['allowed_types'] = 'gif|jpg|png';
 		 $config['overwrite'] = FALSE; 
@@ -267,18 +269,44 @@ class contributor extends CI_Controller {
 		           $error = array('error' => $this->upload->display_errors());
 		    	   echo $this->upload->display_errors();
 		 	  } else {
-		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		 	  	 /*	$config2['image_library'] = 'gd2';
+	                $config2['source_image'] = $this->upload->upload_path.$this->upload->file_name;
+	                $config2['upload_path'] = './assets/uploads/thumbs';
+	                $config2['maintain_ratio'] = TRUE;
+	                $config2['create_thumb'] = TRUE;
+	                $config2['thumb_marker'] = '_thumb';
+	                $config2['width'] = 350;
+	                $this->load->library('image_lib',$config2); 
+	                if ( !$this->image_lib->resize()) {
+	            		$this->image_lib->display_errors();
+	          		} */
+
 		           $this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size']);
 		           $success = 1;
          	    }
 		    $i++;
 		}
-		if($success === 1){
+		if($success === 1 &&  $count > 0){
 			$this->user_model->update_edit_status($id,TRUE);
 			$this->user_model->update_upload_status($id,FALSE);
-		}
+		} 
 		echo $success;
 	}
+	public function _create_thumbnail($fileName,$width,$height) {
+        $this->load->library('image_lib');
+        $config['image_library'] = '	gd2';
+        $config['source_image'] = $_SERVER['DOCUMENT_ROOT'].$fileName;       
+        $config['create_thumb'] = TRUE;
+        $config['maintain_ratio'] = TRUE;
+        $config['width'] = $width;
+        $config['height'] = $height;
+        $config['new_image'] = $_SERVER['DOCUMENT_ROOT'].$fileName;               
+        $this->image_lib->initialize($config);
+        if(!$this->image_lib->resize())
+        { 
+            echo $this->image_lib->display_errors();
+        }        
+    }
 	public function upload_contributor_releases() {
 		 
 		 $this->load->library('session');
@@ -330,6 +358,7 @@ class contributor extends CI_Controller {
 	    	$success = 0;
 	    	
 	    	while($i < $size) {
+	    	if(strlen($_POST['file_id'][$i])> 0){
 	    		$file_id = $_POST['file_id'][$i];
 	    		$file_name = $_POST['file_name'][$i];
 	    		$file_keywords = $_POST['file_keywords'][$i];
@@ -371,7 +400,9 @@ class contributor extends CI_Controller {
 		    		$success = 1;	
 	    		}
 	    		
-	    	}
+	    	} else {
+	    		$success = 1;
+	    	}}
 	    	if($success === 1){
 	    		$this->user_model->update_video_edit_status($id,FALSE);
 	    		$this->user_model->update_video_upload_status($id,TRUE);
@@ -387,12 +418,17 @@ class contributor extends CI_Controller {
 	    $id = $data['user_session']['user_meta']['0']['id'];
 	    
 	    	$i = 0;
-	    	$size = sizeof($_POST['file_id']);
-	    	$success = 0;
-	    	
+	    	if(isset($_POST['file_id'])) {
+		    	$size = sizeof($_POST['file_id']);
+		    	$success = 0;
+		    	// var_dump($_POST['file_id']);
+	    	} else {
+	    		$size = 0;
+	    		$success = 1;
+	    	} 
 	    	
 	    	while($i < $size) {
-	    		
+	    	if(isset($_POST['file_id'][$i])) {
 	    		$file_id = $_POST['file_id'][$i];
 	    		$file_name = $_POST['file_name'][$i];
 	    		$file_keywords = $_POST['file_keywords'][$i];
@@ -433,8 +469,11 @@ class contributor extends CI_Controller {
 		    		$success = 1;	
 	    		}
 	    		
-	    	}
-	    	if($success === 1){
+	    	} else {
+	    		$success = 1;
+	    	} }
+	    	
+	    	if($success === 1 && isset($_POST['file_id']) ){
 	    		$this->user_model->update_edit_status($id,FALSE);
 	    		$this->user_model->update_upload_status($id,TRUE);
 	    	}

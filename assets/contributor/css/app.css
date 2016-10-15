@@ -1152,26 +1152,26 @@ ul#menu_account::before {
   font-size: 20px;
   cursor: pointer;
   opacity: 0;
-  filter: alpha(opacity=0); }
-
-  .jFiler-items.jFiler-row {
-      border-top: 1px solid;
-      padding-top: 10px;
-      width: 65vw;
-  }
+  filter: alpha(opacity=0); 
+}
+.jFiler-items.jFiler-row {
+  border-top: 1px solid;
+  padding-top: 10px;
+  width: 72vw;
+}
   /*Edit Files */
-  .edit_content {
-    font-family: 'Calibri';
-  }
-  .edit_file_img {
-    width: 150px;
-    padding: 20px;
-  }
-  .edit_item {
-      padding-top: 10px;
-      border-bottom: 1px solid;
-      position: relative;
-  }
+.edit_content {
+  font-family: 'Calibri';
+}
+.edit_file_img {
+  width: 150px;
+  padding: 20px;
+}
+.edit_item {
+  padding-top: 10px;
+  border-bottom: 1px solid;
+  position: relative;
+}
   .edit_footer {
      margin-top: 40px;
      padding: 10px;

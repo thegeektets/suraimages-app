@@ -1,10 +1,25 @@
 .loading {
-	background-image: url(rolling.gif) !important;
-    background-position: center  !important;
-    background-repeat: no-repeat !important;
     background-color: #d6de23 !important;
-    position: relative !important;
+    position: absolute !important;
+    width: 0;
+    height: 15px;
     font-weight: 300;
+    font-size: 15px;
+    transition: width .3s;
+    min-height: 15px;
+    margin-top: 0px;
+    float: left;
+    top: 0;
+    left: 0;
+ }
+ .processing {
+    background-image: url('rolling.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f7f7f7;
+    width: 100%;
+    height: 100px;
+    color: #333;
+    text-transform: uppercase;
     font-size: 16px;
-
 }
