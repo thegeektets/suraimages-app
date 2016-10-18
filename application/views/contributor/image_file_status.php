@@ -371,7 +371,7 @@
             <div class="row collapse">
               <div class="large-1 column report_col">
                   <input type="checkbox" name="file_select" class="select_file">
-                  <img src="<?php echo $contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                  <img src="<?php echo $contributor_images[$i]['file_thumbnail']; ?>" class="edit_file_img">
               </div>
               <div class="large-1 column report_col">
                   <?php echo $contributor_images[$i]['upload_id']; ?>

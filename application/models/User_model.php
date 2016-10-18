@@ -193,10 +193,18 @@ class User_model extends CI_Model {
                 $country = $this->input->post("slc_country");
                 $user_id = $id;
 
-                $query = $this->db->query("     
-                REPLACE INTO user_details (firstname, middlename, surname, postaladdress, postaddress, zipcode, city, country, telnumber,email,user_id)
+
+                $query = $this->db->query("select * from user_details where user_id = '".$id ."'");
+                $result = $query->result_array();
+                if(sizeof($result) > 0){
+                    $sql = " UPDATE user_details SET firstname = ".$this->db->escape($fname).", middlename = ".$this->db->escape($mname).", surname = ".$this->db->escape($sname).", postaladdress = ".$this->db->escape($paddress).", postaddress = ".$this->db->escape($poaddress).", zipcode = ".$this->db->escape($zcode).", city = ".$this->db->escape($city).", country = ".$this->db->escape($country).", telnumber = ".$this->db->escape($telnumber).", email = ".$this->db->escape($email)." where user_id = ".$id ."";
+                    $this->db->query($sql);    
+                } else {
+                    $this->db->query("     
+                    INSERT INTO user_details (firstname, middlename, surname, postaladdress, postaddress, zipcode, city, country, telnumber,email,user_id)
                 VALUES(".$this->db->escape($fname).",".$this->db->escape($mname).",".$this->db->escape($sname).",".$this->db->escape($paddress).",".$this->db->escape($poaddress).",".$this->db->escape($zcode).",".$this->db->escape($city).",".$this->db->escape($country).",".$this->db->escape($telnumber).",".$this->db->escape($email).",".$this->db->escape($user_id).")");
-                      
+                }
+            
         }
         public function update_upload_status($id , $status){
                 $user_id = $id;

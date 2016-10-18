@@ -17,15 +17,17 @@ class Contributor_model extends CI_Model {
             $this->db->query(" INSERT INTO contributor_video_uploads(user_id,file_url,file_name,file_size) VALUES(".$this->db->escape($id).",".$this->db->escape($url).","
                 .$this->db->escape($name).",".$this->db->escape($size).")");
         }
-        public function upload_contributor_images($id,$name,$size) {
+        public function upload_contributor_images($id,$name,$size,$thumb_path) {
             $this->load->helper('url');
             $this->load->library('session');
             $upload_data = $this->upload->data(); 
             $ppic =   $upload_data['file_name'];
             $url = base_url("assets/uploads/".$ppic); 
+            $thumb_path = base_url($thumb_path);
+            list($width, $height) = getimagesize($url);
             $query = 
-            $this->db->query(" INSERT INTO contributor_image_uploads(user_id,file_url,file_name,file_size) VALUES(".$this->db->escape($id).",".$this->db->escape($url).","
-                .$this->db->escape($name).",".$this->db->escape($size).")");
+            $this->db->query(" INSERT INTO contributor_image_uploads(user_id,file_url,file_name,file_size,file_width,file_height,file_thumbnail) VALUES(".$this->db->escape($id).",".$this->db->escape($url).","
+                .$this->db->escape($name).",".$this->db->escape($size).",".$this->db->escape($width).",".$this->db->escape($height).",".$this->db->escape($thumb_path).")");
         }
         public function upload_contributor_releases($id,$name) {
             $this->load->helper('url');

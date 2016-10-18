@@ -932,7 +932,7 @@
                                               </div>
                                               <div>
                                                   <span class="strong"> Identification: </span> 
-                                                  <a href="<?php echo $exscontributors[$i]['id_file']?>" target="_blank" > Passport ID.jpg </a>
+                                                  <a href="<?php echo $exscontributors[$i]['id_file']?>" target="_blank" ><?php echo $exscontributors[$i]['id_name']?> </a>
                                                   <?php
                                                    if($exscontributors[$i]['id_status'] == 'Approved'){ 
                                                      echo $exscontributors[$i]['id_status']; 
@@ -1309,7 +1309,7 @@
                                          <div class="row collapse">
                                            <div class="large-1 column ">
                                                <input type="checkbox" name="file_select" class="select_file">
-                                                 <img src="<?php echo $all_contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                                                 <img src="<?php echo $all_contributor_images[$i]['file_thumbnail']; ?>" class="edit_file_img">
                                            </div>
                                            <div class="large-1 column ">
                                                <?php echo $all_contributor_images[$i]['upload_id']; ?>

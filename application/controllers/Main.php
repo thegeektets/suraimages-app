@@ -31,10 +31,12 @@ class Main extends CI_Controller {
 		$orientation = $this->input->post('orientation');
 		$people = $this->input->post('people');
 		$category = $this->input->post('category');
+		$contributor = $this->input->post('contributor');
 
 		$data['search_term'] = $search_term; 
+		$data['contributors'] =$this->admin_model->get_excontributor_users();
 		$data['all_results'] = $this->main_model->optimize_all_uploads($search_term,
-			$license_type,$image_type,$orientation,$people,$category);
+			$license_type,$image_type,$orientation,$people,$category,$contributor);
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -59,6 +61,7 @@ class Main extends CI_Controller {
 		$this->load->helper(array('form', 'url'));
 		$data['search_term'] = $search_term; 
 		$data['all_results'] = $this->main_model->search_all_uploads($search_term);
+		$data['contributors'] =$this->admin_model->get_excontributor_users();
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -82,6 +85,7 @@ class Main extends CI_Controller {
 		$data['search_term'] = $search_term; 
 		$this->load->helper(array('form', 'url')); 
 		$data['all_results'] = $this->main_model->get_same_shoots($same_shoot);
+		$data['contributors'] =$this->admin_model->get_excontributor_users();
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -104,6 +108,7 @@ class Main extends CI_Controller {
 	{
 		$this->load->helper('url'); 
 		$data['all_results'] = $this->main_model->get_single_upload($upload_id);
+		$data['contributors'] =$this->admin_model->get_excontributor_users();
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -120,8 +125,4 @@ class Main extends CI_Controller {
 		$this->load->view('non_member/details', $data);
 		$this->load->view('non_member/footer');
 	}
-
-	
-
-
 }

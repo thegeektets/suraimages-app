@@ -158,7 +158,7 @@
     
                 <div class="mosaicflow__item search_results_img">
                   <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
-                     <img src="<?php echo $all_results[$i]['file_url'] ?>" onerror="this.style.display='none'" >
+                     <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                   </a>
                   <div class="search_img_details"> 
                       <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>

@@ -537,41 +537,47 @@
                         <li class="tabs-title"><a href="#releases"> Releases (<?php echo count($contributor_releases); ?>) </a></li>
                   </ul>
                     <div class="tabs-content" data-tabs-content="upload-tabs">
-                    <?php if(($user_details[0]['upload_status'] == FALSE ) || (count($contributor_images) === 0)){ ?>
-                       <?php if(($user_details[0]['edit_status'] == FALSE ) || (count($contributor_images) === 0)){ ?>
-                       <div class="tabs-panel is-active" id="images">
-                          <div class="alert_message">
-                              <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
-                              Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is
-                              worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
-                          </div>
-                          <form id="trial_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_trial_images();">
-                          <div class="row">
-                              <div class="large-10 columns pull-right">
-                                 Shows us what you are good at by submitting atleast 5 of your best images in JPEG format. Make sure the images are
-                                 of high quality with a minimum file size of 8MB each. (select more than one to upload multiple files)
-                               </div>
-                               <div class="large-2 columns pull-left">   
-                                      <input type="file" name="trialfiles[]"  class="impress_image_filer" multiple="multiple">
-                               </div>
-                              
-                           </div>
-                           <hr/>
-                            <div class="tab_content">
-                                  <div class="message pull-left">
-                                  </div>
-                                  <button class="button btn_upload_multi" type="submit"> Continue </button>
-                            </div>
-                            </form>
-                            
-                            <div style="clear: both"></div>        
-                       </div>
-                        <?php } else {
-                         require_once('edit_image_files.php');
-                        }?>
-                        <?php } else {
+                    
+                    <?php if(($user_details[0]['upload_status'] == TRUE ) && (count($contributor_images) > 0)){
+                          
                           require_once('image_file_status.php');
-                        } ?>
+                         
+                         } else {
+                            if(($user_details[0]['edit_status'] == TRUE ) && (count($edit_contributor_images) > 0)){
+                                require_once('edit_image_files.php');
+                           
+                            } else { ?>
+                          
+                          <div class="tabs-panel is-active" id="images">
+                            <div class="alert_message">
+                                <img src="<?php echo base_url('/assets/contributor/img/alert.png')?>" class="alert_pic">
+                                Please note, every file you upload will automatically be licensed as Royalty Free until our curator review and deem the file otherwise (Right Managed), but should you feel your work is
+                                worth being licensed as Right Managed kindly don’t hesitate to communicate to us.
+                            </div>
+                            <form id="trial_form" method="post" enctype ='multipart/form-data' onsubmit="return submit_trial_images();">
+                            <div class="row">
+                                <div class="large-10 columns pull-right">
+                                   Shows us what you are good at by submitting atleast 5 of your best images in JPEG format. Make sure the images are
+                                   of high quality with a minimum file size of 8MB each. (select more than one to upload multiple files)
+                                 </div>
+                                 <div class="large-2 columns pull-left">   
+                                        <input type="file" name="trialfiles[]"  class="impress_image_filer" multiple="multiple">
+                                 </div>
+                                
+                             </div>
+                             <hr/>
+                              <div class="tab_content">
+                                    <div class="message pull-left">
+                                    </div>
+                                    <button class="button btn_upload_multi" type="submit"> Continue </button>
+                              </div>
+                              </form>
+                              
+                              <div style="clear: both"></div>        
+                          </div>
+                          
+                        <?php } } ?>
+                       
                         <div class="tabs-panel" id="videos">
                           <?php if($user_details[0]['video_upload_status'] == FALSE ) { ?>
                           <?php if($user_details[0]['video_edit_status'] == FALSE ) { ?>

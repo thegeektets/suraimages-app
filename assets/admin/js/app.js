@@ -13,11 +13,11 @@ $(document).ready(function(){
 	var close_btn = "false";
 
 	$(function() {
-            $('.slc_category').change(function() {
-            }).multipleSelect({
-                width: '100%'
-            });
-        });
+	  $('.slc_category').change(function() {
+	    }).multipleSelect({
+	        width: '100%'
+	    });
+    });
 	
 	$(".search_img_details").hide();
 	$(".search_img_popup").hide();

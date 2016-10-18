@@ -39,7 +39,9 @@
     <script src="<?php echo base_url('/assets/non_member/js/vendor/what-input.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/vendor/foundation.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/vendor/slick.min.js')?>"></script>
+    <script src="<?php echo base_url('/assets/contributor/multiselect/multiple-select.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/mainfile.js')?>"></script>
     
   </body>
 </html>

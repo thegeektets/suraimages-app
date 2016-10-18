@@ -19,6 +19,8 @@
 </div>
 </footer>
 <script src="<?php echo base_url('/assets/contributor/js/vendor/jquery.js')?>"></script>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/contributor/filer/js/jquery.filer.min.js?v=1.0.5')?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/contributor/filer/js/custom.js?v=1.0.5')?>"></script>
 <script src="<?php echo base_url('/assets/contributor/js/vendor/what-input.js')?>"></script>
@@ -75,6 +77,9 @@
     data:$('#edit_image_contributor').serialize(),
     success:
       function(data){
+        
+        console.log(data);
+
         if (data === '1'){
            $('.message').attr("class" ,"message alert-box success");
            $('.message').text("Images have been edited successfully!"); 
@@ -85,6 +90,16 @@
         } else if (data === '0') {
           $('.message').attr("class" ,"message alert-box warning");
           $('.message').text("Failed to submit, make sure all required fields are filled"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
+        } else if (data === '5') {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').text("Failed to submit, make sure the price is within the set range"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          
+        } else if (data === '7') {
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').text("Failed to submit, make sure each image contains atleast 7 keywords"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
@@ -398,6 +413,10 @@ function submit_trial_images(){
                 $('.message').text(""+data); 
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                 
+                $('.processing').addClass('btn_upload_multi');
+                $('.btn_upload_multi').removeClass('processing');
+                $('.btn_upload_multi').addClass('button');
+                $('.btn_upload_multi').text("Continue");
               }
               $('.message').show();
             },

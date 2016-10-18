@@ -296,7 +296,11 @@ class admin extends CI_Controller {
 		$id = $data['user_session']['user_meta']['0']['id'];
     		$file_id = $this->input->post("file_id");
     		$file_name = $this->input->post("file_name");
-    		$file_keywords = $this->input->post("file_keywords");
+    		if(is_array($this->input->post("file_keywords"))){
+    			$file_keywords = implode(",", $this->input->post("file_keywords"));
+    		} else {
+    			$file_keywords = $this->input->post("file_keywords");
+    		}
     		$file_price_large = $this->input->post("file_price_large");
     		$file_license = $this->input->post("file_license");
     		$file_type = $this->input->post("file_type");

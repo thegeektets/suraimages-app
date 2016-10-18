@@ -11,6 +11,11 @@ function formatBytes(bytes,decimals) {
 
 $(document).ready(function(){
 	
+    $('.slc_category').change(function() {
+    	}).multipleSelect({
+        width: '100%'
+    	});
+
 	$('.search_results').removeClass('large-10');
 
 	$('.file_l_size').each(function(){

@@ -240,6 +240,7 @@ class contributor extends CI_Controller {
 	public function upload_contributor_images() {
 		 
 		 $this->load->library('session');
+		 $this->load->library('image_lib');
 		 $data['user_session']=$this->session->all_userdata();;
 		 $this->load->helper(array('form', 'url'));
 		 $id = $data['user_session']['user_meta']['0']['id'];
@@ -251,7 +252,12 @@ class contributor extends CI_Controller {
 		 $this->upload->initialize($config);
 
 		 $files = $_FILES;
-		 $count = count($_FILES['trialfiles']['name']);
+		 if(isset($_FILES['trialfiles'])){
+		 	$count = count($_FILES['trialfiles']['name']);	
+		 } else {
+		 	$count = 0;
+		 }
+		 
 		 $i = 0;
 		 $_FILES = array();
 		 $success = 0;
@@ -269,20 +275,47 @@ class contributor extends CI_Controller {
 		           $error = array('error' => $this->upload->display_errors());
 		    	   echo $this->upload->display_errors();
 		 	  } else {
-		 	  	 /*	$config2['image_library'] = 'gd2';
-	                $config2['source_image'] = $this->upload->upload_path.$this->upload->file_name;
-	                $config2['upload_path'] = './assets/uploads/thumbs';
-	                $config2['maintain_ratio'] = TRUE;
+		 	  	 	$ppic = $_FILES['trialfiles']['name'];
+		 	  	 	$url = "./assets/uploads/".$ppic; 
+	             
+	                $config2['image_library'] = 'gd2';
+		 	  	 	$config2['source_image'] = $url;
+	                $config2['new_image'] = './assets/uploads/thumbs/';
+		            $config2['maintain_ratio'] = TRUE;
 	                $config2['create_thumb'] = TRUE;
 	                $config2['thumb_marker'] = '_thumb';
-	                $config2['width'] = 350;
-	                $this->load->library('image_lib',$config2); 
-	                if ( !$this->image_lib->resize()) {
-	            		$this->image_lib->display_errors();
-	          		} */
+	                $config2['width'] = 600;
+	                $config2['height'] = 600;
+                    
+	                $this->image_lib->initialize($config2);
 
-		           $this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size']);
-		           $success = 1;
+	                if ( !$this->image_lib->resize()) {
+	            
+	            		echo $this->image_lib->display_errors();
+	          	
+	          		} else {
+						$this->image_lib->clear();
+						$pathinfo = pathinfo($_FILES['trialfiles']['name']);
+		            	$thumbnail_path = 'assets/uploads/thumbs/'. $pathinfo['filename'] . "_thumb." . $pathinfo['extension'];
+	                
+						$config3['image_library'] = 'gd2';
+		                $config3['source_image'] = './'.$thumbnail_path;
+		                $config3['wm_type'] = 'overlay';
+	                    $config3['wm_overlay_path'] = './assets/contributor/img/sura_dark.png';
+	                    $config3['wm_opacity'] = '50';
+	                    $config3['wm_vrt_alignment'] = 'middle'; 
+	                    $config3['wm_hor_alignment'] = 'center';
+	          			$this->image_lib->initialize($config3);
+	          			if(!$this->image_lib->watermark()){
+	          				echo $this->image_lib->display_errors();
+	          			} else {
+							$this->image_lib->clear();
+		          			$this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size'], $thumbnail_path);
+			           		$success = 1;		          				
+	          			}
+	          		}
+
+		           
          	    }
 		    $i++;
 		}
@@ -416,22 +449,26 @@ class contributor extends CI_Controller {
 		$this->load->library('form_validation');
 	    $data['user_session']=$this->session->all_userdata();
 	    $id = $data['user_session']['user_meta']['0']['id'];
+	    $rf_pricing = $this->admin_model->get_rf_pricing();
+		$price_max = $rf_pricing[0]['photo_max'];
+		$price_min = $rf_pricing[0]['photo_min'];
+		
+		if(!isset($price_min)){
+			$price_min = 0;
+			$price_max = 250;
+		}
 	    
 	    	$i = 0;
-	    	if(isset($_POST['file_id'])) {
-		    	$size = sizeof($_POST['file_id']);
-		    	$success = 0;
-		    	// var_dump($_POST['file_id']);
-	    	} else {
-	    		$size = 0;
-	    		$success = 1;
-	    	} 
+	    	$size = sizeof($_POST['file_id']);
+		    $success = 0;
+		    // var_dump($_POST['file_id']);
 	    	
 	    	while($i < $size) {
-	    	if(isset($_POST['file_id'][$i])) {
+	    	
 	    		$file_id = $_POST['file_id'][$i];
 	    		$file_name = $_POST['file_name'][$i];
 	    		$file_keywords = $_POST['file_keywords'][$i];
+	    		$keywords_array = explode(",", $file_keywords);
 	    		$file_price_large = $_POST['file_price_large'][$i];
 	    		$file_price_medium =$_POST['file_price_medium'][$i];
 	    		$file_price_small =$_POST['file_price_small'][$i];
@@ -450,34 +487,61 @@ class contributor extends CI_Controller {
 	    		$model_array = explode(",", $file_model);
 	    		$release_array= explode(",", $file_release);
 	    		
-	    		if(trim($file_name) === "" || trim($file_keywords) === "" ) {
+	    		if( trim($file_name) === "" || trim($file_keywords) === "" || trim($file_category) === ""
+	    		|| trim($file_type) === "" || trim($file_subtype) === "" || trim($file_orientation) === "") {
 	    			// validation error
-	    			echo $success;
+	    			echo 0;
 	    			return false;
 	    			
+	    		} else if(count($keywords_array)< 7){
+	    			echo 7;
+	    			return false;
+
+	    		} else if($file_price_large !== "0" && $file_price_large !== ""){
+
+	    			if($file_price_large < $price_min || $file_price_large > $price_max) {
+	    				echo 5;
+	    				return false;
+	    			} else {
+
+			    		for ($t=0; $t < count($model_array) ; $t++) { 
+			    			$this->add_file_model($file_id,$id,$model_array[$t],$file_price_large);
+			    		}
+			    		for ($r=0; $r < count($release_array); $r++) {
+			    			$this->add_file_release($file_id,$id,$release_array[$r]);
+			    		}
+						    $this->contributor_model->edit_contributor_images( $file_id,
+							$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+							$file_orientation,$file_people,$file_shoot,$file_category );	
+			    		$i++;
+			    		$success = 1;
+	    			}
+
 	    		} else {
-		    		for ($t=0; $t < count($model_array) ; $t++) { 
-		    			$this->add_file_model($file_id,$id,$model_array[$t],$file_price_large);
-		    		}
-		    		for ($r=0; $r < count($release_array); $r++) {
-		    			$this->add_file_release($file_id,$id,$release_array[$r]);
-		    		}
-					    $this->contributor_model->edit_contributor_images( $file_id,
-						$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
-						$file_orientation,$file_people,$file_shoot,$file_category );	
-		    		$i++;
-		    		$success = 1;	
+			    		for ($t=0; $t < count($model_array) ; $t++) { 
+			    			$this->add_file_model($file_id,$id,$model_array[$t],$file_price_large);
+			    		}
+			    		for ($r=0; $r < count($release_array); $r++) {
+			    			$this->add_file_release($file_id,$id,$release_array[$r]);
+			    		}
+						    $this->contributor_model->edit_contributor_images( $file_id,
+							$file_name,$file_keywords,$file_price_large,$file_price_medium,$file_price_small,$file_type,$file_subtype,
+							$file_orientation,$file_people,$file_shoot,$file_category );	
+			    		$i++;
+			    		$success = 1;	
 	    		}
 	    		
-	    	} else {
-	    		$success = 1;
-	    	} }
-	    	
-	    	if($success === 1 && isset($_POST['file_id']) ){
+	    	}
+
+	    	if($success === 1){
+
 	    		$this->user_model->update_edit_status($id,FALSE);
 	    		$this->user_model->update_upload_status($id,TRUE);
+	    		echo $success;
+	    	} else {
+	    		echo $success;
 	    	}
-	    	echo $success;
+	    	
 	}
 	public function add_model(){
 	    $this->load->helper('url'); 

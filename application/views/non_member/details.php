@@ -41,9 +41,9 @@
        </div>
        <div class="row collapse">
             <div class="large-6 columns pull-left">
-                <img src="<?php echo $all_results[0]['file_url'] ?>" class="search_display_img">
+                <img src="<?php echo $all_results[0]['file_thumbnail'] ?>" class="search_display_img">
                  <div class="similar_links pull-right">
-                   <a href="search_page.html"> Download Sample Image </a> 
+                   <a download href="<?php echo $all_results[0]['file_thumbnail'] ?>"> Download Sample Image </a> 
                  </div>
                 <div class="search_popup_details">
 
@@ -155,15 +155,13 @@
                                       <hr style="border-top: solid 1px;" />
                                       <div class="row">
                                           <div class="quality_column">
-                                            <input type="radio" name="quality"> Small
+                                            <input type="radio" name="quality" value="<?php echo round(($all_results[0]['file_price_large']/3),2)?>"> Small
                                           </div>
                                           <div class="desc_column">
                                               <p>
                                                  <span class="file_dimensions">
                                                   <?php
-                                                    list($width, $height) = getimagesize($all_results[0]['file_url']);
-                                                    echo round(($width/3),0).' x '.round(($height/3),0).'px';
-
+                                                    echo (round($all_results[0]['file_width']/3,0)).' x '.(round($all_results[0]['file_height']/3)).'px';
                                                   ?>
                                                   |
                                                 </span>
@@ -179,15 +177,14 @@
                                       <hr style="border-top: solid 1px;" />
                                       <div class="row">
                                           <div class="quality_column">
-                                            <input type="radio" name="quality"> Medium
+                                          <input type="radio" name="quality" value="<?php echo round(($all_results[0]['file_price_large']/2),2)?>"> Medium
                                           </div>
                                           <div class="desc_column">
                                              <p>
                                                <span class="file_dimensions">
                                                  <?php
-                                                   list($width, $height) = getimagesize($all_results[0]['file_url']);
-                                                   echo round(($width/2),0).' x '.round(($height/2),0).'px';
-                                                 ?>
+                                                    echo (round($all_results[0]['file_width']/2,0)).' x '.(round($all_results[0]['file_height']/2)).'px';
+                                                  ?>
                                                  |
                                                </span>
                                                <span class="file_m_size"> 
@@ -202,15 +199,15 @@
                                       <hr style="border-top: solid 1px;" />
                                       <div class="row">
                                           <div class="quality_column">
-                                            <input type="radio" name="quality"> Large
+                                            <input type="radio" name="quality" value="<?php echo round(($all_results[0]['file_price_large']),2)?>">  Large
                                           </div>
                                           <div class="desc_column">
                                             <p>
                                               <span class="file_dimensions">
                                                 <?php
-                                                  list($width, $height) = getimagesize($all_results[0]['file_url']);
-                                                  echo $width.' x '.$height.'px';
-                                                ?>
+                                                    echo 
+                                                       $all_results[0]['file_width'].' x '.$all_results[0]['file_height'].'px';
+                                                  ?>
                                                 |
                                               </span>
                                               <span class="file_l_size"> 
@@ -223,7 +220,10 @@
                                           </div>
                                       </div>
                                       <div class="price_footer">
-                                            License Fee : $00
+                                            License Fee : $
+                                            <span class="file_price">
+                                            00
+                                            </span>
                                       </div>
                                       <div class="price_footer">
                                             <button class="button success"> Add to Basket</button>

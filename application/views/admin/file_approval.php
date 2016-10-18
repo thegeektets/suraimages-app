@@ -15,6 +15,7 @@
                    <option value="Orientation"> Orientation </option>
                    <option value="License Type"> License Type </option>
                    <option value="People"> People </option>
+                   <option value="Same Shoot"> Same Shoot </option>
                    <option value="Delete" class="delete_option"> Delete </option>
                </select>
                <span class="question_wrap">
@@ -341,9 +342,7 @@
                         <label>Title : </label>
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $all_contributor_images[$i]['file_name']; ?>">
                         <label> Key Words : </label>
-                        <textarea  required="required"   name="file_keywords[]" class="file_keywords" type="text" placeholder="0000">
-                                <?php echo trim($all_contributor_images[$i]['file_keywords']); ?>
-                        </textarea>
+                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000" style="text-align:left"><?php if(strlen((trim($all_contributor_images[$i]['file_keywords'])))>0){echo (trim($all_contributor_images[$i]['file_keywords']));}?></textarea>
                 </div>
                 <div class="large-3 columns">
                    <div class="row collapse">
@@ -379,9 +378,9 @@
                                   $all_contributor_images[$i]['upload_id'] ?>[]">
                                     <option value="">Select Categories</option>
                                     <?php 
-                                      $categories = explode(",", $all_contributor_images[$i]['file_category']);
+                  $categories = explode(",", $all_contributor_images[$i]['file_category']);
                                        for($c=0; $c < count($categories); $c++) { 
-                                        if(strlen(categories[$c]) > 0){
+                                        if(strlen($categories[$c]) > 0){
                                     ?>
                                       <option value="<?php echo $categories[$c]; ?>" selected="selected">
                                         <?php echo $categories[$c];?>
@@ -458,7 +457,7 @@
                             <div class="large-7 columns">
                                 <select name="file_people[]" required="required" class="file_people">
                                   <option value="">Select number of people </option>
-                                  <option value="0">0</option>
+                                  <option value="0"<?php if($all_contributor_images[$i]['file_people'] == "0" ) echo 'selected = "selected"'?> >0</option>
                                   <option value="1" <?php if($all_contributor_images[$i]['file_people'] == "1" ) echo 'selected = "selected"'?> >1</option>
                                   <option value="2" <?php if($all_contributor_images[$i]['file_people'] == "2" ) echo 'selected = "selected"'?>  >2</option>
                                   <option value="3" <?php if($all_contributor_images[$i]['file_people'] == "3" ) echo 'selected = "selected"'?>  >3</option>
@@ -471,8 +470,15 @@
                                   <option value="10" <?php if($all_contributor_images[$i]['file_people'] == "10" ) echo 'selected = "selected"'?>  >10</option>
                                   </select>
                             </div>
-                        </div>
+                            <div class="large-5 columns">
+                                <label>SameShoot Code: </label>
+                            </div>
+                            <div class="large-7 columns">
+                               <input type="text" name="file_shoot[]" class="file_shoot"
+                                value="<?php echo $all_contributor_images[$i]['file_same_shoot_code']?>" placeholder="">
+                            </div>
                   </div>
+                </div>
                 <div class="large-3 columns">
                       <div class="large-12 columns">
                         <strong> Attach Releases (<?php echo count($all_contributor_images[$i]['releases']); ?>) </strong>

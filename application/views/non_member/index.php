@@ -31,7 +31,7 @@
     <div class="row">
         <div class="home_search">
           <form class="frm_home_search" on" <?php echo form_open('main/start_search'); ?>
-              <input type="text" name="search_term" class="inpt_home_search" placeholder="Search images, videos and illustrations" required="required" />
+              <input type="text" name="search_term" class="inpt_home_search" placeholder="Search images, videos and illustrations" />
               <select class="slt_home_search" required="required" name="search_cat">
                   <option value="image">Images</option>
                   <option value="video">Videos</option>

@@ -348,9 +348,7 @@
                         <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $contributor_videos[$i]['upload_id']; ?>">
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $contributor_videos[$i]['file_name']; ?>">
                         <label> Key Words : <span class="required_asteric">*</span></label>
-                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000">
-                                <?php echo $contributor_videos[$i]['file_keywords']?>
-                        </textarea>
+                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="Not less than 7 keywords" style="text-align:left"><?php if(strlen((trim($contributor_videos[$i]['file_keywords'])))>0){echo (trim($contributor_videos[$i]['file_keywords']));}?></textarea>
                 </div>
                 <div class="large-3 column">
                       Set Price 

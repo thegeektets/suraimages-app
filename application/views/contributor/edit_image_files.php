@@ -336,16 +336,14 @@
              <div class="row">
                 <div class="large-2 column">
                   <input type="checkbox" name="file_select" class="select_file">
-                  <img src="<?php echo $edit_contributor_images[$i]['file_url']; ?>" class="edit_file_img">
+                  <img src="<?php echo $edit_contributor_images[$i]['file_thumbnail']; ?>" class="edit_file_img">
                 </div>
                 <div class="large-4 column">
                         <label>Title : <span class="required_asteric">*</span></label>
                         <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $edit_contributor_images[$i]['upload_id']; ?>">
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $edit_contributor_images[$i]['file_name']; ?>">
                         <label> Key Words : <span class="required_asteric">*</span></label>
-                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000" style="text-align:left">
-                                <?php echo (trim($edit_contributor_images[$i]['file_keywords'])); ?>
-                        </textarea>
+                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="Not less than 7 keywords" style="text-align:left"><?php if(strlen((trim($edit_contributor_images[$i]['file_keywords'])))>0){echo (trim($edit_contributor_images[$i]['file_keywords']));}?></textarea>
                 </div>
                 <div class="large-3 column">
                       Set Price 
@@ -369,7 +367,7 @@
                       </div>
                       <div class="row collapse prices">
                           <div class="large-4 columns">
-                                <input type="text" name="file_price_large[]" placeholder="Price" value="<?php echo $edit_contributor_images[$i]['file_price_large']?>" class="file_price_large">
+                                <input type="number" min="<?php echo $rf_pricing['0']['photo_min']; ?>" max="<?php echo $rf_pricing['0']['photo_max']; ?>" name="file_price_large[]" placeholder="Price" value="<?php echo $edit_contributor_images[$i]['file_price_large']?>" class="file_price_large">
                           </div>
                           <div class="large-4 columns">
                                 <input type="text" name="file_price_medium[]" placeholder="Medium" readonly="readonly" value="<?php echo $edit_contributor_images[$i]['file_price_medium']?>" class="file_price_medium">
@@ -390,7 +388,7 @@
                                     <?php 
                                       $categories = explode(",", $edit_contributor_images[$i]['file_category']);
                                        for($c=0; $c < count($categories); $c++) { 
-                                        if(strlen(categories[$c]) > 0){
+                                        if(strlen($categories[$c]) > 0){
                                     ?>
                                       <option value="<?php echo $categories[$c]; ?>" selected="selected">
                                         <?php echo $categories[$c];?>

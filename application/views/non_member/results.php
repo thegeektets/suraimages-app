@@ -13,7 +13,7 @@
                    <ul class="menu vertical nested">
                      <li>
                        <select  name="license_type" class="accordion_select">
-                          <option value="">Select Image Type</option>
+                          <option value="">Select License </option>
                           <option value="royalty">Royalty Free</option>
                           <option value="right">Right Managed</option>
                        </select>
@@ -49,8 +49,9 @@
                    <a href="#">People</a>
                    <ul class="menu vertical nested">
                      <li>
-                       <select class="accordion_select">
-                         <option value="people">People</option>
+                       <select class="accordion_select" name="people">
+                         <option value="">People</option>
+                         <option value="0">0</option>
                          <option value="1">1</option>
                          <option value="2">2</option>
                          <option value="3">3</option>
@@ -70,7 +71,8 @@
                    <a href="#">Category</a>
                    <ul class="menu vertical nested">
                      <li>
-                         <select  name="category" class="accordion_select">
+                         <select name="category" class="accordion_select slc_category">
+                             <option value="">Select Category </option>
                              <option value="Abstract">Abstract</option>
                              <option value="Agriculture">Agriculture/ Farming </option>
                              <option value="Animals">Animals/ Livestock </option>
@@ -102,7 +104,20 @@
                      </li>
                    </ul>
                  </li>
-                 
+                 <li>
+                   <a href="#">Contributor</a>
+                   <ul class="menu vertical nested">
+                     <li>
+                      <select name="contributor" class="accordion_select">
+                        <option value="">Select Contributor </option>
+                         <?php for($i=0;$i<count($contributors);$i++){ ?>
+                         <option value="<?php echo $contributors[$i]['user_id'] ?>">
+                            <?php echo $contributors[$i]['firstname']." ".$contributors[$i]['middlename']; ?> </option>
+                         <?php } ?>
+                     </select>  
+                     </li>
+                   </ul>
+                 </li>
                  
                </ul>
                <div class="search-footer">
@@ -161,7 +176,7 @@
     
                 <div class="mosaicflow__item search_results_img">
                   <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
-                     <img src="<?php echo $all_results[$i]['file_url'] ?>" onerror="this.style.display='none'" >
+                     <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                   </a>
                   <div class="search_img_details"> 
                       <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
@@ -181,7 +196,7 @@
             ?>      
                         <div class="mosaicflow__item search_results_img">
                           <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
-                             <img src="<?php echo $all_results[$i]['file_url'] ?>" onerror="this.style.display='none'" >
+                             <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                           </a>
                           <div class="search_img_details"> 
                               <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
@@ -200,7 +215,7 @@
             ?>
                     <div class="mosaicflow__item search_results_img">
                       <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
-                         <img src="<?php echo $all_results[$i]['file_url'] ?>" onerror="this.style.display='none'" >
+                         <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                       </a>
                       <div class="search_img_details"> 
                           <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>

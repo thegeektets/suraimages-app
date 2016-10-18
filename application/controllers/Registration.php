@@ -87,7 +87,8 @@ class registration extends CI_Controller {
   	  $this->load->helper(array('form', 'url'));
       $this->load->library('form_validation');
       $this->form_validation->set_rules('txt_email', 'txt_email', 'required'); 
-      $this->form_validation->set_rules('txt_password', 'txt_password', 'required'); 
+      $this->form_validation->set_rules('txt_password', 'txt_password', 'required');
+      $result = ""; 
                       
 	    if ($this->form_validation->run() == FALSE) {
 	 	   $data['success'] = FALSE;
@@ -216,7 +217,7 @@ class registration extends CI_Controller {
 	    $this->load->library('session');
 	    $this->load->helper('url');
 	    $user_session=$this->session->all_userdata();
-	   
+	   	$result = "";
 	   	if ($user_session['user_meta']['0']['login'] == FALSE) {
 			$this->user_model->update_user_login($user_session['user_meta']['0']['email'], 'member');
 			$result = $this->send_member_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
@@ -227,7 +228,7 @@ class registration extends CI_Controller {
 								 A welcome email has been send to your account';
 		} else {
 		  $data['message'] = 	'Registration Successfull <br/>
-								 Failed to send email <br/>'.$result;
+								 '.$result;
 		}
    		header('Location:'.base_url('index.php/member'));
 	}
@@ -236,7 +237,7 @@ class registration extends CI_Controller {
 	    $this->load->library('session');
 	    $this->load->helper('url');
 		$user_session=$this->session->all_userdata();
-		
+		$result = "";
 		if ($user_session['user_meta']['0']['login'] == FALSE) {
 			$this->user_model->update_user_login($user_session['user_meta']['0']['email'], 'contributor');
 			$result = $this->send_contributor_welcome_email($user_session['user_meta']['0']['email'],$user_session['user_meta']['0']['username']);
@@ -248,7 +249,7 @@ class registration extends CI_Controller {
 								 A welcome email has been send to your account';
 		} else {
 		  $data['message'] = 	'Registration Successfull <br/>
-								 Failed to send email <br/>'.$result;
+								 '.$result;
 		}
    		header('Location:'.base_url('index.php/contributor'));
 	}

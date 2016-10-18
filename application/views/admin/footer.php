@@ -31,6 +31,7 @@
 <script src="<?php echo base_url('/assets/admin/js/vendor/slick.min.js')?>"></script>
 <script src="<?php echo base_url('/assets/admin/js/app.js')?>"></script> 
 <script src="<?php echo base_url('/assets/admin/js/adminfiles.js')?>"></script> 
+<script src="<?php echo base_url('/assets/contributor/js/unique.js')?>"></script>
 <script src="<?php echo base_url('/assets/contributor/js/editfiles.js')?>"></script>
 <script src="<?php echo base_url('/assets/admin/multiselect/multiple-select.js')?>"></script> 
 <?php if (($user_session['single_image_file']) === TRUE || ($user_session['activate_upload']) === TRUE) {?>
@@ -47,6 +48,54 @@
   
 ?>   
 <script type="text/javascript">
+    function submit_delete(){
+    $('.popup').hide();
+    var success = false;
+    $('.edit_item').each(function () { 
+      if ( $(this).find("input[name='file_select']").prop('checked') ){
+    
+         var file_id = $(this).find("input[name='file_id[]']").val();
+           $.ajax({
+           type: 'post',
+           url:'<?php echo base_url("/index.php/contributor/delete_image_file/")?>'+file_id,
+           data:$('#edit_image_contributor').serialize(),
+           success:
+             function(data){
+               if (data === '1') {
+                  success = true; 
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Files have been deleted"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               } else {
+                  success = false;
+                  $('.message').hide();
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text("Failed to delete file"); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  $('.message').show();
+                  $("#submit_changes").show();
+                  $(".submit_changes").show();   
+               }
+               $('#message').show();
+             },
+           fail:
+             function(data){
+               console.log(data);
+             }
+
+         });
+          $(this).hide();
+
+      }
+    
+    });
+
+    return false;
+  }
     function editimagecontributor(){
      $.ajax({
       type: 'post',

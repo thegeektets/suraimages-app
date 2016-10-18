@@ -33,9 +33,7 @@
                           <label class="red"> Key Words : </label>
                         </div>
                         <div class="large-9 columns">
-                            <textarea  name="file_keywords" placeholder="0000">
-                              <?php echo $all_contributor_images[$i]['file_keywords']; ?>
-                          </textarea>
+                            <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="0000" style="text-align:left"><?php if(strlen((trim($all_contributor_images[$i]['file_keywords'])))>0){echo (trim($all_contributor_images[$i]['file_keywords']));}?></textarea>
                         </div>
                         <div style="clear: both"></div>
                     </div>
