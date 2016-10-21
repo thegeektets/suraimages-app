@@ -115,7 +115,7 @@ $(document).ready(function(){
 			}
 		});
 
-	if( $(".similar-images").find(".search_img").length ){
+	if( $(".similar-images").find(".search_imgs").length ){
 		$('.similar-images').slick({
 		        infinite: true,
 		        slidesToShow: 5,

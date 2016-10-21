@@ -247,10 +247,11 @@ body {
  	margin-bottom: 5px;
  }
 
- select.accordion_select {
+ .accordion_select , .accordion_select:hover, .accordion_select:focus {
  	 width: 100%;
    font-family: 'Calibri';
    font-size: 14px;
+   font-weight: 300;
  }
  .accordion-title {
  	font-family: 'Calibri';
@@ -356,16 +357,18 @@ body {
  		font-family: 'Calibri';
  		margin-top: 10px;
  		font-size: 14px;
- 		color: #000;
+ 		color: #333;
     text-transform: uppercase;
+    font-weight: 700;
  }
  .btn-clear , .btn-clear:hover, .btn-clear:focus {
  		background-color: #fff;
  		font-family: 'Calibri';
  		margin-top: 10px;
  		font-size: 14px;
- 		color: #000;		
+ 		color: #333;		
     text-transform: uppercase;
+    font-weight: 700;
  }
 
  .inside_search_frm {
@@ -441,6 +444,13 @@ body {
 .search_results_img {
   
 }
+.search_imgs {
+}
+.search_imgs > img  , .search_imgs {
+    width: 100%;
+    object-fit: cover;
+}
+
 .search_img {
 }
 .search_img > img  , .search_img {

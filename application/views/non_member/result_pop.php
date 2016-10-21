@@ -5,19 +5,26 @@
 <div class="row">
     <div class="large-6 columns medium-6 columns">
         <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" class="search_display_img">
-
+        <div class="similar_links pull-right">
+          <a download="<?php echo "suraimages_".$all_results[$i]['upload_id']." sample".$all_results[$i]['file_name'] ?>" href="<?php echo $all_results[$i]['file_thumbnail'] ?>"
+          style="text-decoration:underline"> Download Sample Image </a> 
+        </div>
         <div class="search_popup_details">
 
+           <div class="row collapse">
             <div class="search_popup_title">Title 
               <span class="pull-right">:</span>
             </div>
             <div class="search_popup_content"> <?php echo $all_results[$i]['file_name'] ?></div>
-
+          </div>
+          <div class="row collapse">
             <div class="search_popup_title">Image ID 
               <span class="pull-right">:</span>
             </div>
-            <div class="search_popup_content"> <?php echo $all_results[$i]['upload_id'] ?></span></div>
-
+            <div class="search_popup_content"> <?php echo "suraimages_".$all_results[$i]['upload_id'] ?></span>
+            </div>
+          </div>
+          <div class="row collapse">
             <div class="search_popup_title" >Release Information 
               <span class="pull-right">:</span>
             </div>
@@ -29,6 +36,8 @@
                         No
                 <?php } ?>
             </div>
+          </div>
+          
 
 
 
@@ -62,7 +71,11 @@
                            <hr style="border-top: solid 1px;" />
                            <div class="row">
                                <div class="quality_column">
-                                 <input type="radio" name="quality" value="<?php echo round(($all_results[$i]['file_price_large']/3),2)?>"> Small
+                                 <input type="radio" name="quality" value="
+                                    <?php 
+                                    echo number_format((float)
+                                    ($all_results[$i]['file_price_large']/3), 2, '.', '');
+                                    ?>"> Small
                                </div>
                                <div class="desc_column">
                                    <span class="file_dimensions">
@@ -77,13 +90,19 @@
                                    </p>
                                </div>
                                <div class="price_column">
-                                 <span class="price">$<?php echo round(($all_results[$i]['file_price_large']/3),2)?></span>
+                                 <span class="price">$<?php 
+                                    echo number_format((float)
+                                    ($all_results[$i]['file_price_large']/3), 2, '.', '');
+                                    ?></span>
                                </div>
                            </div>
                            <hr style="border-top: solid 1px;" />
                            <div class="row">
                                <div class="quality_column">
-                                 <input type="radio" name="quality" value="<?php echo round(($all_results[$i]['file_price_large']/2),2)?>"> Medium
+                                 <input type="radio" name="quality" value="<?php 
+                                  echo number_format((float)
+                                    ($all_results[$i]['file_price_large']/2), 2, '.', '');
+                                  ?>"> Medium
                                </div>
                                <div class="desc_column">
                                   <span class="file_dimensions">
@@ -99,13 +118,19 @@
                                   </p>
                                </div>
                                <div class="price_column">
-                                  <span class="price">$<?php echo round(($all_results[$i]['file_price_large']/2),2)?></span>
+                                  <span class="price">$<?php 
+                                    echo number_format((float)
+                                    ($all_results[$i]['file_price_large']/2), 2, '.', '');
+                                    ?></span>
                                </div>
                            </div>
                            <hr style="border-top: solid 1px;" />
                            <div class="row">
                                <div class="quality_column">
-                                 <input type="radio" name="quality" value="<?php echo round(($all_results[$i]['file_price_large']),2)?>"> Large
+                                 <input type="radio" name="quality" value="<?php 
+                                    echo number_format((float)
+                                    ($all_results[$i]['file_price_large']), 2, '.', '');
+                                    ?>"> Large
                                </div>
                                <div class="desc_column">
                                  <p>
@@ -121,7 +146,10 @@
                                  </p>
                                </div>
                                <div class="price_column">
-                                 <span class="price">$<?php echo $all_results[$i]['file_price_large']?></span>
+                                 <span class="price">$<?php 
+                                    echo number_format((float)
+                                    ($all_results[$i]['file_price_large']), 2, '.', '');
+                                    ?></span>
                                </div>
                            </div>
                            <div class="price_footer">
@@ -136,7 +164,7 @@
                        </div>
                        <div class="tabs-panel" id="panel2<?php echo trim($all_results[$i]['upload_id'])?>">
                          <p>Exclusive license means that the licensee/ the buyer has exclusive rights to the content (Images, Videos) they
-                           buy for a speci ed period of time. Meaning, the licensee will be the only person to use the content s for the
+                           buy for a specified period of time. Meaning, the licensee will be the only person to use the content s for the
                            stipulated period of time and within that period the content s will be inactive for purchase from any other
                            licensee until the duration of the license e pires. See our Exclusivity & Control page for more information.</p>
 
@@ -223,7 +251,13 @@
     <div class="large-12 columns pop-similar-images">
         <?php for($s=0; $s < count($all_results[$i]['same_shoots']); $s++ ){ ?>
         <div class="large-2 columns">
-          <img src="<?php echo $all_results[$i]['same_shoots'][$s]['file_url'] ?>" class="search_img" onerror="this.style.display='none'">
+          
+          <div class="search_results_img">
+            <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['same_shoots'][$s]['upload_id']); ?>">
+               <img class="search_imgs" src="<?php echo $all_results[$i]['same_shoots'][$s]['file_thumbnail'] ?>"onerror="this.style.display='none'">
+            </a>
+
+          </div>
         </div>
         <?php } ?>
     </div>  

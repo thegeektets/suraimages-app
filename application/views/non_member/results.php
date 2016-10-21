@@ -181,9 +181,10 @@
                   <div class="search_img_details"> 
                       <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
                       <span class="search_img_icons">
-                          <a href=""><i class="fa fa-calculator" aria-hidden="true"></i></a>
+                          <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>"><i class="fa fa-calculator" aria-hidden="true"></i></a>
                           <a href=""><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
-                          <a href=""><img src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
+                          <a href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>">
+                          <img style="width: 17px;margin-top: 3px;margin-left: 1px;"src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
                       </span>
                   </div>
                   <?php require 'result_pop.php' ?>
