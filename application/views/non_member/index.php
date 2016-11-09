@@ -14,12 +14,25 @@
             <li class="menu-text phone "> +254 20 242 9588 </li>
           </ul>
         </div>
+        <?php if(!isset($user_session['logged_in'])) { ?> 
+        <div class="top-bar-right">
+             <ul class="menu" data-responsive-menu="medium-dropdown">
+                 <li class="menu-text menu-divider"> <a href="<?php echo base_url('/index.php/registration/login')?>">Sign in  </a></li>
+                 <li class="menu-text"><a href="#"> <a href="<?php echo base_url('/index.php/registration')?>">Register </a></li>
+             </ul>
+        </div>
+        <?php } else { ?>
         <div class="top-bar-right">
           <ul class="menu" data-responsive-menu="medium-dropdown">
-              <li class="menu-text menu-divider"> <a href="<?php echo base_url('/index.php/registration/login')?>">Sign in  </a></li>
-              <li class="menu-text"><a href="#"> <a href="<?php echo base_url('/index.php/registration')?>">Register </a></li>
+              <li class="menu-text menu-divider"> 
+                                          <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
+                                          <?php echo $user_session['user_meta']['0']['email'];?>  </a>
+              </li>
+              <li class="menu-text menu-divider"><a href="<?php echo base_url('/index.php/registration/logout')?>"> Sign Out </a></li>
+              <li class="menu-text"><a href="<?php echo base_url('index.php/member#basket') ?>" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (<?php echo count($cart_items)?>)</a></li>
           </ul>
         </div>
+        <?php } ?>
       </div>
     </div>
   <div class="inside_body">

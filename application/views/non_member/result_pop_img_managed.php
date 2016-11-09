@@ -63,10 +63,11 @@
                    <div>
                        <ul class="tabs" data-tabs id="example-tabs">
                          <span class="">
-                             <li class="tabs-title is-active"><a href="
-                             <?php echo "#panel1".trim($all_results[$i]['upload_id'])?>" aria-selected="true">Standard License</a></li>
-                             <li class="tabs-title exclusive_license disabled"><a href="
-                             <?php echo "#panel2".trim($all_results[$i]['upload_id'])?>">Exclusive License</a></li>
+                             <li class="tabs-title is-active">
+                               <a href="<?php echo "#panel1".trim($all_results[$i]['upload_id'])?>" aria-selected="true">
+                                  Standard License
+                               </a>
+                             </li>
                          </span>
                        </ul>
 

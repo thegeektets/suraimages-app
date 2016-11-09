@@ -1375,6 +1375,14 @@ button.slick-next.slick-arrow {
     width: 100px;
     padding-right: 10px;
   }
+  
+  .remove_cart_item {
+    float: right;
+    padding-right: 10px;
+  }
+  .remove_cart_item > a > img {
+    width: 15px
+  }
 
   .close_img {
     float: right;

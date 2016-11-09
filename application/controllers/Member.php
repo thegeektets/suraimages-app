@@ -7,6 +7,7 @@ class member extends CI_Controller {
 	{
        parent::__construct();
        $this->load->model('user_model');
+       $this->load->model('member_model');
    	}
 
 
@@ -21,6 +22,10 @@ class member extends CI_Controller {
 		if (isset($data['user_session']['logged_in'])) {
 			if(strlen($data['user_session']['user_meta']['0']['email']) > 0 ){
 				$data['user_details'] = $this->fetch_user_details();
+				$member_id = $data['user_details'][0]['user_id'];
+				$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);
 				
 				if(sizeof($data['user_details']) > 0){
 				   $data['code'] = array_search($data['user_details']['0']['country'], $this->countrycodes()); // returns 'US'

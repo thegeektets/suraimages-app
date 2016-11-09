@@ -169,19 +169,26 @@ class HAuth extends CI_Controller {
 			$this->session->set_userdata($newdata);
 			$user_session = $this->session->all_userdata();
 
-			$data['user_session']=$this->session->all_userdata();;
+			$data['user_session']=$this->session->all_userdata();
 			
-			if($user_session['user_meta']['0']['login'] == FALSE ) {
-			   $this->choose_account();
-			} else {
-				if($user_session['user_meta']['0']['account'] == 'member') {
-					$this->open_member_dashboard();
-				} else if ( $user_session['user_meta']['0']['account'] == 'contributor' ) {
-					$this->open_contributor_dashboard();
-				} else {
-					$this->open_admin_dashboard();
-				}
-			}
+			if ($user_session['add_to_cart'] == TRUE ) {
+			       			
+       			header('Location:'.base_url('index.php/main/complete_add_to_cart'));
+
+       		} else {
+       				if($user_session['user_meta']['0']['login'] == FALSE ) {
+       						   $this->choose_account();
+       				} else {
+       							if($user_session['user_meta']['0']['account'] == 'member') {
+       								$this->open_member_dashboard();
+       							} else if ( $user_session['user_meta']['0']['account'] == 'contributor' ) {
+       								$this->open_contributor_dashboard();
+       							} else {
+       								$this->open_admin_dashboard();
+       							}
+       				}
+       		}
+	
 		}
 
 	   	public function choose_account() {

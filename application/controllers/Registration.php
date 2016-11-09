@@ -103,6 +103,7 @@ class registration extends CI_Controller {
 	       $user_approval = $this->user_model-> get_user_approval();
 
 		       if(md5($this->input->post("txt_password")) === $user_pass) {
+			       	
 			       	if($user_approval == TRUE ){
 			       		$newdata = array(
 			       		        'user_meta'  => $user_meta,
@@ -110,7 +111,16 @@ class registration extends CI_Controller {
 			       		        );
 			       		$this->session->set_userdata($newdata);
 			       		$user_session = $this->session->all_userdata();
-			       		$this->dashboard();	
+			       		
+			       		if ($user_session['add_to_cart'] === TRUE ){
+			       			
+			       			header('Location:'.base_url('index.php/main/complete_add_to_cart'));
+
+			       		} else {
+			       			$this->dashboard();
+			       		}
+
+
 			       	} else {
 			       	   $result = $this->send_welcome_email(set_value('txt_email'),set_value('txt_email'));
 			       	   $data['success'] = FALSE;

@@ -7,6 +7,156 @@ class Admin_model extends CI_Model {
                 parent::__construct();
                 $this->load->database(); 
         }
+        public function update_rr_pricing(){
+
+                $subregion_price = $this->input->post("txt_subregion_price");
+                $region_price = $this->input->post("txt_region_price");
+                $usage_adv = $this->input->post("txt_usage_adv");
+                $usage_edt = $this->input->post("txt_usage_edt");
+                $usage_int = $this->input->post("txt_usage_int");
+                $media_adv_print = $this->input->post("txt_media_adv_print");
+                $media_adv_tv  = $this->input->post("txt_media_adv_tv");
+                $media_adv_digital = $this->input->post("txt_media_adv_digital");
+                $media_edt_print = $this->input->post("txt_media_edt_print");
+                $media_edt_tv = $this->input->post("txt_media_edt_tv");
+                $media_edt_digital = $this->input->post("txt_media_edt_digital");
+                $media_int_print = $this->input->post("txt_media_int_print");
+                $media_int_digital = $this->input->post("txt_media_int_digital");
+                $details_adv_print_newsp = $this->input->post("txt_details_adv_print_newsp");
+                $details_adv_print_mag = $this->input->post("txt_details_adv_print_mag");
+                $details_adv_print_outd = $this->input->post("txt_details_adv_print_outd");
+                $details_adv_print_pos = $this->input->post("txt_details_adv_print_pos");
+                $details_adv_print_all = $this->input->post("txt_details_adv_print_all");
+                $details_edt_print_newsp = $this->input->post("txt_details_edt_print_newsp");
+                $details_edt_print_mag = $this->input->post("txt_details_edt_print_mag");
+                $details_edt_print_book = $this->input->post("txt_details_edt_print_book");
+                $details_edt_print_collateral = $this->input->post("txt_details_edt_print_collateral");
+                $details_adv_tv_commercial = $this->input->post("txt_details_adv_tv_commercial");
+                $details_edt_tv_program = $this->input->post("txt_details_edt_tv_program");
+                $details_edt_tv_film = $this->input->post("txt_details_edt_tv_film");
+                $details_adv_digital_website = $this->input->post("txt_details_adv_digital_website");
+                $details_adv_digital_mobile = $this->input->post("txt_details_adv_digital_mobile");
+                $details_adv_digital_social = $this->input->post("txt_details_adv_digital_social");
+                $details_adv_digital_all     = $this->input->post("txt_details_adv_digital_all");
+                $details_edt_digital_website = $this->input->post("txt_details_edt_digital_website");
+                $details_edt_digital_mobile = $this->input->post("txt_details_edt_digital_mobile");
+                $details_edt_digital_social = $this->input->post("txt_details_edt_digital_social");
+                $details_edt_digital_all = $this->input->post("txt_details_edt_digital_all");
+                $details_int_digital_website     = $this->input->post("txt_details_int_digital_website");
+                $details_int_digital_presentation = $this->input->post("txt_details_int_digital_presentation");
+             
+                $duration_adv_1day = $this->input->post("txt_duration_adv_1day");
+                $duration_adv_1month = $this->input->post("txt_duration_adv_1month");
+                $duration_adv_3months = $this->input->post("txt_duration_adv_3months");
+                $duration_adv_6months = $this->input->post("txt_duration_adv_6months");
+                $duration_adv_1year = $this->input->post("txt_duration_adv_1year");
+                $duration_adv_2years = $this->input->post("txt_duration_adv_2years");
+                $duration_adv_1week = $this->input->post("txt_duration_adv_1week");
+             
+                $duration_edt_1day = $this->input->post("txt_duration_edt_1day");
+                $duration_edt_1week = $this->input->post("txt_duration_edt_1week");
+                $duration_edt_1month = $this->input->post("txt_duration_edt_1month");
+                $duration_edt_3months    = $this->input->post("txt_duration_edt_3months");
+                $duration_edt_6months = $this->input->post("txt_duration_edt_6months");
+                $duration_edt_1year = $this->input->post("txt_duration_edt_1year");
+                $duration_edt_2years = $this->input->post("txt_duration_edt_2years");
+             
+                $duration_int_1day = $this->input->post("txt_duration_int_1day");
+                $duration_int_1week = $this->input->post("txt_duration_int_1week");
+                $duration_int_1month     = $this->input->post("txt_duration_int_1month");
+                $duration_int_3months = $this->input->post("txt_duration_int_3months");
+                $duration_int_6months = $this->input->post("txt_duration_int_6months");
+                $duration_int_1year = $this->input->post("txt_duration_int_1year");
+                $duration_int_2years = $this->input->post("txt_duration_int_2years");
+                $pricing_id = $this->input->post("txt_pricing_id");
+               
+                $query = $this->db->query("     
+                    REPLACE INTO rr_pricing (subregion_price, region_price, usage_adv, usage_edt, usage_int, media_adv_print, media_adv_tv, media_adv_digital,media_edt_print, media_edt_tv , media_edt_digital, media_int_print,media_int_digital, details_adv_print_newsp, details_adv_print_mag, details_adv_print_outd  ,details_adv_print_pos, details_adv_print_all, details_edt_print_newsp, details_edt_print_mag,details_edt_print_book , details_edt_print_collateral, details_adv_tv_commercial, details_edt_tv_program,details_edt_tv_film, details_adv_digital_website, details_adv_digital_mobile, details_adv_digital_social,details_adv_digital_all , details_edt_digital_website , details_edt_digital_mobile, 
+                    details_edt_digital_social,details_edt_digital_all, details_int_digital_website,details_int_digital_presentation, duration_adv_1day,duration_adv_1month, duration_adv_3months, duration_adv_6months, duration_adv_1year,duration_adv_2years, duration_adv_1week, duration_edt_1day , duration_edt_1week,duration_edt_1month, duration_edt_3months, duration_edt_6months, duration_edt_1year    ,duration_edt_2years, duration_int_1day , duration_int_1week, duration_int_1month   ,duration_int_3months, duration_int_6months, duration_int_1year, duration_int_2years, pricing_id)
+
+                VALUES ( ".$this->db->escape($subregion_price).",".$this->db->escape($region_price).",".$this->db->escape($usage_adv).",".$this->db->escape($usage_edt).",".$this->db->escape($usage_int).",".$this->db->escape($media_adv_print).",".$this->db->escape($media_adv_tv).",".$this->db->escape($media_adv_digital).",".$this->db->escape($media_edt_print).",".$this->db->escape($media_edt_tv).",".$this->db->escape($media_edt_digital).",".$this->db->escape($media_int_print).",".$this->db->escape($media_int_digital).",".$this->db->escape($details_adv_print_newsp).",".$this->db->escape($details_adv_print_mag).",".$this->db->escape($details_adv_print_outd).",".$this->db->escape($details_adv_print_pos).",".$this->db->escape($details_adv_print_all).",".$this->db->escape($details_edt_print_newsp).",".$this->db->escape($details_edt_print_mag).",".$this->db->escape($details_edt_print_book).",".$this->db->escape($details_edt_print_collateral).",".$this->db->escape($details_adv_tv_commercial).",".$this->db->escape($details_edt_tv_program).",".$this->db->escape($details_edt_tv_film).",".$this->db->escape($details_adv_digital_website).",".$this->db->escape($details_adv_digital_mobile).",".$this->db->escape($details_adv_digital_social).",".$this->db->escape($details_adv_digital_all).",".$this->db->escape($details_edt_digital_website).",".$this->db->escape($details_edt_digital_mobile).",".$this->db->escape($details_edt_digital_mobile).",".$this->db->escape($details_edt_digital_social).",".$this->db->escape($details_edt_digital_all).",".$this->db->escape($details_int_digital_website).$this->db->escape($details_int_digital_presentation).",".$this->db->escape($duration_adv_1day).",".$this->db->escape($duration_adv_1month).",".$this->db->escape($duration_adv_3months).",".$this->db->escape($duration_adv_6months).",".$this->db->escape($duration_adv_1year).",".$this->db->escape($duration_adv_2years).",".$this->db->escape($duration_adv_1week).",".$this->db->escape($duration_edt_1day).",".$this->db->escape($duration_edt_1week).",".$this->db->escape($duration_edt_1month).",".$this->db->escape($duration_edt_3months).",".$this->db->escape($duration_edt_6months).",".$this->db->escape($duration_edt_1year).",".$this->db->escape($duration_edt_2years).",".$this->db->escape($duration_int_1day).",".$this->db->escape($duration_int_1week).",".$this->db->escape($duration_int_1month).",".$this->db->escape($duration_int_3months).",".$this->db->escape($duration_int_6months).",".$this->db->escape($duration_int_1year).",".$this->db->escape($duration_int_2years).",".$this->db->escape($pricing_id).")");
+                      
+        }
+        public function get_rr_pricing() {
+                $query = $this->db->query("select * from rr_pricing");
+                   return $query->result_array();
+        }
+
+        
+        public function update_rm_pricing(){
+
+                $subregion_price = $this->input->post("txt_subregion_price");
+                $region_price = $this->input->post("txt_region_price");
+                $usage_adv = $this->input->post("txt_usage_adv");
+                $usage_edt = $this->input->post("txt_usage_edt");
+                $usage_int = $this->input->post("txt_usage_int");
+                $media_adv_print = $this->input->post("txt_media_adv_print");
+                $media_adv_tv  = $this->input->post("txt_media_adv_tv");
+                $media_adv_digital = $this->input->post("txt_media_adv_digital");
+                $media_edt_print = $this->input->post("txt_media_edt_print");
+                $media_edt_tv = $this->input->post("txt_media_edt_tv");
+                $media_edt_digital = $this->input->post("txt_media_edt_digital");
+                $media_int_print = $this->input->post("txt_media_int_print");
+                $media_int_digital = $this->input->post("txt_media_int_digital");
+                $details_adv_print_newsp = $this->input->post("txt_details_adv_print_newsp");
+                $details_adv_print_mag = $this->input->post("txt_details_adv_print_mag");
+                $details_adv_print_outd = $this->input->post("txt_details_adv_print_outd");
+                $details_adv_print_pos = $this->input->post("txt_details_adv_print_pos");
+                $details_adv_print_all = $this->input->post("txt_details_adv_print_all");
+                $details_edt_print_newsp = $this->input->post("txt_details_edt_print_newsp");
+                $details_edt_print_mag = $this->input->post("txt_details_edt_print_mag");
+                $details_edt_print_book = $this->input->post("txt_details_edt_print_book");
+                $details_edt_print_collateral = $this->input->post("txt_details_edt_print_collateral");
+                $details_adv_tv_commercial = $this->input->post("txt_details_adv_tv_commercial");
+                $details_edt_tv_program = $this->input->post("txt_details_edt_tv_program");
+                $details_edt_tv_film = $this->input->post("txt_details_edt_tv_film");
+                $details_adv_digital_website = $this->input->post("txt_details_adv_digital_website");
+                $details_adv_digital_mobile = $this->input->post("txt_details_adv_digital_mobile");
+                $details_adv_digital_social = $this->input->post("txt_details_adv_digital_social");
+                $details_adv_digital_all     = $this->input->post("txt_details_adv_digital_all");
+                $details_edt_digital_website = $this->input->post("txt_details_edt_digital_website");
+                $details_edt_digital_mobile = $this->input->post("txt_details_edt_digital_mobile");
+                $details_edt_digital_social = $this->input->post("txt_details_edt_digital_social");
+                $details_edt_digital_all = $this->input->post("txt_details_edt_digital_all");
+                $details_int_digital_website     = $this->input->post("txt_details_int_digital_website");
+                $details_int_digital_presentation = $this->input->post("txt_details_int_digital_presentation");
+             
+                $duration_adv_1day = $this->input->post("txt_duration_adv_1day");
+                $duration_adv_1month = $this->input->post("txt_duration_adv_1month");
+                $duration_adv_3months = $this->input->post("txt_duration_adv_3months");
+                $duration_adv_6months = $this->input->post("txt_duration_adv_6months");
+                $duration_adv_1year = $this->input->post("txt_duration_adv_1year");
+                $duration_adv_2years = $this->input->post("txt_duration_adv_2years");
+                $duration_adv_1week = $this->input->post("txt_duration_adv_1week");
+             
+                $duration_edt_1day = $this->input->post("txt_duration_edt_1day");
+                $duration_edt_1week = $this->input->post("txt_duration_edt_1week");
+                $duration_edt_1month = $this->input->post("txt_duration_edt_1month");
+                $duration_edt_3months    = $this->input->post("txt_duration_edt_3months");
+                $duration_edt_6months = $this->input->post("txt_duration_edt_6months");
+                $duration_edt_1year = $this->input->post("txt_duration_edt_1year");
+                $duration_edt_2years = $this->input->post("txt_duration_edt_2years");
+             
+                $duration_int_1day = $this->input->post("txt_duration_int_1day");
+                $duration_int_1week = $this->input->post("txt_duration_int_1week");
+                $duration_int_1month     = $this->input->post("txt_duration_int_1month");
+                $duration_int_3months = $this->input->post("txt_duration_int_3months");
+                $duration_int_6months = $this->input->post("txt_duration_int_6months");
+                $duration_int_1year = $this->input->post("txt_duration_int_1year");
+                $duration_int_2years = $this->input->post("txt_duration_int_2years");
+                $pricing_id = $this->input->post("txt_pricing_id");
+               
+                $query = $this->db->query("     
+                    REPLACE INTO rm_pricing (subregion_price, region_price, usage_adv, usage_edt, usage_int, media_adv_print, media_adv_tv, media_adv_digital,media_edt_print, media_edt_tv , media_edt_digital, media_int_print,media_int_digital, details_adv_print_newsp, details_adv_print_mag, details_adv_print_outd  ,details_adv_print_pos, details_adv_print_all, details_edt_print_newsp, details_edt_print_mag,details_edt_print_book , details_edt_print_collateral, details_adv_tv_commercial, details_edt_tv_program,details_edt_tv_film, details_adv_digital_website, details_adv_digital_mobile, details_adv_digital_social,details_adv_digital_all , details_edt_digital_website , details_edt_digital_mobile, 
+                    details_edt_digital_social,details_edt_digital_all, details_int_digital_website,details_int_digital_presentation, duration_adv_1day,duration_adv_1month, duration_adv_3months, duration_adv_6months, duration_adv_1year,duration_adv_2years, duration_adv_1week, duration_edt_1day , duration_edt_1week,duration_edt_1month, duration_edt_3months, duration_edt_6months, duration_edt_1year    ,duration_edt_2years, duration_int_1day , duration_int_1week, duration_int_1month   ,duration_int_3months, duration_int_6months, duration_int_1year, duration_int_2years, pricing_id)
+
+                VALUES ( ".$this->db->escape($subregion_price).",".$this->db->escape($region_price).",".$this->db->escape($usage_adv).",".$this->db->escape($usage_edt).",".$this->db->escape($usage_int).",".$this->db->escape($media_adv_print).",".$this->db->escape($media_adv_tv).",".$this->db->escape($media_adv_digital).",".$this->db->escape($media_edt_print).",".$this->db->escape($media_edt_tv).",".$this->db->escape($media_edt_digital).",".$this->db->escape($media_int_print).",".$this->db->escape($media_int_digital).",".$this->db->escape($details_adv_print_newsp).",".$this->db->escape($details_adv_print_mag).",".$this->db->escape($details_adv_print_outd).",".$this->db->escape($details_adv_print_pos).",".$this->db->escape($details_adv_print_all).",".$this->db->escape($details_edt_print_newsp).",".$this->db->escape($details_edt_print_mag).",".$this->db->escape($details_edt_print_book).",".$this->db->escape($details_edt_print_collateral).",".$this->db->escape($details_adv_tv_commercial).",".$this->db->escape($details_edt_tv_program).",".$this->db->escape($details_edt_tv_film).",".$this->db->escape($details_adv_digital_website).",".$this->db->escape($details_adv_digital_mobile).",".$this->db->escape($details_adv_digital_social).",".$this->db->escape($details_adv_digital_all).",".$this->db->escape($details_edt_digital_website).",".$this->db->escape($details_edt_digital_mobile).",".$this->db->escape($details_edt_digital_mobile).",".$this->db->escape($details_edt_digital_social).",".$this->db->escape($details_edt_digital_all).",".$this->db->escape($details_int_digital_website).$this->db->escape($details_int_digital_presentation).",".$this->db->escape($duration_adv_1day).",".$this->db->escape($duration_adv_1month).",".$this->db->escape($duration_adv_3months).",".$this->db->escape($duration_adv_6months).",".$this->db->escape($duration_adv_1year).",".$this->db->escape($duration_adv_2years).",".$this->db->escape($duration_adv_1week).",".$this->db->escape($duration_edt_1day).",".$this->db->escape($duration_edt_1week).",".$this->db->escape($duration_edt_1month).",".$this->db->escape($duration_edt_3months).",".$this->db->escape($duration_edt_6months).",".$this->db->escape($duration_edt_1year).",".$this->db->escape($duration_edt_2years).",".$this->db->escape($duration_int_1day).",".$this->db->escape($duration_int_1week).",".$this->db->escape($duration_int_1month).",".$this->db->escape($duration_int_3months).",".$this->db->escape($duration_int_6months).",".$this->db->escape($duration_int_1year).",".$this->db->escape($duration_int_2years).",".$this->db->escape($pricing_id).")");
+                      
+        }
+        public function get_rm_pricing() {
+                $query = $this->db->query("select * from rm_pricing");
+                   return $query->result_array();
+        }
         public function update_rf_pricing($id){
                 $photomin = $this->input->post("txt_photomin");
                 $photomax = $this->input->post("txt_photomax");

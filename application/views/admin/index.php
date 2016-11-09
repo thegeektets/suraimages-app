@@ -470,19 +470,795 @@
                               <div class="tab_title">
                                    Rights Managed Pricing :
                               </div>
+                              <form name="rm_managed" id="rm_managed" onsubmit="return update_rm_pricing()">
                               <div class="tab_content">
+                                 <div class="row">
+                                    <div class="container">
+                                        <div id="message" class="message">
+                                        </div>
+                                        <label class="strong">Photos/ Illustrations : </label>
+                                        <ul class="accordion rr_managed_accordion" data-accordion>
+
+                                          <input type="hidden" name="txt_pricing_id" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['pricing_id'] ?>" >
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item is-active " data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                                Usage:
+                                            </a>
+                                            
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="row">
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Advertising</label>
+                                                        <input type="text" name="txt_usage_adv" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['usage_adv'] ?>" >
+                                                    </div>
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Editorial</label>
+                                                        <input type="text" name="txt_usage_edt" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['usage_edt'] ?>" >
+                                                    </div>
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Internal Company Use</label>
+                                                        <input type="text" name="txt_usage_int" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['usage_int'] ?>" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </li>
+                                         
+                                          
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Media:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Print </label>
+                                                    <input type="text" name="txt_media_adv_print" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_adv_print'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >TV </label>
+                                                    <input type="text" name="txt_media_adv_tv" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_adv_tv'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_adv_digital" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_adv_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Print </label>
+                                                    <input type="text" name="txt_media_edt_print" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_edt_print'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >TV </label>
+                                                    <input type="text" name="txt_media_edt_tv" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_edt_tv'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_edt_digital" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_edt_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Print </label>
+                                                    <input type="text" name="txt_media_int_print" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_int_print'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_int_digital" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['media_int_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Details:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#panel1" aria-selected="true">
+                                                                Print
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#panel2" aria-selected="true">
+                                                                TV
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#panel3" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel is-active" id="panel1">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Newspaper </label>
+                                                           <input type="text" name="txt_details_adv_print_newsp" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['details_adv_print_newsp'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Magazine </label>
+                                                           <input type="text" name="txt_details_adv_print_mag" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['details_adv_print_mag'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Outdoor </label>
+                                                           <input type="text" name="txt_details_adv_print_outd" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['details_adv_print_outd'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >POS </label>
+                                                           <input type="text" name="txt_details_adv_print_pos" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_adv_print_pos'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >All </label>
+                                                           <input type="text" name="txt_details_adv_print_all" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_adv_print_all'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel " id="panel2">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Commercial </label>
+                                                           <input type="text" name="txt_details_adv_tv_commercial" placeholder="150" class="managed_input"
+                                                            value="<?php echo $managed_pricing['0']['details_adv_tv_commercial'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel " id="panel3">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_adv_digital_website" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_adv_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Mobile App </label>
+                                                           <input type="text" name="txt_details_adv_digital_mobile" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $managed_pricing['0']['details_adv_digital_mobile'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Social Media </label>
+                                                           <input type="text" name="txt_details_adv_digital_social" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $managed_pricing['0']['details_adv_digital_social'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >All Digital Media </label>
+                                                           <input type="text" name="txt_details_adv_digital_all" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $managed_pricing['0']['details_adv_digital_all'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#panel4" aria-selected="true">
+                                                                Print
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#panel5" aria-selected="true">
+                                                                TV
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#panel6" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                          
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel is-active" id="panel4">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Newspaper </label>
+                                                           <input type="text" name="txt_details_edt_print_newsp" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_print_newsp'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Magazine </label>
+                                                           <input type="text" name="txt_details_edt_print_mag" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_print_mag'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Book </label>
+                                                           <input type="text" name="txt_details_edt_print_book" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_print_book'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel " id="panel5">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >TV Program </label>
+                                                           <input type="text" name="txt_details_edt_tv_program" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_tv_program'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Film </label>
+                                                           <input type="text" name="txt_details_edt_tv_film" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_tv_film'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel " id="panel6">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_edt_digital_website" placeholder="150" class="managed_input" 
+                                                             value="<?php echo $managed_pricing['0']['details_edt_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Mobile App </label>
+                                                           <input type="text" name="txt_details_edt_digital_mobile" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $managed_pricing['0']['details_edt_digital_mobile'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Social Media </label>
+                                                           <input type="text" name="txt_details_edt_digital_social" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $managed_pricing['0']['details_edt_digital_social'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >All Digital Media </label>
+                                                           <input type="text" name="txt_details_edt_digital_all" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_digital_all'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#panel7" aria-selected="true">
+                                                                Print
+                                                            </a>
+                                                          </li>
+                                                         
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#panel8" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                          
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel is-active" id="panel7">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Collateral </label>
+                                                           <input type="text" name="txt_details_edt_print_collateral" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_edt_print_collateral'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel " id="panel8">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_int_digital_website" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_int_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Presentation </label>
+                                                           <input type="text" name="txt_details_int_digital_presentation" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $managed_pricing['0']['details_int_digital_presentation'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Duration:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_adv_1day" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_adv_1week" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_adv_1month" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_adv_3months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_adv_6months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_adv_1year" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_adv_2years" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_adv_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_edt_1day" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_edt_1week" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_edt_1month" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_edt_3months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_edt_6months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_edt_1year" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_edt_2years" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_edt_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_int_1day" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_int_1week" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_int_1month" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_int_3months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_int_6months" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_int_1year" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_int_2years" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['duration_int_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                                Region:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > Region </label>
+                                                    <input type="text" name="txt_region_price" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['region_price'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                               Sub-Region:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > Sub-Region </label>
+                                                    <input type="text" name="txt_subregion_price" placeholder="150" class="managed_input" value="<?php echo $managed_pricing['0']['subregion_price'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                        </ul>
+                                    </div>
+                                 </div>
                               </div>
-                              <button class="button btn_upload_id">Save Changes</button>   
+                              <div class="large-2 columns pull-right">
+                                    <button class="button btn_search" type="submit">
+                                        Save Changes
+                                    </button>   
+                              </div>  
                               <div style="clear: both"></div>
+                            </form>
                           </div>
                           <div class="tabs-panel" id="rrpricing">
                               <div class="tab_title">
                                    Rights Ready Pricing :
                               </div>
+                              <form name="rr_pricing" id="rr_pricing" onsubmit="return update_rr_pricing()">
                               <div class="tab_content">
+                                 <div class="row">
+                                    <div class="container">
+                                        <div id="message" class="message">
+                                        </div>
+                                        <label class="strong">Photos/ Illustrations : </label>
+                                        <ul class="accordion rr_managed_accordion" data-accordion>
+
+                                          <input type="hidden" name="txt_pricing_id" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['pricing_id'] ?>" >
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item is-active " data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                                Usage:
+                                            </a>
+                                            
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="row">
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Advertising</label>
+                                                        <input type="text" name="txt_usage_adv" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['usage_adv'] ?>" >
+                                                    </div>
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Editorial</label>
+                                                        <input type="text" name="txt_usage_edt" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['usage_edt'] ?>" >
+                                                    </div>
+                                                    <div class="large-4 columns">
+                                                        <label class="managed_label" >Internal Company Use</label>
+                                                        <input type="text" name="txt_usage_int" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['usage_int'] ?>" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </li>
+                                         
+                                          
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Media:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >TV </label>
+                                                    <input type="text" name="txt_media_adv_tv" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['media_adv_tv'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_adv_digital" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['media_adv_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >TV </label>
+                                                    <input type="text" name="txt_media_edt_tv" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['media_edt_tv'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_edt_digital" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['media_edt_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" >Digital </label>
+                                                    <input type="text" name="txt_media_int_digital" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['media_int_digital'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Details:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#ppanel2" aria-selected="true">
+                                                                TV
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#ppanel3" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel " id="ppanel2">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Commercial </label>
+                                                           <input type="text" name="txt_details_adv_tv_commercial" placeholder="150" class="managed_input"
+                                                            value="<?php echo $rr_pricing['0']['details_adv_tv_commercial'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel is-active" id="ppanel3">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_adv_digital_website" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_adv_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Mobile App </label>
+                                                           <input type="text" name="txt_details_adv_digital_mobile" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $rr_pricing['0']['details_adv_digital_mobile'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Social Media </label>
+                                                           <input type="text" name="txt_details_adv_digital_social" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $rr_pricing['0']['details_adv_digital_social'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >All Digital Media </label>
+                                                           <input type="text" name="txt_details_adv_digital_all" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $rr_pricing['0']['details_adv_digital_all'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title">
+                                                            <a href="#ppanel5" aria-selected="true">
+                                                                TV
+                                                            </a>
+                                                          </li>
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#ppanel6" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                          
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel " id="ppanel5">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >TV Program </label>
+                                                           <input type="text" name="txt_details_edt_tv_program" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_edt_tv_program'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Film </label>
+                                                           <input type="text" name="txt_details_edt_tv_film" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_edt_tv_film'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      <div class="tabs-panel details-panel is-active" id="ppanel6">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_edt_digital_website" placeholder="150" class="managed_input" 
+                                                             value="<?php echo $rr_pricing['0']['details_edt_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Mobile App </label>
+                                                           <input type="text" name="txt_details_edt_digital_mobile" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $rr_pricing['0']['details_edt_digital_mobile'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Social Media </label>
+                                                           <input type="text" name="txt_details_edt_digital_social" placeholder="150" class="managed_input" 
+                                                            value="<?php echo $rr_pricing['0']['details_edt_digital_social'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >All Digital Media </label>
+                                                           <input type="text" name="txt_details_edt_digital_all" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_edt_digital_all'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                    <ul class="tabs tabs-details" data-tabs id="details-tabs">
+                                                          <li class="tabs-title details-title is-active">
+                                                            <a href="#ppanel8" aria-selected="true">
+                                                                Digital
+                                                            </a>
+                                                          </li>
+                                                          
+                                                    </ul>
+                                                    <div class="tabs-content details-tabs" data-tabs-content="details-tabs">
+                                                      <div class="tabs-panel details-panel is-active" id="ppanel8">
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Website </label>
+                                                           <input type="text" name="txt_details_int_digital_website" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_int_digital_website'] ?>" >
+                                                          </div>
+                                                          <div class="row collapse">
+                                                           <label class="managed_label" >Presentation </label>
+                                                           <input type="text" name="txt_details_int_digital_presentation" placeholder="150" class="managed_input" 
+                                                           value="<?php echo $rr_pricing['0']['details_int_digital_presentation'] ?>" >
+                                                          </div>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                              Duration:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_adv_1day" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_adv_1week" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_adv_1month" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_adv_3months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_adv_6months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_adv_1year" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_adv_2years" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_adv_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_edt_1day" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_edt_1week" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_edt_1month" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_edt_3months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_edt_6months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_edt_1year" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_edt_2years" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_edt_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 day </label>
+                                                    <input type="text" name="txt_duration_int_1day" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_1day'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 week </label>
+                                                    <input type="text" name="txt_duration_int_1week" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_1week'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 month </label>
+                                                    <input type="text" name="txt_duration_int_1month" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_1month'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 3 months </label>
+                                                    <input type="text" name="txt_duration_int_3months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_3months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 6 months </label>
+                                                    <input type="text" name="txt_duration_int_6months" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_6months'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 1 year </label>
+                                                    <input type="text" name="txt_duration_int_1year" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_1year'] ?>" >
+                                                   </div>
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > 2 years </label>
+                                                    <input type="text" name="txt_duration_int_2years" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['duration_int_2years'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                                Region:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > Region </label>
+                                                    <input type="text" name="txt_region_price" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['region_price'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                          <li class="accordion-item rr_managed_accordion_item" data-accordion-item>
+                                            
+                                            <a href="#" class="rr-managed-title">
+                                               Sub-Region:
+                                            </a>
+                                            <div class="accordion-content rr_managed_accordion_content" data-tab-content>
+                                                <div class="large-4 columns">
+                                                   <div class="row collapse">
+                                                    <label class="managed_label" > Sub-Region </label>
+                                                    <input type="text" name="txt_subregion_price" placeholder="150" class="managed_input" value="<?php echo $rr_pricing['0']['subregion_price'] ?>" >
+                                                   </div>
+                                                </div>
+                                                <div style="clear: both"></div>
+                                            </div>
+                                                   
+                                          </li>
+                                          
+                                        </ul>
+                                    </div>
+                                 </div>
                               </div>
-                              <button class="button btn_upload_id">Save Changes</button>   
+                              <div class="large-2 columns pull-right">
+                                    <button class="button btn_search" type="submit">
+                                        Save Changes
+                                    </button>   
+                              </div>  
                               <div style="clear: both"></div>
+                            </form>
                           </div>
 
                     </div>

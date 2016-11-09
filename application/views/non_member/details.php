@@ -8,16 +8,28 @@
    <div class="top-bar" id="main-menu">
           <div class="row">
             <div class="top-bar-left">
-                <div class="home_logo">
+               <a href="<?php echo base_url(); ?>" class="home_logo">
+               </a>
             </div>
-            </div>
-             <div class="top-bar-right">
-                  <ul class="menu" data-responsive-menu="medium-dropdown">
-                    <li class="menu-text menu-divider"> <a href="<?php echo base_url('/index.php/registration/login')?>">Sign in  </a></li>
-                    <li class="menu-text menu-divider"><a href="#"> <a href="<?php echo base_url('/index.php/registration')?>">Register </a></li>
-                    <li class="menu-text"><a href="#" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (2)</a></li>
-                  </ul>
+              <?php if(!isset($user_session['logged_in'])) { ?> 
+              <div class="top-bar-right">
+                   <ul class="menu" data-responsive-menu="medium-dropdown">
+                       <li class="menu-text menu-divider"> <a href="<?php echo base_url('/index.php/registration/login')?>">Sign in  </a></li>
+                       <li class="menu-text"><a href="#"> <a href="<?php echo base_url('/index.php/registration')?>">Register </a></li>
+                   </ul>
               </div>
+              <?php } else { ?>
+              <div class="top-bar-right">
+                <ul class="menu" data-responsive-menu="medium-dropdown">
+                    <li class="menu-text menu-divider"> 
+                            <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
+                            <?php echo $user_session['user_meta']['0']['email'];?>  </a>
+                    </li>
+                    <li class="menu-text menu-divider"><a href="<?php echo base_url('/index.php/registration/logout')?>"> Sign Out </a></li>
+                    <li class="menu-text"><a href="<?php echo base_url('index.php/member#basket') ?>" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (<?php echo count($cart_items)?>)</a></li>
+                </ul>
+              </div>
+              <?php } ?>
            </div>
     </div>
 
@@ -133,8 +145,12 @@
             </div>
             <div class="large-6 columns pull-right">
                   <hr style="border-top: solid 1px;" />
+                  <div class="message">
+                  </div>
                   <ul class="accordion search_details_accordion" data-accordion>
-                   
+                  
+                   <form name="add_to_cart_form" class="add_to_cart_form">
+                  
                     <li class="accordion-item search_details_accordion_item is-active " data-accordion-item>
                       
                       <a href="#" class="accordion-title">
@@ -147,7 +163,7 @@
                                 <ul class="tabs" data-tabs id="example-tabs">
                                   <span class="center_tabs">
                                       <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Standard License</a></li>
-                                      <li class="tabs-title"><a href="#panel2">Exclusive License</a></li>
+                                      <li class="tabs-title exclusive_license disabled"><a href="#panel2">Exclusive License</a></li>
                                   </span>
                                 </ul>
 
@@ -242,9 +258,13 @@
                                             <span class="file_price">
                                             00
                                             </span>
+                                            <input type="hidden" name="upload_id" value="<?php echo $all_results[0]['upload_id'] ?>">
+                                            <input type="hidden" name="file_quality" value="">
+                                            <input type="hidden" name="file_price" value="">
+                                            <input type="hidden" name="current_url" value="">
                                       </div>
                                       <div class="price_footer">
-                                            <button class="button success"> Add to Basket</button>
+                                            <button class="button success" type="submit"> Add to Basket</button>
                                       </div>
                                   </div>
                                   <div class="tabs-panel" id="panel2">
@@ -253,19 +273,60 @@
                                       stipulated period of time and within that period the content s will be inactive for purchase from any other
                                       licensee until the duration of the license e pires. See our Exclusivity & Control page for more information.</p>
 
-                                      <div class="">
-                                        <input type="radio" name="duration"> 1 Month </br> 
-                                        <input type="radio" name="duration"> 3 Months </br> 
-                                        <input type="radio" name="duration"> 6 Months </br> 
-                                        <input type="radio" name="duration"> 1 Year </br> 
-                                        <input type="radio" name="duration"> 2 Years </br> 
+                                      <div class="row">
+                                        <div class="large-8 columns duration_col">
+                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_1month']; ?>"> 1 Month 
+                                        </div>
+                                        <div class="large-4 columns">
+                                            <span class="price">$<?php 
+                                               echo $ex_pricing[0]['photo_1month'];?>
+                                            </span>
+                                        </div>
+                                        <div class="large-8 columns duration_col">
+                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_3month']; ?>"> 3 Months </br> 
+                                        </div>
+                                        <div class="large-4 columns">
+                                            <span class="price">$<?php 
+                                               echo $ex_pricing[0]['photo_3month'];?>
+                                            </span>
+                                        </div>
+                                        <div class="large-8 columns duration_col">
+                                          <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_6month']; ?>"> 6 Months </br> 
+                                        </div>
+                                        <div class="large-4 columns">
+                                            <span class="price">$<?php 
+                                               echo $ex_pricing[0]['photo_6month'];?>
+                                            </span>
+                                        </div>
+                                        <div class="large-8 columns duration_col">
+                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_1year']; ?>"> 1 Year </br> 
+                                        </div>
+                                        <div class="large-4 columns">
+                                            <span class="price">$<?php 
+                                               echo $ex_pricing[0]['photo_1year'];?>
+                                            </span>
+                                        </div>
+                                        <div class="large-8 columns duration_col">
+                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_2year']; ?>"> 2 Years </br> 
+                                        </div>
+                                        <div class="large-4 columns">
+                                            <span class="price">$<?php 
+                                               echo $ex_pricing[0]['photo_2year'];?>
+                                            </span>
+                                        </div>
+                                        
                                       </div>
 
                                       <div class="price_footer">
-                                            License Fee : $00
+                                            License Fee : $
+                                            <span class="ex_file_price">
+                                             00
+                                            </span>
+                                            <input type="hidden" name="file_duration" value="">
+                                            <input type="hidden" name="file_license" value="Royalty Free">
                                       </div>
                                       <div class="price_footer">
-                                            <button class="button success"> Add to Basket</button>
+                                            <button class="button success" type="submit"> Add to Basket</button>
                                       </div>
 
                                   </div>
@@ -273,6 +334,7 @@
                             </div>
                       </div>
                     </li>
+                   </form>
                     <hr style="border-top: solid 1px;" />
                     
                     <li class="accordion-item search_details_accordion_item" data-accordion-item>
@@ -283,7 +345,7 @@
                       </a>
                       <div class="accordion-content search_details_accordion_content" data-tab-content>
                         <p>This shows the number of times this content has been downloaded within speci ed
-region and sub region to help licensee understand the distribution of the content.</p>
+                            region and sub region to help licensee understand the distribution of the content.</p>
                               <ul class="tabs" data-tabs id="example-tabs">
                                 <span class="">
                                     <li class="tabs-title is-active"><a href="#africa" aria-selected="true">Africa (18)</a></li>

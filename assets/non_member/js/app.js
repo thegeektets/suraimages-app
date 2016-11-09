@@ -11,6 +11,28 @@ function formatBytes(bytes,decimals) {
 
 $(document).ready(function(){
 	
+	var url = ""+window.location.href;
+
+	$('input:hidden[name="current_url"]').val(url);
+
+	function hidemessage(){
+	  $('.message').hide();
+	}
+
+	$(".disabled").click(function(){
+	  if(($.trim($(this).parents(".accordion-content").find('.file_price').text())) !== '00'){
+	  	return true 
+	  } else {
+	    $('.message').hide();
+	    $('.message').attr("class" ,"message alert-box warning");
+	    $('.message').text("Select a file size before Viewing Exclusive License"); 
+	    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+	    $('.message').show();
+	    setTimeout(hidemessage, 3000);
+	    return false
+	  }
+  	});
+    
     $('.slc_category').change(function() {
     	}).multipleSelect({
         width: '100%'
@@ -34,7 +56,31 @@ $(document).ready(function(){
 	$(".search_img_details").hide();
 	$(".search_img_popup").hide();
 
+	$( ".shopping_basket" ).click(
+	  function() {
 
+	  	$(".search_img_popup").hide();
+	   	$(this).parents('.search_results_img').find(".search_img_popup").css("display","block");
+	   	var left =  ((window.innerWidth - 
+	   				$(this).parents('.search_results_img').find(".search_img_popup").width())/2);
+		$(this).parents('.search_results_img').find(".search_img_popup").css("left",(left-50)+"px");
+
+	   	if( $(this).parents('.search_results_img').find(".search_img_popup").find(".pop-similar-images").length ){
+	   		try {
+	   		$(this).parents('.search_results_img').find(".search_img_popup").find(".pop-similar-images").slick({
+	   				        infinite: true,
+	   				        slidesToShow: 3,
+	   				        slidesToScroll: 3
+	   				});
+	   		} catch (error){
+	   			console.log(error);
+	   		}
+	   	}
+	   	return false;
+	  }
+	);
+
+	
 	$( ".search_img" ).click(
 	  function() {
 	  	$(".search_img_popup").hide();

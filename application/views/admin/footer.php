@@ -48,6 +48,61 @@
   
 ?>   
 <script type="text/javascript">
+    
+    function update_rr_pricing() {
+         $.ajax({
+          type: 'post',
+          url:'<?php echo base_url("/index.php/admin/update_rr_pricing")?>',
+          data:$('#rr_pricing').serialize(),
+          success:
+            function(data){
+              if (data === '1') {
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Updated Rights Ready Pricing "); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+              
+              } else {
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text(""+data); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+              }
+              $('.message').show();
+            },
+          fail:
+            function(data){
+              console.log(data);
+            }
+
+        });
+        return false;
+    }
+    function update_rm_pricing() {
+         $.ajax({
+          type: 'post',
+          url:'<?php echo base_url("/index.php/admin/update_rm_pricing")?>',
+          data:$('#rm_managed').serialize(),
+          success:
+            function(data){
+              if (data === '1') {
+                  $('.message').attr("class" ,"message alert-box success");
+                  $('.message').text("Updated Rights Managed Pricing "); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+              
+              } else {
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text(""+data); 
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+              }
+              $('.message').show();
+            },
+          fail:
+            function(data){
+              console.log(data);
+            }
+
+        });
+        return false;
+    }
     function submit_delete(){
     $('.popup').hide();
     var success = false;

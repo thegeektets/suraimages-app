@@ -27,6 +27,32 @@
 <script src="<?php echo base_url('/assets/member/js/vendor/slick.min.js')?>"></script>
 <script src="<?php echo base_url('/assets/member/js/app.js')?>"></script>
 <script type="text/javascript">
+  function remove_cart_item (item_id,item_cost,order_id) {
+    console.log(""+item_cost);
+      $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/main/remove_cart_item/")?>'+item_id+'/'+item_cost+'/'+order_id,
+      success:
+        function(data){
+          if(data == 1){
+            $('.message').attr("class" ,"message alert-box success");
+            $('.message').text("cart item removed"); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            $('.message').show();
+            setTimeout($('.message').hide(), 3000);
+            $('#report_item'+item_id).hide();
+            $('.order_cost').text(parseInt($('.order_cost').text())-item_cost);
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+  }
   function change_user_password(){
     $.ajax({
     type: 'post',

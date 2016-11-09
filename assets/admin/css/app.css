@@ -1130,9 +1130,17 @@ button.slick-next.slick-arrow {
       padding-right: 10px;
       padding-top: 5px;
   }
-  .btn_search , .btn_search:hover {
+  .btn_search {
       background-color: #f8991c;
       color: #fff;
+      margin: 0px;
+      font-weight: 700;
+      text-transform: uppercase;
+  }
+  .btn_search:hover, .btn_search:focus , .btn_search:active {
+      background: #fff;
+      border:1px solid #f8991c;
+      color: #f8991c;
       margin: 0px;
       font-weight: 700;
       text-transform: uppercase;
@@ -1489,6 +1497,15 @@ button.slick-next.slick-arrow {
   }
 
    /* corrections css */
+   input.managed_input {
+       display: inline-block;
+       width: 50px;
+       margin-left: 15px;
+   }
+   .managed_label {
+      width:  100px;
+      float: left;
+   }
    input.inline_input {
        display: inline-block;
        width: 75px;
@@ -1664,3 +1681,157 @@ button.slick-next.slick-arrow {
   .file_title {
     display: block;
   }
+  .rr_managed_accordion_item {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  li.accordion-item.rr_managed_accordion_item {
+    padding-top: 8px!important;
+    padding-bottom: 8px !important;
+    border-bottom: #fff solid 3px !important;
+  }
+  ul.accordion.rr_managed_accordion {
+    background-color: #feebd2;
+  }
+  .rr-managed-title {
+    font-family: 'Calibri';
+    font-weight: 700;
+    color: #807f83;
+    border: none;
+    background-color: #feebd2 !important;
+  }
+  .rr-managed-title > a {
+     font-family: 'Calibri';
+     font-weight: 700;
+     color: #807f83;
+     border: none;
+     background-color: #feebd2;
+  }
+  .rr-managed-title:hover , .rr-managed-title:focus{
+     font-family: 'Calibri';
+     font-weight: 700;
+     color: #807f83;
+     background-color: #feebd2 !important;
+  }
+  .rr_managed_accordion_item:hover, .rr_managed_accordion_item:focus {
+      font-family: 'Calibri';
+      font-weight: 700;
+      color: #807f83;
+      background-color: #feebd2 !important;
+  }
+  .rr_managed_accordion_content {
+    background-color: #feebd2; 
+    border: none;
+  }
+   :last-child:not(.is-active) > .rr-managed-title {
+       border-radius: 0 0 0 0;
+       border-bottom: 1px solid #e6e6e6;
+   }
+ .rr_managed_accordion_content > ul > li > a::before {
+      content: "\f0da";
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        padding-right: 5px;
+        color: #f7981d;
+ }
+ .rr-managed-title::before {
+    content: "\f0da";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #f8991d;
+    position: absolute;
+    left: 10px;
+    top: 40%;
+    margin-top: -0.5rem;
+ }
+
+ .is-active > .rr-managed-title::before {
+    content: "\f0d7";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: #f8991d;
+    position: absolute;
+    left: 10px;
+    top: 10%;
+ }
+ ul#details-tab {
+    float: left;
+    width: 30%;
+    background: initial;
+    color: inherit;
+    border: none;
+}
+ .details-content {
+    min-height: auto;
+    float: left;
+    width: 70%;
+}
+.tabs-content.details-tabs {
+    min-height: auto;
+    width: 70%;
+    float: right;
+    border-left: 1px solid #333;
+    padding-left: 10px;
+}
+ul#details-tabs {
+    width: 25%;
+    float: left;
+    margin-right: 10px;
+    position: relative;
+}
+.details-title > a[aria-selected='true'] {
+    background:inherit;
+    border: none;
+    color: #f8991c;
+}
+.details-title > a {
+    color: #807f83;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 300;
+    border: none;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+}
+.details-title > a:hover {
+    background: inherit;
+}
+.details-title > a::before {
+    content: "\f0da";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #f8991d;
+    position: absolute;
+    left: 10px;
+ }
+ .details-title > a[aria-selected='true']::before {
+    content: "\f0d7";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #f8991d;
+    position: absolute;
+    left: 10px;
+ }
+.details-panel {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 0px;
+}
+.standard-tab {
+    float: none;
+    width: 50%;
+    margin: 0px auto;
+}

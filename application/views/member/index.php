@@ -52,7 +52,7 @@
             </div>
             <ul class="tabs member_tabs" data-tabs id="member-tabs">
                   <li class="tabs-title is-active"><a href="#account" aria-selected="true"> Account </a></li>
-                  <li class="tabs-title"><a href="#basket">Shopping Basket (0)</a></li>
+                  <li class="tabs-title"><a href="#basket">Shopping Basket (<?php echo count($cart_items)?>)</a></li>
                   <li class="tabs-title"><a href="#history">Purchase History (0)</a></li>
                   
             </ul>
@@ -398,7 +398,8 @@
                           <li class="tabs-title"><a href="#checkout"> Checkout </a></li>
                           
                     </ul>
-
+                    <div class="message">
+                    </div>
                     <div class="tabs-content" data-tabs-content="basket-tabs">
                         
                           <div class="tabs-panel is-active" id="shopping">
@@ -426,27 +427,34 @@
                                          </div>
                                       </div> 
                                       <div class="report_content">
-                                           <div class="report_item">
+                                        <?php for($c=0; $c < count($cart_items); $c++) { ?>   
+                                           <div class="report_item" id="<?php echo 'report_item'.$cart_items[$c]['item_id'] ?>">
                                              <div class="row">
                                                <div class="large-2 column report_col">
                                                    <input type="checkbox" name="">
-                                                   <img src="<?php echo base_url('/assets/member/img/search_image.png')?>" class="search_image">
+                                                   <img src="<?php echo $cart_items[$c]['file_thumbnail']?>" class="search_image">
                                                </div>
                                                <div class="large-1 column report_col">
-                                                   0012354
+                                                   <?php echo $cart_items[$c]['product_id'] ?>
                                                </div>
                                                <div class="large-3 column report_col">
-                                                   Equatorial Forest
+                                                   <?php echo $cart_items[$c]['file_name'] ?>
                                                </div>
                                                <div class="large-2 column report_col">
-                                                   Royalty Free
+                                                   <?php 
+                                                      if( $cart_items[$c]['product_license'] == "Exclusive License" ) {
+                                                          echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration'] ;
+                                                      } else {
+                                                          echo $cart_items[$c]['product_license'];
+                                                      }
+                                                    ?>  
                                                </div>
                                                <div class="large-2 column report_col">
-                                                    <a href="">Calculate Price </a>
+                                                    <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$cart_items[$c]['upload_id']); ?>"> Calculate Price </a>
                                                </div>
                                                <div class="large-2 column report_col">
-                                                   $15
-                                                   <div class="close_img">
+                                                   $<?php echo $cart_items[$c]['product_cost'] ?>
+                                                   <div class="remove_cart_item" onclick="return remove_cart_item(<?php echo $cart_items[$c]['item_id'];?>,<?php echo $cart_items[$c]['product_cost'];?>,<?php echo $cart_items[$c]['order_id'];?>)">
                                                       <a href="">
                                                           <img src="<?php echo base_url('/assets/member/img/close.png')?>">
                                                       </a>
@@ -454,91 +462,7 @@
                                                </div>
                                               </div>
                                            </div>
-                                           <div class="report_item">
-                                             <div class="row">
-                                               <div class="large-2 column report_col">
-                                                   <input type="checkbox" name="">
-                                                   <img src="<?php echo base_url('/assets/member/img/search_image.png')?>" class="search_image">
-                                               </div>
-                                               <div class="large-1 column report_col">
-                                                   0012354
-                                               </div>
-                                               <div class="large-3 column report_col">
-                                                   Equatorial Forest
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   Right Managed
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                    <a href="">Calculate Price </a>
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   $15
-                                                   <div class="close_img">
-                                                      <a href="">
-                                                          <img src="<?php echo base_url('/assets/member/img/close.png')?>">
-                                                      </a>
-                                                   </div>
-                                               </div>
-                                              </div>
-                                           </div>
-                                           <div class="report_item">
-                                             <div class="row">
-                                               <div class="large-2 column report_col">
-                                                   <input type="checkbox" name="">
-                                                   <img src="<?php echo base_url('/assets/member/img/search_image.png')?>" class="search_image">
-                                               </div>
-                                               <div class="large-1 column report_col">
-                                                   0012354
-                                               </div>
-                                               <div class="large-3 column report_col">
-                                                   Equatorial Forest
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   R-F Exclusive for 6 months
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                    <a href="">Calculate Price </a>
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   $15
-                                                   <div class="close_img">
-                                                      <a href="">
-                                                          <img src="<?php echo base_url('/assets/member/img/close.png')?>">
-                                                      </a>
-                                                   </div>
-                                               </div>
-                                              </div>
-                                           </div>
-                                           <div class="report_item">
-                                             <div class="row">
-                                               <div class="large-2 column report_col">
-                                                   <input type="checkbox" name="">
-                                                   <img src="<?php echo base_url('/assets/member/img/search_image.png')?>" class="search_image">
-                                               </div>
-                                               <div class="large-1 column report_col">
-                                                   0012354
-                                               </div>
-                                               <div class="large-3 column report_col">
-                                                   Equatorial Forest
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   Royalty Free
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                    <a href="">Calculate Price </a>
-                                               </div>
-                                               <div class="large-2 column report_col">
-                                                   $15
-                                                   <div class="close_img">
-                                                      <a href="">
-                                                          <img src="<?php echo base_url('/assets/member/img/close.png')?>">
-                                                      </a>
-                                                   </div>
-                                               </div>
-                                              </div>
-                                           </div>
-
+                                        <?php } ?>   
                                            <div class="report_footer">
                                              <div class="row">
                                                <div class="large-5 columns pull-left">
@@ -565,7 +489,10 @@
                                                       </div>
                                                </div>
                                                <div class="pull-right">
-                                                   Total Price : $90
+                                                   Total Price : $
+                                                   <span class="order_cost">
+                                                   <?php echo $user_cart[0]['order_cost'] ?>
+                                                   </span>
                                                </div>
                                               </div>
                                            </div>

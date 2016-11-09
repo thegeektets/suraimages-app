@@ -54,8 +54,8 @@
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
-          $('.message').attr("class" ,"message alert-box success");
-          $('.message').text("Files edited successfully!"); 
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').append("Failed to submit, make sure all required fields are filled"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           console.log(data)
           
@@ -103,9 +103,9 @@
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           
         } else {
-          $('.message').attr("class" ,"message alert-box success");
-          $('.message').text("Files edited successfully!"); 
-          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+           $('.message').attr("class" ,"message alert-box warning");
+           $('.message').text("Failed to submit, make sure all required fields are filled"); 
+           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
           console.log(data)
           
         }

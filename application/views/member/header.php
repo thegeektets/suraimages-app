@@ -34,23 +34,23 @@
     <div class="top-bar" id="main-menu">
       <div class="row">
         <div class="top-bar-left">
-            <div class="home_logo">
-        </div>
+            <a href="<?php echo base_url(); ?>" class="home_logo">
+            </a>
         </div>
         <div class="top-bar-right inside-page">
           <ul class="menu" data-responsive-menu="medium-dropdown">
               <li class="menu-text"> <a href="#">Welcome  </a></li>
               <li class="menu-text menu-divider"> 
-                  <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
-                  <?php echo $user_session['user_meta']['0']['email'];?>  </a>
-                  <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-                    <li><a href="#">Account</a></li>
-                    <li><a href="#">Shopping Basket </a></li>
-                    <li><a href="#">Purchase History</a></li>
-                  </ul>
+                            <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
+                            <?php echo $user_session['user_meta']['0']['email'];?>  </a>
+                            <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Account</a></li>
+                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Shopping Basket </a></li>
+                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Purchase History</a></li>
+                            </ul>
               </li>
               <li class="menu-text menu-divider"><a href="<?php echo base_url('/index.php/registration/logout')?>"> Sign Out </a></li>
-              <li class="menu-text"><a href="#" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (2)</a></li>
+              <li class="menu-text"><a href="<?php echo base_url('index.php/member#basket') ?>" class="shopping_cart"> <i class="fa fa-shopping-basket" aria-hidden="true"></i> (<?php echo count($cart_items)?>)</a></li>
           </ul>
           <div class="menu_switch">
                <a href="<?php echo base_url('/index.php/registration/switch_contributor_account')?>">

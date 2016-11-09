@@ -301,8 +301,7 @@ class contributor extends CI_Controller {
 						$config3['image_library'] = 'gd2';
 		                $config3['source_image'] = './'.$thumbnail_path;
 		                $config3['wm_type'] = 'overlay';
-	                    $config3['wm_overlay_path'] = './assets/contributor/img/sura_dark.png';
-	                    $config3['wm_opacity'] = '50';
+	                    $config3['wm_overlay_path'] = './assets/contributor/img/watermark.png';
 	                    $config3['wm_vrt_alignment'] = 'middle'; 
 	                    $config3['wm_hor_alignment'] = 'center';
 	          			$this->image_lib->initialize($config3);

@@ -32,8 +32,8 @@
       <div class="top-bar" id="main-menu">
         <div class="row">
           <div class="top-bar-left">
-              <div class="home_logo">
-          </div>
+              <a href="<?php echo base_url(); ?>" class="home_logo">
+              </a>
           </div>
           <?php if(!isset($user_session)) { ?> 
           <div class="top-bar-right">

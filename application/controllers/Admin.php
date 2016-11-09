@@ -18,9 +18,10 @@ class admin extends CI_Controller {
 		$data['user_session']=$this->session->all_userdata();;
 
 		if (isset($data['user_session']['logged_in'])) {
-			if($data['user_session']['logged_in'] === TRUE ){
+			if($data['user_session']['logged_in'] === TRUE && $data['user_session']['user_meta'][0]['account'] === 'admin'){
 				$data['user_details'] = $this->fetch_user_details();
 				$id = $data['user_details'][0]['user_id'];
+
 				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
 				for($f = 0; $f < count($data['all_contributor_images']); $f++){
 					
@@ -40,6 +41,8 @@ class admin extends CI_Controller {
 					$data['all_contributor_videos'][$f]['releases']=$releases;
 				}
 				
+				$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+				$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 				$data['rf_pricing'] = $this->fetch_rf_pricing();
 	     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
 	     	   	$data['members'] = $this->fetch_member_users();
@@ -68,7 +71,7 @@ class admin extends CI_Controller {
 				$this->load->view('admin/footer');
 			} else {
 				$data['success'] = FALSE ;
-				$data['message'] = 'Login is required for this page';
+				$data['message'] = 'Admin login is required for this page';
 				$this->load->helper(array('form', 'url'));
 				$this->load->view('registration/header' , $data);
 				$this->load->view('registration/login' , $data);
@@ -76,7 +79,7 @@ class admin extends CI_Controller {
 			}
    		} else {
    			$data['success'] = FALSE ;
-   			$data['message'] = 'Login is required for this page';
+   			$data['message'] = 'Admin login is required for this page';
    			$this->load->helper(array('form', 'url'));
    			$this->load->view('registration/header' , $data);
    			$this->load->view('registration/login' , $data);
@@ -200,6 +203,14 @@ class admin extends CI_Controller {
 	    }
 	}
 
+	public function update_rm_pricing(){
+	    $this->admin_model->update_rm_pricing();
+		echo 1;
+	}
+	public function update_rr_pricing(){
+	    $this->admin_model->update_rr_pricing();
+		echo 1;
+	}
 	public function fetch_rf_pricing(){
 		return $this->admin_model->get_rf_pricing();
 	}

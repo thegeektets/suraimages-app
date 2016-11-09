@@ -31,8 +31,8 @@
     <div class="top-bar" id="main-menu">
       <div class="row">
         <div class="top-bar-left">
-            <div class="home_logo">
-        </div>
+            <a href="<?php echo base_url(); ?>" class="home_logo">
+            </a>
         </div>
         <div class="top-bar-right inside-page">
           <ul class="menu" data-responsive-menu="medium-dropdown">

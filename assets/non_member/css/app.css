@@ -797,3 +797,116 @@ li.is-submenu-item.is-accordion-submenu-item {
 button.ms-choice {
     margin-bottom: 10px;
 }
+.alert-box {
+      border-style: solid;
+      border-width: 1px;
+      display: block;
+      font-size: 0.72222rem;
+      font-weight: normal;
+      margin-bottom: 1.11111rem;
+      padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;
+      position: relative;
+      transition: opacity 300ms ease-out;
+      background-color: #008CBA;
+      border-color: #0078a0;
+      color: #FFFFFF;
+      font-size: 16px;
+  }
+  .alert-box.success {
+    background-color: #d6de23;
+    border-color: #d6de23;
+    color: #333;
+  }
+  .alert-box.warning {
+    background-color: #f08a24;
+    border-color: #de770f;
+    color: #FFFFFF;
+  }
+  .alert-box.radius {
+      border-radius: 3px;
+  }
+  .alert-box .close {
+    right: 0.22222rem;
+    background: inherit;
+    color: #333333;
+    font-size: 1.22222rem;
+    line-height: .9;
+    margin-top: -0.61111rem;
+    opacity: 0.3;
+    padding: 0 6px 4px;
+    position: absolute;
+    top: 50%;
+ }
+ .close {
+    right: 0.22222rem;
+    background: inherit;
+    color: #333333;
+    font-size: 1.22222rem;
+    line-height: .9;
+    margin-top: -0.61111rem;
+    opacity: 0.3;
+    padding: 0 6px 4px;
+    position: absolute;
+    top: 50%;
+}
+.dropdown.menu > li.opens-left > .is-dropdown-submenu {
+    left: auto;
+    right: 0;
+    top: 100%;
+    list-style: none;
+    background: #fff;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.dropdown.menu > li.opens-left > .is-dropdown-submenu {
+    left: auto;
+    right: 0;
+    top: 100%;
+    list-style: none;
+    background: #fff;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.dropdown.menu > li.opens-left > .is-dropdown-submenu {
+    left: auto;
+    right: 0;
+    top: 100%;
+    list-style: none;
+    background: #fff;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.is-dropdown-submenu > li {
+    width: 80%;
+    border-bottom: 1px solid #333;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.dropdown.menu > li.is-dropdown-submenu-parent > a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border: inset 5px;
+    border-color: #f8991c transparent transparent;
+    border-top-style: solid;
+    border-bottom-width: 0;
+    right: 5px;
+    margin-top: -2px;
+}
