@@ -52,6 +52,9 @@
       <div class="large-6 columns  medium-6 columns">
           <hr style="border-top: solid 1px;" />
           <ul class="accordion search_accordion" data-accordion>
+            <?php if( $all_results[$i]['exclusive_to'] == 'NULL' || 
+                       $all_results[$i]['exclusive_to'] < date('Y-m-d')){
+             ?>
             <li class="accordion-item search_accordion_item is-active " data-accordion-item>
               
               <a href="#" class="accordion-title">
@@ -227,6 +230,7 @@
                                    00
                                    </span>
                                    <input type="hidden" name="file_duration" value="">
+                                   <input type="hidden" name="exclusive_duration" value="">
                                    <input type="hidden" name="file_license" value="Royalty Free">
                              </div>
                              <div class="price_footer">
@@ -239,6 +243,20 @@
 
              </div>
             </li>
+            <?php 
+                } else {
+            ?>
+            <li class="accordion-item search_accordion_item is-active" data-accordion-item>
+                   <div class="search_price_exclusive">
+                       <span class="">
+                           Available for purchase from <?php 
+                               echo date("F j, Y", strtotime($all_results[$i]['exclusive_to']));   ?>
+                       </span>
+                   </div>
+             </li>
+                 <?php 
+                 }
+                 ?>
             <hr style="border-top: solid 1px;" />
           </form>  
             <li class="accordion-item search_accordion_item" data-accordion-item>

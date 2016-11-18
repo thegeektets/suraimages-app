@@ -1,4 +1,5 @@
-$(document).foundation()
+//$('.standard-select').foundationSelect();
+$(document).foundation();
 
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Byte';
@@ -11,6 +12,12 @@ function formatBytes(bytes,decimals) {
 
 $(document).ready(function(){
 	
+	$(function() {
+            $('.standard-select-multiple').change(function() {
+            }).multipleSelect({
+                width: '100%'
+            });
+        });
 	var url = ""+window.location.href;
 
 	$('input:hidden[name="current_url"]').val(url);

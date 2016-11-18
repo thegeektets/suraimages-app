@@ -109,6 +109,11 @@
       function(){
        $(this).hide();
     });
+    $('#checkout-label').click(function(){
+      console.log('checkout');
+      window.location.href = '<?php echo base_url() ?>'+'/index.php/member/pay_pesapal';
+    });
+
 </script>
   </body>
 </html>

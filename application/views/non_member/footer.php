@@ -38,6 +38,7 @@
     <script src="<?php echo base_url('/assets/non_member/js/jquery.mosaicflow.js')?>"></script>    
     <script src="<?php echo base_url('/assets/non_member/js/vendor/what-input.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/vendor/foundation.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/foundation-select.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/vendor/slick.min.js')?>"></script>
     <script src="<?php echo base_url('/assets/contributor/multiselect/multiple-select.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>
@@ -103,7 +104,78 @@
 
         return false ;
       });
-  
+      $('.add_to_cart').submit( function () {
+        
+        var makesubmission = false;
+
+        if(
+        $('input:hidden[name="usage_txt"]').val() !== '0' &&
+        $('input:hidden[name="media_txt"]').val() !== '0' &&
+        $('input:hidden[name="details_txt"]').val()!== '0' &&
+        $('input:hidden[name="duration_txt"]').val() !== '0' &&
+        $('input:hidden[name="sub_region_txt"]').val() !== '0' &&
+        $('input:hidden[name="region_txt"]').val()!== '0'){
+          makesubmission = true;
+        }
+
+        if(makesubmission) {
+            $.ajax({
+            type: 'post',
+            url:'<?php echo base_url("/index.php/Main/image_add_to_cart")?>',
+            data:$(this).serialize(),
+            success:
+              function(data) {
+                if(data == '3' ) {
+
+                    $('.message').hide();
+                    $('.message').attr("class" ,"message alert-box warning");
+                    $('.message').text("login to your member account to add to cart"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    $('.message').show();
+                    setTimeout(hidemessage, 3000);
+                    document.location.href = "<?php echo base_url('index.php/registration/login'); ?>";
+                } else if(data == '2') {
+                    $('.message').hide();
+                    $('.message').attr("class" ,"message alert-box warning");
+                    $('.message').text("Cannot shop with the admin account please login to your member account"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    $('.message').show();
+                    setTimeout(hidemessage, 3000);
+                      
+                } else {
+                    var st = data.indexOf("-");
+                    var cart_count = data.substring(0,st);
+                    $('.shopping_cart').text('( '+cart_count+' )');
+                    $('.message').hide();
+                    $('.message').attr("class" ,"message alert-box success");
+                    $('.message').text("Image added to cart"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    $('.message').show();
+                    setTimeout(hidemessage, 3000);
+                      
+                }
+                
+                console.log(data);
+              },
+            fail:
+              function(data){
+                console.log(data);
+              }
+          });
+
+          
+        } else {
+          $('.message').hide();
+          $('.message').attr("class" ,"message alert-box warning");
+          $('.message').text("All standard license details are required apart from exlusive license"); 
+          $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+          $('.message').show();
+          setTimeout(hidemessage, 3000);
+          
+        }
+
+        return false ;
+      });
     </script>
     
   </body>

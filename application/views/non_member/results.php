@@ -178,16 +178,33 @@
                   <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
                      <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                   </a>
-                  <div class="search_img_details"> 
-                      <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
-                      <span class="search_img_icons">
-                          <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>"><i class="fa fa-calculator" aria-hidden="true"></i></a>
-                          <a href="" class="shopping_basket"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
-                          <a href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>">
-                          <img style="width: 17px;margin-top: 3px;margin-left: 1px;"src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
-                      </span>
-                  </div>
+                  <?php if( $all_results[$i]['exclusive_to'] == 'NULL' || 
+                            $all_results[$i]['exclusive_to'] < date('Y-m-d')){
+                  ?>
+                      <div class="search_img_details"> 
+                          <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
+                          <span class="search_img_icons">
+                              <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>"><i class="fa fa-calculator" aria-hidden="true"></i></a>
+                              <a href="" class="shopping_basket"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
+                              <a href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>">
+                              <img style="width: 17px;margin-top: 3px;margin-left: 1px;"src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
+                          </span>
+                      </div>
+                  <?php 
 
+                  } else {
+
+                  ?>
+                      <div class="search_img_details search_img_exclusive">
+                          <span class="search_img_title">
+                              Available for purchase from <?php 
+                                  echo date("F j, Y", strtotime($all_results[$i]['exclusive_to']));   ?>
+                          </span>
+                      </div>
+                  <?php 
+                  }
+                  ?>
+                  
                   <?php 
 
                     if ($all_results[$i]['file_license'] == 'Royalty Free'){
@@ -208,15 +225,32 @@
                           <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
                              <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                           </a>
-                          <div class="search_img_details"> 
-                              <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
-                              <span class="search_img_icons">
-                                  <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>"><i class="fa fa-calculator" aria-hidden="true"></i></a>
-                                  <a href="" class="shopping_basket"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
-                                  <a href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>">
-                                  <img style="width: 17px;margin-top: 3px;margin-left: 1px;"src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
-                              </span>
-                          </div>
+                          <?php if( $all_results[$i]['exclusive_to'] == 'NULL' || 
+                            $all_results[$i]['exclusive_to'] < date('Y-m-d')){
+                  ?>
+                                <div class="search_img_details"> 
+                                    <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>
+                                    <span class="search_img_icons">
+                                        <a target="_blank" href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>"><i class="fa fa-calculator" aria-hidden="true"></i></a>
+                                        <a href="" class="shopping_basket"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
+                                        <a href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>">
+                                        <img style="width: 17px;margin-top: 3px;margin-left: 1px;"src="<?php echo base_url() ?>/assets/non_member/icons/expand.png"></a>
+                                    </span>
+                                </div>
+                            <?php 
+
+                            } else {
+
+                            ?>
+                                <div class="search_img_details search_img_exclusive">
+                                    <span class="search_img_title">
+                                        Available for purchase from <?php 
+                                            echo date("F j, Y", strtotime($all_results[$i]['exclusive_to']));   ?>
+                                    </span>
+                                </div>
+                            <?php 
+                            }
+                            ?>
                           <?php 
 
                             if ($all_results[$i]['file_license'] == 'Royalty Free'){

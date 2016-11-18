@@ -2469,103 +2469,43 @@
                           </div>
                        </div> 
                        <div class="report_content">
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column report_col report_idle">
-                                    <img src="assets/img/search_image.png">
-                                </div>
-                                <div class="large-1 column report_col">
-                                    0012354
-                                </div>
-                                <div class="large-5 column report_col">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column report_col">
-                                    (2)
-                                </div>
-                                <div class="large-2 column report_col">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column report_col">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column report_col report_idle">
-                                    <img src="assets/img/search_image.png">
-                                </div>
-                                <div class="large-1 column report_col">
-                                    0012354
-                                </div>
-                                <div class="large-5 column report_col">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column report_col">
-                                    (4)
-                                </div>
-                                <div class="large-2 column report_col">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column report_col">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column report_col report_idle">
-                                    <img src="assets/img/search_image.png">
-                                </div>
-                                <div class="large-1 column report_col">
-                                    0012354
-                                </div>
-                                <div class="large-5 column report_col">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column report_col">
-                                   (2)
-                                </div>
-                                <div class="large-2 column report_col">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column report_col">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column report_col report_idle">
-                                    <img src="assets/img/search_image.png">
-                                </div>
-                                <div class="large-1 column report_col">
-                                    0012354
-                                </div>
-                                <div class="large-5 column report_col">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column report_col">
-                                    (2)
-                                </div>
-                                <div class="large-2 column report_col">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column report_col">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                       </div>           
-                       <div class="report_footer">
-                         <div class="row">
-                       
-                           <div class="pull-right">
-                               Total Sales : $90
-                           </div>
+                        <?php 
+                          $total = 0;
+                          for($r=0; $r<count($purchase_history);$r++) { 
+                            $total = $total + $purchase_history[$r]['product_cost'];
+                        ?>
+                          <div class="report_item">
+                            <div class="row">
+                              <div class="large-1 column report_col report_idle">
+                                  <img src="<?php echo $purchase_history[$r]['file_thumbnail']?>"/>
+                              </div>
+                              <div class="large-1 column report_col">
+                                  <?php echo $purchase_history[$r]['upload_id']?>
+                              </div>
+                              <div class="large-5 column report_col">
+                                  <?php echo $purchase_history[$r]['file_name']?>
+                              </div>
+                              <div class="large-2 column report_col">
+                                  (1)
+                              </div>
+                              <div class="large-2 column report_col">
+                                   <?php echo $purchase_history[$r]['date_purchased']?>
+                              </div>
+                              <div class="large-1 column report_col">
+                                  $<?php echo $purchase_history[$r]['product_cost']?>
+                              </div>
+                             </div>
                           </div>
-                       </div>
+                        <?php } ?>  
+
+                          <div class="report_footer">
+                            <div class="row">
+                       
+                              <div class="pull-right">
+                                  Total Sales : $<?php echo $total; ?>
+                              </div>
+                             </div>
+                          </div>
                   </div>
                   <div style="clear: both"></div>
             </div>

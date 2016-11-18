@@ -61,6 +61,8 @@ class Main extends CI_Controller {
 		$people = $this->input->post('people');
 		$category = $this->input->post('category');
 		$contributor = $this->input->post('contributor');
+		$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+		$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 		$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		$data['search_term'] = $search_term; 
@@ -103,6 +105,8 @@ class Main extends CI_Controller {
 		}
 		$data['search_term'] = $search_term; 
 		$data['all_results'] = $this->main_model->search_all_uploads($search_term);
+		$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+		$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 		$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		$data['contributors'] =$this->admin_model->get_excontributor_users();
@@ -143,6 +147,8 @@ class Main extends CI_Controller {
 		
 		$data['all_results'] = $this->main_model->get_similar_images($upload_id);
 		$data['contributors'] =$this->admin_model->get_excontributor_users();
+		$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+		$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 		$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		
@@ -183,6 +189,8 @@ class Main extends CI_Controller {
 		}
 		
 		$data['all_results'] = $this->main_model->get_same_shoots($same_shoot);
+		$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+		$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 		$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		$data['contributors'] =$this->admin_model->get_excontributor_users();
@@ -222,9 +230,13 @@ class Main extends CI_Controller {
 		
 		$data['all_results'] = $this->main_model->get_single_upload($upload_id);
 		$data['contributors'] =$this->admin_model->get_excontributor_users();
+		$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+		$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
 		$data['rf_pricing'] = $this->admin_model->get_rf_pricing();
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		
+		$license_type = '';
+
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -234,12 +246,24 @@ class Main extends CI_Controller {
 				} else {
 					$same_shoots = '';
 				}
+				if($file_id == $upload_id){
+					$license_type = $data['all_results'][$f]['file_license'];
+				}
 				$data['all_results'][$f]['releases']=$releases;
 				$data['all_results'][$f]['same_shoots']=$same_shoots;
 			}
-		$this->load->view('non_member/header' , $data);
-		$this->load->view('non_member/details', $data);
-		$this->load->view('non_member/footer');
+		if($license_type == 'Royalty Free'){
+			
+			$this->load->view('non_member/header' , $data);
+			$this->load->view('non_member/details', $data);
+			$this->load->view('non_member/footer');
+
+		} else {
+			$this->load->view('non_member/header' , $data);
+			$this->load->view('non_member/details_managed', $data);
+			$this->load->view('non_member/footer');
+		}
+		
 	}
 	public function image_add_to_cart() {
 		$this->load->helper(array('form', 'url'));	
@@ -250,8 +274,10 @@ class Main extends CI_Controller {
 				$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
 			$member_id = $data['user_details'][0]['user_id'];
 			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
-			$order_id = $data['user_cart'][0]['order_id'];
-			$data['cart_items'] = $this->member_model->get_cart_items($order_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
 		}
 		$data['success'] = '' ;
 		$data['cart_session']['product_id'] = $this->input->post('upload_id');
@@ -261,6 +287,7 @@ class Main extends CI_Controller {
 		$data['cart_session']['product_cost'] = $this->input->post('file_price');
 		$data['cart_session']['product_license'] = $this->input->post('file_license');
 		$data['cart_session']['current_url'] = $this->input->post('current_url');
+		$data['cart_session']['exclusive_duration'] = $this->input->post('exclusive_duration');
 		$data['cart_session']['add_to_cart'] = TRUE;
 		$data['cart_session']['cart_redirect'] = FALSE;	
 
@@ -295,9 +322,11 @@ class Main extends CI_Controller {
 			$data['user_details'] = 
 				$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
 			$member_id = $data['user_details'][0]['user_id'];
-			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
-			$order_id = $data['user_cart'][0]['order_id'];
-			$data['cart_items'] = $this->member_model->get_cart_items($order_id);
+			$data['user_cart'] = $this->member_model->get_new_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
 		}
 	
 		$account = $data['user_session']['user_meta'][0]['account'];
@@ -306,7 +335,13 @@ class Main extends CI_Controller {
 			$this->user_model->update_user_login($user_session['user_meta']['0']['email'], 'member');
 		}
 		// get user cart
-		$user_cart = $this->member_model->get_user_cart($member_id);
+		if (count($data['user_cart']) > 0) {
+
+			$user_cart = $data['user_cart'];
+		} else {
+			
+			$user_cart = $this->member_model->get_new_cart($member_id);
+		}
 		$user_session = $data['user_session'];
 		$product_cost = $user_session['product_cost'];
 		$product_id = $user_session['product_id'];
@@ -314,28 +349,26 @@ class Main extends CI_Controller {
 		$product_size = $user_session['product_size'];
 		$product_duration = $user_session['product_duration'];
 		$product_license = $user_session['product_license'];
+		$exclusive_duration = $user_session['exclusive_duration'];
 
 		$redirect_url = $user_session['current_url'];
 
 		if(count($user_cart) < 1 ) {
 			$this->member_model->create_new_order($member_id,$product_cost);		
-			$user_cart = $this->member_model->get_user_cart($member_id);
+			$user_cart = $this->member_model->get_new_cart($member_id);
 		}
-
 		$order_id = $user_cart[0]['order_id'];
 		$cart_items = $this->member_model->get_cart_items($order_id);
-
-		// check if cart items 
-		
+			
 		if(count($cart_items) < 1){
 			// items empty just add
-			$this->member_model->add_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license);
+			$this->member_model->add_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license,$exclusive_duration);
 			$this->member_model->update_order_cost($order_id,$product_cost);			
 		} else {
 			$exists = FALSE;
 			for($i = 0 ; $i < count($cart_items); $i++ ) {
 				if($cart_items[$i]['product_id'] == $product_id ) {
-					$this->member_model->replace_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license,$cart_items[$i]['item_id']);
+					$this->member_model->replace_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license,$exclusive_duration,$cart_items[$i]['item_id']);
 					// update order_cost
 					$order_cost = $user_cart[0]['order_cost'] - $cart_items[$i]['product_cost'];
 					$order_cost = $order_cost +  $product_cost;
@@ -344,13 +377,14 @@ class Main extends CI_Controller {
 			}
 
 			if($exists == FALSE ) {
-				$this->member_model->add_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license);	
+				$this->member_model->add_cart_item($order_id,$product_id,$product_type,$product_size,$product_duration,$product_cost,$product_license,$exclusive_duration);	
 				$order_cost = $user_cart[0]['order_cost'] + $product_cost;
 					
 			}
 			// update order cost
 			$this->member_model->update_order_cost($order_id,$order_cost);
 		}
+
 		
 		$cart_items = $this->member_model->get_cart_items($order_id);
 

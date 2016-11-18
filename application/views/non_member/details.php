@@ -149,6 +149,9 @@
                   </div>
                   <ul class="accordion search_details_accordion" data-accordion>
                   
+                  <?php if( $all_results[0]['exclusive_to'] == 'NULL' || 
+                             $all_results[0]['exclusive_to'] < date('Y-m-d')){
+                   ?>
                    <form name="add_to_cart_form" class="add_to_cart_form">
                   
                     <li class="accordion-item search_details_accordion_item is-active " data-accordion-item>
@@ -261,6 +264,7 @@
                                             <input type="hidden" name="upload_id" value="<?php echo $all_results[0]['upload_id'] ?>">
                                             <input type="hidden" name="file_quality" value="">
                                             <input type="hidden" name="file_price" value="">
+                                            <input type="hidden" name="exclusive_duration" value="">
                                             <input type="hidden" name="current_url" value="">
                                       </div>
                                       <div class="price_footer">
@@ -335,6 +339,20 @@
                       </div>
                     </li>
                    </form>
+                  <?php 
+                      } else {
+                  ?>
+                  <li class="accordion-item search_details_accordion_item is-active " data-accordion-item>
+                         <div class="search_price_exclusive">
+                             <span class="">
+                                 Available for purchase from <?php 
+                                     echo date("F j, Y", strtotime($all_results[0]['exclusive_to']));   ?>
+                             </span>
+                         </div>
+                   </li>
+                       <?php 
+                       }
+                       ?>
                     <hr style="border-top: solid 1px;" />
                     
                     <li class="accordion-item search_details_accordion_item" data-accordion-item>

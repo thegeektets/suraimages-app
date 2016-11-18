@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?php echo base_url('/assets/non_member/css/slick.css')?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/non_member/css/responsive.css')?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/contributor/multiselect/multiple-select.css')?>" />
+    <link rel="stylesheet" href="<?php echo base_url('/assets/non_member/css/foundation-select.css')?>" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway:300,400,700|Roboto" rel="stylesheet">
     <script src="https://use.fontawesome.com/e4e812a2f7.js"></script>
   </head>

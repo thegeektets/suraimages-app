@@ -11,12 +11,21 @@ class member extends CI_Controller {
    	}
 
 
-	public function index()
+	public function index($data = NULL)
 	{
 		$this->load->helper('url'); 
 		$this->load->library('session');
 		$this->load->helper(array('form', 'url'));
-		$data['success'] ='';	
+		if ($data == NULL ){
+			$data['success'] ='';	
+		} else {
+			$data = $data;
+		}
+		if (isset($data['iframe_src']) || isset($data['payment_success']) ) {
+			$data['checkout'] = true;
+		} else {
+			$data['checkout'] = false;
+		}
 		$data['user_session']=$this->session->all_userdata();;
 		
 		if (isset($data['user_session']['logged_in'])) {
@@ -24,8 +33,11 @@ class member extends CI_Controller {
 				$data['user_details'] = $this->fetch_user_details();
 				$member_id = $data['user_details'][0]['user_id'];
 				$data['user_cart'] = $this->member_model->get_user_cart($member_id);
-				$order_id = $data['user_cart'][0]['order_id'];
-				$data['cart_items'] = $this->member_model->get_cart_items($order_id);
+				$data['purchase_history'] = $this->member_model->get_purchase_history($member_id);
+				if (count($data['user_cart']) > 0) {
+					$order_id = $data['user_cart'][0]['order_id'];
+					$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+				}
 				
 				if(sizeof($data['user_details']) > 0){
 				   $data['code'] = array_search($data['user_details']['0']['country'], $this->countrycodes()); // returns 'US'
@@ -49,6 +61,448 @@ class member extends CI_Controller {
    			$this->load->view('registration/login' , $data);
    			$this->load->view('registration/footer');
    		}
+	}
+	public function pesapal_res(){
+		// load thankyou
+		$reference = null;
+		$pesapal_tracking_id = null;
+		
+		if(isset($_GET['pesapal_merchant_reference']))
+		 $reference = $_GET['pesapal_merchant_reference'];
+		if(isset($_GET['pesapal_transaction_tracking_id']))
+		 $pesapal_tracking_id = $_GET['pesapal_transaction_tracking_id'];
+		
+		$data['payment_success'] = true;
+		
+		// introduce check here
+
+		// store payment
+		//$reference = 127;
+		//$pesapal_tracking_id = 'TESTID';
+		if($reference !== null && $pesapal_tracking_id !== null ){
+			$this->member_model->update_order_payment($reference, $pesapal_tracking_id);	
+		}
+		$data['reference'] = $reference;
+		$this->index($data);
+
+	}
+
+	function convertCurrency($amount, $from, $to){
+	    $url  = "https://www.google.com/finance/converter?a=$amount&from=$from&to=$to";
+	    $data = file_get_contents($url);
+	    preg_match("/<span class=bld>(.*)<\/span>/",$data, $converted);
+	    $converted = preg_replace("/[^0-9.]/", "", $converted[1]);
+	    return round($converted, 3);
+	}
+
+	public function download_package($order_id) {
+
+		$this->load->library('image_lib');
+			            
+		$reference = $order_id;
+		$package_files = $this->member_model->get_package_files($order_id);
+
+		$zipname = 'suraimages_package_'.$reference.'.zip';
+		$zip = new ZipArchive;
+		$zip -> open($zipname, ZipArchive:: CREATE | ZipArchive:: OVERWRITE);
+
+		for($i=0; $i < count($package_files); $i++) {
+			
+			$file_url = $package_files[$i]['file_url'];
+			
+			$duration = '';
+			if($package_files[$i]['product_license'] == 'Exclusive License') {
+			
+					$duration = $package_files[$i]['product_duration'];
+			
+			} else if($package_files[$i]['exclusive_duration'] !== NULL ) {
+
+					$duration = $package_files[$i]['exclusive_duration'];		
+			}
+			if($duration !== '') {
+				$duration = trim($duration);
+				 if($duration == '1 Month'){
+				 	
+				 	$start = Date('Y-m-d');
+				 	$end = new DateTime('+ '.$duration);
+				 	$end = $end->format('Y-m-d');
+
+				  } else if ($duration == '3 Months' ) {
+				  	 $start = Date('Y-m-d');
+				 	 $end = new DateTime('+ '.$duration);
+				 	 $end = $end->format('Y-m-d');
+
+				  } else if ($duration == '6 Months') {
+				 	 
+				 	 $start = Date('Y-m-d');
+				 	 $end = new DateTime('+ '.$duration);
+				 	 $end = $end->format('Y-m-d');
+
+				  } else if ($duration == '1 Year') {
+				 	
+				 	$start = Date('Y-m-d');
+				 	$end = new DateTime('+ '.$duration);
+				 	$end = $end->format('Y-m-d');
+
+				  } else if ($duration == '2 Years') {
+				 	
+				 	$start = Date('Y-m-d');
+				 	$end = new DateTime('+ '.$duration);
+				 	$end = $end->format('Y-m-d');
+				  }
+				  $upload_id = $package_files[$i]['upload_id'];
+				  $this->member_model->update_exclusive_image($upload_id, $start, $end);
+			}
+
+			if($package_files[$i]['file_license'] == 'Right Managed'){
+			
+				$zip->addFromString(basename($file_url), file_get_contents($file_url));		
+			
+			} else {
+				$size = $package_files[$i]['product_size'];
+				$pathinfo = pathinfo($file_url);
+				if($size == 'Large'){
+					$zip->addFromString(basename($file_url), file_get_contents($file_url));	
+				} else {
+					$config2['image_library'] = 'gd2';
+		 	  	 	$config2['source_image'] = "./assets/uploads/".$pathinfo['filename'].".".$pathinfo['extension'];
+	                $config2['new_image'] = './assets/downloads/';
+		            $config2['maintain_ratio'] = TRUE;
+	                $config2['create_thumb'] = TRUE;
+	                $config2['thumb_marker'] = '_download';
+	                
+	                if($size == 'Medium'){
+	                	$config2['width'] = round($package_files[$i]['file_width']/2);
+	                	$config2['height'] = round($package_files[$i]['file_height']/2);
+	                 } else {
+	                 	$config2['width'] = round($package_files[$i]['file_width']/3);
+	                 	$config2['height'] = round($package_files[$i]['file_height']/3);
+	                 }
+	                $this->image_lib->initialize($config2);
+	                if ( !$this->image_lib->resize()) {
+	            
+	            		echo $this->image_lib->display_errors();
+	          	
+	          		} else {
+						$this->image_lib->clear();
+		            	$thumbnail_path = 'assets/downloads/'. $pathinfo['filename'] . "_download." . $pathinfo['extension'];
+		            	$zip->addFile($thumbnail_path, basename($thumbnail_path));
+		            }
+            	}
+			}
+			
+		}
+		
+
+		$zip->close();
+		
+		header('Content-Type: application/zip');
+		header('Content-disposition: attachment; filename='.$zipname);
+		header('Content-Length:'.filesize($zipname));
+		readfile($zipname);
+		
+	}
+
+	public function pay_pesapal() {
+		$this->load->library('session');
+		$user_cart = $this->input->post("user_cart");
+		$user_cart = json_decode(base64_decode($user_cart) , true);
+		$data['user_session']=$this->session->all_userdata();
+		if($user_cart == NULL && isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = $this->fetch_user_details();
+			$member_id = $data['user_details'][0]['user_id'];
+			$user_cart = $this->member_model->get_user_cart($member_id);
+			
+		}
+
+
+		$this->load->helper(array('form', 'url'));
+		$this->load->file('checkout/OAuth.php');
+		//pesapal params -
+		$token = $params = NULL;
+
+		// sandbox credentials
+
+		$consumer_key = 'qrzxxvlzP8+SBD2tojveiB7fOhi6SCTK';//Register a merchant account on
+		$consumer_secret = 'Sp9PIs7pURtJnJg3iDHKNC8PSYk=';
+
+		$signature_method = new OAuthSignatureMethod_HMAC_SHA1();
+		$iframelink = 'https://demo.pesapal.com/api/PostPesapalDirectOrderV4';
+		 //$iframelink = 'https://www.pesapal.com/API/PostPesapalDirectOrderV4';
+
+		//get form details
+		$amount = $this->convertCurrency($user_cart[0]['order_cost'], 'USD', 'KES');
+		$amount = number_format($amount, 2);//format amount to 2 decimal places
+		$desc = 'Sura Images Order '.$user_cart[0]['order_id'].' Payment Request';
+		$type = 'MERCHANT'; //default value = MERCHANT
+		$reference = $user_cart[0]['order_id'];//unique order id of the transaction, generated by merchant
+		$first_name = $user_cart[0]['firstname'];
+		$last_name = $user_cart[0]['middlename'];
+		$email = $user_cart[0]['email'];
+		$phonenumber = $user_cart[0]['telnumber'];//ONE of email or phonenumber is required
+		$currency = 'USD';
+
+		$callback_url = base_url().'/index.php/member/pesapal_res'; //redirect url, the page that will handle the response from pesapal.
+
+		$post_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><PesapalDirectOrderInfo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" Amount=\"".$amount."\" Description=\"".$desc."\" Type=\"".$type."\" Reference=\"".$reference."\" FirstName=\"".$first_name."\" LastName=\"".$last_name."\" Email=\"".$email."\" PhoneNumber=\"".$phonenumber."\" xmlns=\"http://www.pesapal.com\" />";
+		$post_xml = htmlentities($post_xml);
+
+		$consumer = new OAuthConsumer($consumer_key, $consumer_secret);
+
+		//post transaction to pesapal
+		$data['iframe_src'] = OAuthRequest::from_consumer_and_token($consumer, $token, "GET", $iframelink, $params);
+		$data['iframe_src']->set_parameter("oauth_callback", $callback_url);
+		$data['iframe_src']->set_parameter("pesapal_request_data", $post_xml);
+		$data['iframe_src']->sign_request($signature_method, $consumer, $token);
+
+		//display pesapal - iframe and pass iframe_src
+
+		$this->index($data);
+	}
+
+	public function initializemail() {
+	    $this->load->library('email');
+		 $config['useragent'] = 'CodeIgniter';
+		 $config['mailpath']  = "/usr/bin/sendmail";
+		 $config['protocol'] = ""; 
+		 $config['smtp_host'] = ""; 
+		 $config['smtp_port'] = ""; 
+		 $config['smtp_user'] = "suraimagesbackend@gmail.com"; 
+		 $config['smtp_pass'] = "Sura@Images"; 
+		 $config['smtp_timeout'] = 5;
+		 $config['wordwrap'] = TRUE;
+		 $config['wrapchars'] = 76;
+		 $config['mailtype'] = 'html';
+		 $config['charset'] = 'utf-8';
+		 $config['validate'] = FALSE;
+		 $config['priority'] = 3;
+		 $config['crlf'] = "\r\n";
+		 $config['newline'] = "\r\n";
+		 $config['bcc_batch_mode'] = FALSE;
+		 $config['bcc_batch_size'] = 200;
+	     $this->email->initialize($config);
+	 } 
+
+
+	public function send_quote_email($email, $id, $user_cart ) {
+
+		 $user_cart = json_decode(base64_decode($user_cart) , true);
+	  
+	  	 $cart_items = "
+		 <table>
+		 	<thead>
+		 		<tr>
+			 		<th>
+			 			Image
+			 		</th>
+			 		<th>
+			 			Image Description
+			 		</th>
+			 		<th>
+			 			Image Cost
+			 		</th>
+			 	</tr>
+		 	</thead>
+		 	<tbody>
+		 ";
+		 for ($c = 0 ; $c < count($user_cart) ; $c++ ) {
+			 $cart_items = $cart_items . "
+					          <tr>
+					            <td class='image_thumb'>
+					              <img src='".$user_cart[$c]['file_thumbnail']."' alt='' height='100px'>
+					            </td>
+					            <td class='image_desc'>
+					              ".$user_cart[$c]['file_name']."
+					            </td>
+					            <td class='image_cost'>
+					              <strong> Amount : </strong>
+					              $ ".$user_cart[$c]['product_cost']."
+					            </td>
+					          </tr>
+					          " ;
+		 } 
+		  $cart_footer = "
+		  	</tbody>
+		  	</table>
+		  "	;		
+		  $cart_items = $cart_items . $cart_footer;		      
+		 $this->load->helper(array('form', 'url'));
+	     $html = "
+	     		<head>
+				<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
+				<style type='text/css'>
+				@font-face {
+				font-family: 'Calibri';
+				font-weight: 700;
+				src: url('".base_url('assets/admin/calibri/Calibri Bold.ttf')."');
+				}
+
+				@font-face {
+				font-family: 'Calibri';
+				font-weight: normal;
+				src: url('".base_url('assets/admin/calibri/Calibri.ttf')."');
+				}
+				@font-face {
+				font-family: 'Calibri';
+				font-weight: 100;
+				src: url('".base_url('assets/admin/calibri/calibril.ttf')."');
+				
+				}
+				body,
+				html {
+				background: #fff !important;
+				} 
+				body {
+				background: #f3f3f3 !important;
+				margin: 0px auto;
+				padding-left: 25px;
+				padding-right: 25px;
+				width: 900px;
+				box-shadow: 5px 5px 5px #888888;
+				margin-top: 10;
+				margin-bottom: 10;
+				position: relative;
+				font-family: 'Calibri';
+				font-weight: 300;
+				font-size: 18px;
+				color: #888;
+				}
+				.header {
+				background: #262134 !important;
+				margin-left: -25px;
+				margin-right: -25px;
+				display: block;
+				}
+				.body-drip {
+				margin-top: 10px;
+				display: block;
+				}
+				.logo {
+				padding: 10px;
+				float: left;
+				}
+				.logo > img {
+				height: 40px;
+				}
+				.phone {
+				margin-top: 10px;
+				float: right;
+				padding: 10px;
+				color: #fff;
+				}
+				.footer {
+				 background: #262134 !important;
+				 padding: 15px;
+				 display: block; 
+				 position: absolute;
+				 bottom: 0px;
+				 left: 0px;
+				 width: 920px;
+				}
+				.copyright {
+				color: #fff;
+				float: right;
+				font-size: 14px;
+				}
+				.social {
+				float: right;
+				color: #fff;
+				font-size: 14px;
+				margin-right: 10px;
+				}
+				</style>
+				</head>
+				<container class='header'>
+				  <div class='logo'>
+				    <img src='".base_url('assets/admin/img/sura_dark.png')."' alt=''>
+				  </div>
+				  <div class='address'>
+				      Duplex Lower Hill <br/>
+				      Upper Hill Rd <br/>
+				      Suite 20, Upper Hill
+				  </div>
+				  <div class='address'>
+				      P.O Box 38540-00100 <br/>
+				      GPO, Nairobi, Kenya <br/>
+				      +254 20 242 9588
+				  </div>
+				  <div class='phone'>
+				      www.suraimages.com
+				      info@suraimages.com
+				  </div>
+				  <div style='clear: both'></div>
+				</container>
+
+				<container class='body-drip'>
+
+				  <spacer size='16'></spacer>
+
+				  <spacer size='16'></spacer>
+
+				  <row>
+				    <div class='quote_head'>
+				      <h3 class='text-center'> Quotation for license(s) </h3>
+				    </div>
+				  </row>
+
+				 
+				  <row>
+				    <columns>
+				      <p class='text-center'> 
+				          <div class='float-left'>
+				            <strong>Attention:</strong> ".$user_cart[0]['firstname']." ".$user_cart[0]['middlename']." </br>
+				            <strong>Phone No:</strong> ".$user_cart[0]['telnumber']." </br>
+				            <strong>Email:</strong> ".$user_cart[0]['email']." </br>
+				            <strong>Currency:</strong> USD </br>
+				          </div>
+				          <div class='float-right'>
+				           <strong>Date: </strong> ".date('d/m/Y')."
+				          </div>
+				          <div style='clear: both'></div>
+				          <br/>
+				          <hr/>
+				          ".$cart_items."
+				          <row>
+				            <div class='float-right'>
+				                <strong>Total Amount : </strong>$".$user_cart[0]['order_cost']."
+				            </div>
+				          </row>
+				          <div style='clear: both'></div>
+				          <hr/>
+				          
+				          <row class='footer'>
+				              <hr/>
+				              <strong>Disclaimer: </strong>This is a system generated quote that doesn't require a stamp.
+				          </row>
+				</container>";
+
+	     $this->initializemail();
+	     $this->load->helper('url');
+	     $this->load->library('email');
+	     $this->email->from('support@suraimages.com', 'SuraImages Support');
+	     $this->email->to($email); 
+	     $this->email->subject('SuraImages license Qoute');
+	     $this->email->message(''.$html); 
+	     
+	     if($this->email->send()){
+	     	 $data['success'] = 'true';
+	     	 $data['qoutesuccess'] = 'true';
+	         $data['message'] = $this->email->print_debugger();
+	         $this->index($data);
+	     }else{
+	     	$data['success'] = 'false';
+	     	$data['qoutesuccess'] = 'false';
+	     	$data['message'] = $this->email->print_debugger();
+	     	$this->index($data);
+	     }
+		
+	 }
+	public function send_quote() {
+		$this->load->helper(array('form', 'url'));	
+		$email = $this->input->post("qoute_email");
+		$member_id = $this->input->post("qoute_id");
+		$user_cart = $this->input->post("qoute_cart");
+		$this->send_quote_email($email, $member_id, $user_cart);
 	}
 	public function update_account() {
 	    $this->load->helper('url'); 

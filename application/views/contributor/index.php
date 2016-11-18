@@ -63,7 +63,7 @@
                 <?php 
                   if ( (strlen($user_details['0']['id_file']) == 0) || (strlen(trim($user_details['0']['firstname'])) == 0 ) ) { ;?>
                    disabled
-                <?php } ?>" id="sales_link"><a href="#sales">Sales History (0)</a></li>
+                <?php } ?>" id="sales_link"><a href="#sales">Sales History (<?php echo count($purchase_history); ?>)</a></li>
             </ul>
         </div>
         <div class="tabs-content" data-tabs-content="contributor-tabs">
@@ -884,100 +884,40 @@
                         </div>
                      </div> 
                      <div class="report_content">
+                        <?php 
+                          $total = 0;
+                          for($r=0; $r<count($purchase_history);$r++) { 
+                            $total = $total + $purchase_history[$r]['product_cost'];
+                        ?>
                           <div class="report_item">
                             <div class="row">
                               <div class="large-1 column report_col">
-                                  <img src="<?php echo base_url('/assets/contributor/img/search_image.png')?>">
+                                  <img src="<?php echo $purchase_history[$r]['file_thumbnail']?>">
                               </div>
                               <div class="large-1 column report_col">
-                                  0012354
+                                  <?php echo $purchase_history[$r]['upload_id']?>
                               </div>
                               <div class="large-5 column report_col">
-                                  Equatorial Forest
+                                  <?php echo $purchase_history[$r]['file_name']?>
                               </div>
                               <div class="large-2 column report_col">
-                                  (2)
+                                  (1)
                               </div>
                               <div class="large-2 column report_col">
-                                   28th Dec, 2015
+                                   <?php echo $purchase_history[$r]['date_purchased']?>
                               </div>
                               <div class="large-1 column report_col">
-                                  $15
+                                  $<?php echo $purchase_history[$r]['product_cost']?>
                               </div>
                              </div>
                           </div>
-                          <div class="report_item">
-                            <div class="row">
-                              <div class="large-1 column report_col">
-                                  <img src="<?php echo base_url('/assets/contributor/img/search_image.png')?>">
-                              </div>
-                              <div class="large-1 column report_col">
-                                  0012354
-                              </div>
-                              <div class="large-5 column report_col">
-                                  Equatorial Forest
-                              </div>
-                              <div class="large-2 column report_col">
-                                  (2)
-                              </div>
-                              <div class="large-2 column report_col">
-                                   28th Dec, 2015
-                              </div>
-                              <div class="large-1 column report_col">
-                                  $15
-                              </div>
-                             </div>
-                          </div>
-                          <div class="report_item">
-                            <div class="row">
-                              <div class="large-1 column report_col">
-                                  <img src="<?php echo base_url('/assets/contributor/img/search_image.png')?>">
-                              </div>
-                              <div class="large-1 column report_col">
-                                  0012354
-                              </div>
-                              <div class="large-5 column report_col">
-                                  Equatorial Forest
-                              </div>
-                              <div class="large-2 column report_col">
-                                  (4)
-                              </div>
-                              <div class="large-2 column report_col">
-                                   28th Dec, 2015
-                              </div>
-                              <div class="large-1 column report_col">
-                                  $15
-                              </div>
-                             </div>
-                          </div>
-                          <div class="report_item">
-                            <div class="row">
-                              <div class="large-1 column report_col">
-                                  <img src="<?php echo base_url('/assets/contributor/img/search_image.png')?>">
-                              </div>
-                              <div class="large-1 column report_col">
-                                  0012354
-                              </div>
-                              <div class="large-5 column report_col">
-                                  Equatorial Forest
-                              </div>
-                              <div class="large-2 column report_col">
-                                  (2)
-                              </div>
-                              <div class="large-2 column report_col">
-                                   28th Dec, 2015
-                              </div>
-                              <div class="large-1 column report_col">
-                                  $15
-                              </div>
-                             </div>
-                          </div>
+                        <?php } ?>  
 
                           <div class="report_footer">
                             <div class="row">
                        
                               <div class="pull-right">
-                                  Total Sales : $90
+                                  Total Sales : $<?php echo $total; ?>
                               </div>
                              </div>
                           </div>

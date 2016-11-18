@@ -8,6 +8,7 @@ class admin extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('admin_model');
        $this->load->model('contributor_model');
+       $this->load->model('member_model');
    	}
 	public function index()
 	{
@@ -23,6 +24,8 @@ class admin extends CI_Controller {
 				$id = $data['user_details'][0]['user_id'];
 
 				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
+				$data['purchase_history'] = $this->member_model->get_all_history();
+
 				for($f = 0; $f < count($data['all_contributor_images']); $f++){
 					
 					$file_id = $data['all_contributor_images'][$f]['upload_id'];

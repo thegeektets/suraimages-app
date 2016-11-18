@@ -1408,6 +1408,25 @@ button.slick-next.slick-arrow {
     border: 1px solid #00c800;
     
   }
+  .btn_download {
+    background-color: #00c800;
+    color: #fff;
+    display:block;
+    margin-top:40px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: initial;
+    width: 400px;
+    margin: 0px auto;
+  }
+
+  .btn_download:hover, .btn_download:focus {
+    background-color: #fff;
+    color: #00c800;
+    border: 1px solid #00c800;
+    
+  }
   input[type="text"] {
       font-weight: 300;
   }

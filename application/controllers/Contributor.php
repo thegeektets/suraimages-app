@@ -7,6 +7,7 @@ class contributor extends CI_Controller {
        parent::__construct();
        $this->load->model('user_model');
        $this->load->model('contributor_model');
+       $this->load->model('member_model');
        $this->load->model('admin_model');
    	}
 	public function index()
@@ -28,6 +29,8 @@ class contributor extends CI_Controller {
 			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
 			$data['contributor_releases'] = $this->contributor_model->get_contributor_releases($id);
 			$data['contributor_videos'] = $this->contributor_model->get_contributor_videos($id);
+			$data['purchase_history'] = $this->member_model->get_contributor_history($id);
+
 			for($f = 0; $f < count($data['contributor_videos']); $f++){
 				
 				$file_id = $data['contributor_videos'][$f]['upload_id'];

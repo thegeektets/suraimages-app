@@ -43,7 +43,21 @@
             <div style="clear: both"></div>
           </div>
        </div>
-
+       <div class="row">
+          <?php
+             if($qoutesuccess === 'true'){
+                 echo '<div class="alert-box success">'
+                       .'qoute email send successfully'.'
+                       <a href="#"" class="close" id="close">&times;</a>
+                       </div>';
+             } else if($qoutesuccess === 'false') {
+                 echo '<div class="alert-box warning">'
+                       .'unable to send qoute email please contact suraimages support'.'
+                       <a href="#"" class="close" id="close">&times;</a>
+                       </div>';
+             }
+          ?>
+       </div>
        <div class="row">
             <div class="member_head">
                 <div class="active">
@@ -51,14 +65,16 @@
                 </div>
             </div>
             <ul class="tabs member_tabs" data-tabs id="member-tabs">
-                  <li class="tabs-title is-active"><a href="#account" aria-selected="true"> Account </a></li>
-                  <li class="tabs-title"><a href="#basket">Shopping Basket (<?php echo count($cart_items)?>)</a></li>
-                  <li class="tabs-title"><a href="#history">Purchase History (0)</a></li>
+                  <li class="tabs-title <?php if($checkout == false ){echo "is-active" ;} ?>"><a href="#account" aria-selected="true"> Account </a></li>
+
+                  <li class="tabs-title <?php if($checkout == true ){echo "is-active" ;} ?>"><a href="#basket">Shopping Basket (<?php echo count($cart_items)?>)</a></li>
+
+                  <li class="tabs-title"><a href="#history">Purchase History (<?php echo count($purchase_history); ?>)</a></li>
                   
             </ul>
 
             <div class="tabs-content" data-tabs-content="member-tabs">
-              <div class="tabs-panel is-active member_panel" id="account">
+              <div class="tabs-panel <?php if($checkout == false ){echo "is-active";} ?> member_panel" id="account">
 
                     <ul class="tabs inner_member_tabs" data-tabs id="account-tabs">
                           <li class="tabs-title is-active"><a href="#edit_account">Edit Account </a></li>
@@ -66,7 +82,7 @@
                     </ul>
 
                     <div class="tabs-content" data-tabs-content="account-tabs">
-                          <div class="tabs-panel is-active" id="edit_account">
+                          <div class="tabs-panel <?php if($checkout == false ){echo "is-active";} ?>" id="edit_account">
                                 <div class="tab_title">
                                     Account Information:
                                 </div>
@@ -391,18 +407,18 @@
                           </div>
                     </div>
               </div>
-            <div class="tabs-panel member_panel" id="basket">
+            <div class="tabs-panel member_panel <?php if($checkout == true ){echo "is-active";} ?>" id="basket">
                     <ul class="tabs inner_member_tabs" data-tabs id="basket-tabs">
-                          <li class="tabs-title is-active"><a href="#shopping" aria-selected="true"> Shopping Basket </a></li>
+                          <li class="tabs-title <?php if($checkout == false ){echo "is-active";} ?>"><a href="#shopping" aria-selected="true"> Shopping Basket </a></li>
                           
-                          <li class="tabs-title"><a href="#checkout"> Checkout </a></li>
+                          <li class="tabs-title <?php if($checkout == true ){echo "is-active";} ?>"><a href="#checkout"> Checkout </a></li>
                           
                     </ul>
                     <div class="message">
                     </div>
                     <div class="tabs-content" data-tabs-content="basket-tabs">
                         
-                          <div class="tabs-panel is-active" id="shopping">
+                          <div class="tabs-panel <?php if($checkout == false ){echo "is-active";} ?>" id="shopping">
                                       <div class="report_header">
                                          <div class="row">
 
@@ -444,7 +460,11 @@
                                                    <?php 
                                                       if( $cart_items[$c]['product_license'] == "Exclusive License" ) {
                                                           echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration'] ;
-                                                      } else {
+                                                      } else if ($cart_items[$c]['product_license'] == "Right Managed" && $cart_items[$c]['exclusive_duration'] !== NULL ) {
+                                                           echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration']." with ".$cart_items[$c]['exclusive_duration']." Exclusive license";
+                                                      } else if ($cart_items[$c]['product_license'] == "Right Managed" ) {
+                                                           echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration'];
+                                                      }  else {
                                                           echo $cart_items[$c]['product_license'];
                                                       }
                                                     ?>  
@@ -467,12 +487,15 @@
                                              <div class="row">
                                                <div class="large-5 columns pull-left">
                                                   <div class="large-12 columns">
+                                                    <form name="qoute_form" id="qoute_form" <?php echo form_open('member/send_quote'); ?>    
                                                         <div class="row collapse">
                                                           <div class="small-7 columns">
-                                                            <input type="text" placeholder="Email Address ">
+                                                            <input type="email" name="qoute_email" placeholder="Email Address" required>
+                                                            <input type="hidden" name="qoute_id" value="<?php echo $cart_items[0]['user_id']; ?>">
+                                                            <input type="hidden" name="qoute_cart" value="<?php echo base64_encode(json_encode($user_cart)); ?>">
                                                           </div>
                                                           <div class="small-5 columns">
-                                                            <a href="#" class="button postfix">Get A Quote </a>
+                                                            <button type='submit' class="button postfix">Get A Quote </button>
                                                               <span class="question_wrap">
                                                                   <span class="question_this">
                                                                      <img src="<?php echo base_url('/assets/member/icons/question.png')?>">
@@ -486,6 +509,7 @@
                                                               </span>
                                                           </div>
                                                         </div>
+                                                      </form>
                                                       </div>
                                                </div>
                                                <div class="pull-right">
@@ -497,106 +521,38 @@
                                               </div>
                                            </div>
 
-                                           <button class="button btn_checkout "> Checkout </button>
-
+                                           <form method="post" enctype ='multipart/form-data' <?php echo form_open('member/pay_pesapal'); ?>
+                                           <?php $cart = base64_encode(json_encode($user_cart)); ?>
+                                           <input type="hidden" name="user_cart" hidden="<?php echo $cart ?>">
+                                            <button class="button btn_checkout" type="submit">
+                                              Checkout 
+                                            </button>
+                                            </form>
                                            <div style="clear: both"></div>
 
                                   </div>
                                 <div style="clear: both"></div>
                           </div>
-                          <div class="tabs-panel" id="checkout">
+                          <div class="tabs-panel <?php if($checkout == true ){echo "is-active";} ?>" id="checkout">
                                   <div class="tab_header">
                                       <div class="tab_title">
-                                        Choose Payment Option
                                       </div>
                                   </div>
                                   <div class="tab_content">
-                                    <div class ="payment_options">
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/pesapal.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/visa.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/mastercard.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/mpesa.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/airtel.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/pesapap.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/equity.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/kcb.png')?>" class="pay_img">
-                                        </div>
-                                        <div class="pay_option">
-                                          <input type="radio" name="">
-                                          <img src="<?php echo base_url('/assets/member/img/co_operative.png')?>" class="pay_img">
-                                        </div>
-                                    </div>
-                                    <div class="large-8 columns">
-                                        <div class="pay_section">
-                                            <div class="pay_title">
-                                                Send Mpesa Ksh. 19406.51 to Pay Bill Business number 220220. Submit the Confirmation Code below :
-                                            </div>
-                                            <ol>
-                                                <li>Go to M-PESA on your phone </li>
-                                                <li>Select Pay Bill option </li>
-                                                <li>Enter Business no. 220220 </li>
-                                                <li>Leave the Account no. blank </li>
-                                                <li>Enter the amount Ksh 19406.51 </li>
-                                                <li>Enter your M-PESA PIN and Send </li>
-                                                <li>You will receive a confirmation SMS from M-PESA with a Confirmation Code </li>
-                                                <li>After you recieve the confirmation </li>
-                                                <li>Click on Complete </li>
-                                            </ol>
-                                        </div>
-                                        <div class="pay_title">
-                                            Enter Payment Details
-                                        </div>
-                                        <hr/>
-                                        <form>
-                                          <div class="form_input">
-                                                <label>
-                                                M-Pesa Mobile Number:
-                                                </label>
-                                                <input type="text" name="" placeholder="Phone Number" class="input_half_right">
-                                          </div>
-                                          <div class="form_input">
-                                              <label>
-                                               M-Pesa Confirmation Code:
-                                              </label>
-                                              <input type="text" name="" placeholder="Confirmation Code" class="input_half_right">
-                                          </div>
-
-                                        </form>
-                                    </div>
-                                    <div class="large-4 columns">
-                                        <div class="pay_secure">
-                                           <img src="<?php echo base_url('/assets/member/img/pesapal.png')?>" class="img_pay">
-                                        
-                                           100% secure payments processed by <a href="">PesaPal </a> and 
-                                           secured by <a href="">Verisign SSL. </a>.In order to protect your
-                                           card from unauthorised use, PesaPal may request further proof of card ownership.
-                                         
-                                           <div style="clear: both"></div>
-                                        </div>   
-                                  </div>
+                                  <?php if($payment_success == true ) { ?>
+                                     <div class = "message alert-box success">
+                                          Payment is successfull click the button below to download your package
+                                     </div>
+                                     <div class="row" style="text-align:center">
+                                          <a type="button" target="_blank" class="button btn_download" href="<?php echo base_url('index.php/member/download_package/'.$reference); ?>"                                        >
+                                              Download Package
+                                          </a>
+                                     </div>
+                                  <?php }  else { ?>
+                                    <iframe src="<?php echo $iframe_src; ?>" width="100%" height="700px"  scrolling="no" frameBorder="0">
+                                          <p>Browser unable to load iFrame</p>
+                                    </iframe>
+                                  <?php } ?>
                                   <div style="clear: both"></div>
                           </div>
 
@@ -632,7 +588,7 @@
                           <div class="large-1 column">
                               ID
                           </div>
-                          <div class="large-5 column">
+                          <div class="large-3 column">
                               Title
                           </div>
                           <div class="large-2 column">
@@ -641,101 +597,47 @@
                           <div class="large-2 column">
                               Date Purchased
                           </div>
+                          <div class="large-2 column">
+                              Download Package
+                          </div>
                           <div class="large-1 column">
                               Price
                           </div>
                           </div>
                        </div> 
                        <div class="report_content">
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column ">
-                                    <img src="<?php echo base_url('/assets/member/img/search_image.png')?>">
-                                </div>
-                                <div class="large-1 column ">
-                                    0012354
-                                </div>
-                                <div class="large-5 column ">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column ">
-                                    Royalty Free
-                                </div>
-                                <div class="large-2 column ">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column ">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column ">
-                                    <img src="<?php echo base_url('/assets/member/img/search_image.png')?>">
-                                </div>
-                                <div class="large-1 column ">
-                                    0012354
-                                </div>
-                                <div class="large-5 column ">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column ">
-                                    Right Managed
-                                </div>
-                                <div class="large-2 column ">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column ">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column ">
-                                    <img src="<?php echo base_url('/assets/member/img/search_image.png')?>">
-                                </div>
-                                <div class="large-1 column ">
-                                    0012354
-                                </div>
-                                <div class="large-5 column ">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column ">
-                                    R-F Exclusive for 6 months
-                                </div>
-                                <div class="large-2 column ">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column ">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
-                            <div class="report_item">
-                              <div class="row">
-                                <div class="large-1 column ">
-                                    <img src="<?php echo base_url('/assets/member/img/search_image.png')?>">
-                                </div>
-                                <div class="large-1 column ">
-                                    0012354
-                                </div>
-                                <div class="large-5 column ">
-                                    Equatorial Forest
-                                </div>
-                                <div class="large-2 column ">
-                                    Royalty Free
-                                </div>
-                                <div class="large-2 column ">
-                                     28th Dec, 2015
-                                </div>
-                                <div class="large-1 column ">
-                                    $15
-                                </div>
-                               </div>
-                            </div>
+                          <?php for($i=0; $i < count($purchase_history); $i++ ) { ?> 
 
+
+                            <div class="report_item">
+                              <div class="row">
+                                <div class="large-1 column ">
+                                  <img src="<?php echo $purchase_history[$i]['file_thumbnail'] ;?>">
+                                </div>
+                                <div class="large-1 column ">
+                                    <?php echo $purchase_history[$i]['upload_id'] ;?>
+                                </div>
+                                <div class="large-3 column ">
+                                    <?php echo $purchase_history[$i]['file_name'] ;?>
+                                </div>
+                                <div class="large-2 column ">
+                                    <?php echo $purchase_history[$i]['file_license'] ;?>
+                                </div>
+                                <div class="large-2 column ">
+                                     <?php echo $purchase_history[$i]['date_purchased'] ;?>
+                                </div>
+                                <div class="large-2 column ">
+                                     <a  target="_blank" href="<?php echo base_url('index.php/member/download_package/'.$purchase_history[$i]['order_id']); ?>"                                        >
+                                              Download Package
+                                          </a>
+                                </div>
+                                <div class="large-1 column ">
+                                    $<?php echo $purchase_history[$i]['product_cost'] ;?>
+                                </div>
+                               </div>
+                            </div>
+                          
+                          <?php } ?>  
                          
                        </div>           
                   </div>
