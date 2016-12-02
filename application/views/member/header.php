@@ -44,9 +44,9 @@
                             <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
                             <?php echo $user_session['user_meta']['0']['email'];?>  </a>
                             <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Account</a></li>
-                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Shopping Basket </a></li>
-                              <li><a href="<?php echo base_url('index.php/member#basket') ?>">Purchase History</a></li>
+                              <li><a href="#account" data-id="account" class="tab_link">Account</a></li>
+                              <li><a href="#basket" data-id="basket" class="tab_link">Shopping Basket </a></li>
+                              <li><a href="#history" data-id="history" class="tab_link">Purchase History</a></li>
                             </ul>
               </li>
               <li class="menu-text menu-divider"><a href="<?php echo base_url('/index.php/registration/logout')?>"> Sign Out </a></li>

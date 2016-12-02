@@ -112,10 +112,12 @@ class registration extends CI_Controller {
 			       		$this->session->set_userdata($newdata);
 			       		$user_session = $this->session->all_userdata();
 			       		
-			       		if ($user_session['add_to_cart'] === TRUE ){
-			       			
-			       			header('Location:'.base_url('index.php/main/complete_add_to_cart'));
-
+			       		if(isset($user_session['add_to_cart'])) {
+							if( $user_session['add_to_cart'] === TRUE ){
+					       		header('Location:'.base_url('index.php/main/complete_add_to_cart'));
+					       	} else {
+					       		$this->dashboard();	
+					       	}
 			       		} else {
 			       			$this->dashboard();
 			       		}

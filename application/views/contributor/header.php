@@ -48,9 +48,9 @@
                    <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
                    <?php echo $user_session['user_meta']['0']['username'];?>  </a>
                    <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-                     <li><a href="#">Account</a></li>
-                     <li><a href="#">Uploads  </a></li>
-                     <li><a href="#">Sale History</a></li>
+                     <li><a href="#account" data-id="account" class="tab_link">Account</a></li>
+                     <li><a href="#uploads" data-id="uploads" class="tab_link">Uploads  </a></li>
+                     <li><a href="#sales" data-id="sales" class="tab_link">Sale History</a></li>
                    </ul>
                </li>
                <li class="menu-text menu-divider"><a href="<?php echo base_url('/index.php/registration/logout')?>"> Sign Out </a></li>

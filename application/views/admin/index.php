@@ -3,15 +3,19 @@
 
        <div class="row">
             <ul class="tabs admin_tabs" data-tabs id="admin-tabs">
-                  <li class="tabs-title is-active" id="account_link" ><a href="#account" aria-selected="true"> Account </a></li>
-                  <li class="tabs-title"><a href="#pricing"> Pricing </a></li>
-                  <li class="tabs-title"><a href="#members"> Members (<?php  echo sizeof($members)?>)</a></li>
+                  <li id="account_link" class="tabs-title <?php if(!isset($act_history) && $act_history !== true){
+                  echo 'is-active';} ?>" id="account_link" ><a href="#account" aria-selected="true"> Account </a></li>
+                  <li id="pricing_link" class="tabs-title"><a href="#pricing"> Pricing </a></li>
+                  <li id="members_link" class="tabs-title"><a href="#members"> Members (<?php  echo sizeof($members)?>)</a></li>
                   <li class="tabs-title" id="contributor_link" ><a href="#contributors"> Contributors (<?php  echo (sizeof($newcontributors)+sizeof($exscontributors))?>)</a></li>
-                  <li class="tabs-title"><a href="#sales"> Sales History </a></li>
+                  <li id="sales_link" class="tabs-title <?php if(isset($act_history) && $act_history == true){
+                                 echo 'is-active';} ?>" ><a href="#sales"> Sales History </a></li>
                   
             </ul>
             <div class="tabs-content" data-tabs-content="admin-tabs">
-              <div class="tabs-panel is-active admin_panel" id="account">
+              <div class="tabs-panel <?php if(!isset($act_history) && $act_history !== true){
+                  echo 'is-active';
+              } ?> admin_panel" id="account">
 
                     <ul class="tabs inner_admin_tabs" data-tabs id="account-tabs">
                           <li class="tabs-title is-active"><a href="#edit_account">Edit Account </a></li>
@@ -2235,13 +2239,22 @@
                                                          Orientation: <?php echo $all_contributor_images[$i]['file_orentiation'] ?> </br>
                                                          People: <?php echo $all_contributor_images[$i]['file_people'] ?> </br>
                                                          Model Notification: <?php 
-                                                                    for($m = 0 ; $m < count($all_contributor_images[$i]['models']); $m++){
-                                                                          $email = $all_contributor_images[$i]['models'][$m]['model_email'];
-                                                                          if(strlen($email)> 0){
-                                                                              echo $email.'<br/>';
+                                                                for($m = 0 ; $m < count($all_contributor_images[$i]['models']); $m++){
+                                                                      $email = $all_contributor_images[$i]['models'][$m]['model_email'];
+                                                                      if(strlen($email)> 0){
+                                                                          echo $email.'<br/>';
+                                                                      }
+                                                                }              
+                                                                ; ?> </br>
+                                                            Release: <?php 
+                                                                    for($m = 0 ; $m < count($all_contributor_images[$i]['releases']); $m++){
+                                                                          $release = $all_contributor_images[$i]['releases'][$m]['release_name'];
+                                                                          $release_url = $all_contributor_images[$i]['releases'][$m]['release_url'];
+                                                                          if(strlen($release)> 0){
+                                                                              echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
                                                                           }
                                                                     }              
-                                                                    ; ?> </br>
+                                                                    ; ?></br>
                                                         
                                                       </span>
                                                   </span>
@@ -2262,65 +2275,72 @@
                     <?php } ?>
                     <div class="tabs-panel" id="resources">
                         <div class="tab_header"> 
+                            <div class="message"></div>
                            <hr/>
                            <div class="tab_title">
                               General release forms for contributors.
                            </div> 
                            <div class="tabs_content">
                              <div class="row resource_item">
-                                <div class="large-2 columns">
-                                    Model Release Form:
-                                </div>
-                                <div class="large-5 columns pull-left">
-                                   <form class="row collapse">
-                                       <div class="small-8 columns pull-left">
-                                          <input type="text" name="search" class="" placeholder="Model Release Form.pdf">
-                                       </div>
-                                       <div class="small-4 columns pull-left">
-                                          <a class="button btn_search" href="#">
+                               <form id="model_release" method="post" enctype ='multipart/form-data' onsubmit="return submit_model_release_forms();">
+                                <div class="row colllapse">
+                                    <div class="large-2 columns">
+                                        Model Release Form:
+                                    </div>
+                                    
+                                     <div class="large-8 columns pull-left">   
+                                            <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
+                                     </div>
+                                     <div class="large-2 columns pull-right">
+                                         <button class="button btn_search" type="submit">
                                                UPLOAD FORM
-                                          </a>
-                                       </div>
-                                   </form>
+                                          </button>
+                                     </div>
                                 </div>
+                                <hr/>
+                                </form>
                              </div>
                              <div class="row resource_item">
-                                <div class="large-2 columns">
-                                    Property Release Form:
-                                </div>
-                                <div class="large-5 columns pull-left">
-                                   <form class="row collapse">
-                                       <div class="small-8 columns pull-left">
-                                          <input type="text" name="search" class="" placeholder="Property Release Form.pdf">
-                                       </div>
-                                       <div class="small-4 columns pull-left">
-                                          <a class="button btn_search" href="#">
-                                               UPLOAD FORM
-                                          </a>
-                                       </div>
-                                   </form>
-                                </div>
+                                <form id="property_release" method="post" enctype ='multipart/form-data' onsubmit="return submit_property_release_forms();">
+                                 <div class="row colllapse">
+                                     <div class="large-2 columns">
+                                         Property Release Form:
+                                     </div>
+                                     
+                                      <div class="large-8 columns pull-left">   
+                                             <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
+                                      </div>
+                                      <div class="large-2 columns pull-right">
+                                          <button class="button btn_search" type="submit">
+                                                UPLOAD FORM
+                                           </button>
+                                      </div>
+                                 </div>
+                                 <hr/>
+                                 </form>
                              </div>
                              <hr/>
                              <div class="tab_title">
                                 Other resources necessary for contributors
                              </div>
                              <div class="row resource_item">
-                                <div class="large-2 columns">
-                                    Resource File:
+                                <form id="model_release" method="post" enctype ='multipart/form-data' onsubmit="return submit_other_release_forms();">
+                                <div class="row colllapse">
+                                    <div class="large-2 columns">
+                                        Other resources Form:
+                                    </div>
+                                    
+                                     <div class="large-8 columns pull-left">   
+                                            <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
+                                     </div>
+                                     <div class="large-2 columns pull-right">
+                                         <button class="button btn_search" type="submit">
+                                               UPLOAD FORM
+                                          </button>
+                                     </div>
                                 </div>
-                                <div class="large-5 columns pull-left">
-                                   <form class="row collapse">
-                                       <div class="small-8 columns pull-left">
-                                          <input type="text" name="search" class="" placeholder="Resource File.pdf">
-                                       </div>
-                                       <div class="small-4 columns pull-left">
-                                          <a class="button btn_search" href="#">
-                                               UPLOAD
-                                          </a>
-                                       </div>
-                                   </form>
-                                </div>
+                                <hr/>
+                                </form>
                              </div>
                             </div>                
                         </div>
@@ -2328,7 +2348,9 @@
                     </div>
                 </div>
             </div>
-            <div class="tabs-panel admin_panel" id="sales">
+            <div class="tabs-panel <?php if(isset($act_history) && $act_history == true){
+                  echo 'is-active';
+              } ?> admin_panel " id="sales">
                   <div class="tab_header">  
                       <div class="row collapse">
                           <div class="large-5 columns medium-5 columns pull-left">
@@ -2337,12 +2359,14 @@
                                     <option value="sales">Sales Reports </option>
                                     <option value="statement">Sales Statement</option>
                                     <option value="license">License Type</option>
+                                    <!--
                                     <option value="files">My Files</option>
+                                    -->
                                 </select>
                                   
                                 <span class="question_wrap">
                                     <span class="question_this">
-                                       <img src="assets/icons/question.png">
+                                       <img src="<?php echo base_url('assets/admin/icons/question.png');?>">
                                     </span>
                                     <span class="question_text">
                                          <a class="question_close">
@@ -2373,76 +2397,96 @@
                                </span>
                           </div>
                       </div>
-                          <div class="row report_filters">
-                            <div class="large-12 columns">
-                                  <div class="sales_filter">
-                                      <div class="row">
-                                      <form class="reports_search">
-                                        <select class="inside_search_slc">
-                                            <option value=""> Sales </option>
-                                            <option value=""> Per Image ID </option>
-                                            <option value="">Per Date </option>
-
-                                        </select>
-                                          <button type="submit" class="button btn_search">
-                                            Display
-                                        </button>
-                                      </form>
-                                      </div>
+                          <div class="row collapse report_filters">
+                        <div class="large-6 columns">
+                            <div class="sales_filter">
+                                <div class="row">
+                                <form class="reports_search collapse" method="post" <?php echo form_open('admin/sales_history_filter'); ?>
+                                  <div class="large-5 columns">
+                                  <select class="sales_reports_select" name="sales_reports_select">
+                                      <option value=""> Sales </option>
+                                      <option value="id_filter"> Per Image ID </option>
+                                      <option value="date_filter">Per Date </option>
+                                  </select>
                                   </div>
-                                  <div class="statement_filter">
-                                      <div class="row">
-                                      
-                                      <form class="reports_search">
-                                        <select class="inside_search_slc">
-                                            <option value=""> Sales Statement </option>
-                                              
-                                        </select>
-                                          <button type="submit" class="button btn_search">
-                                            Display
-                                        </button>
-                                      </form>
-                                      </div>
+                                  <div class="large-4 columns">
+                                  <div class="image_id_filter">
+                                  <input type="text" name="image_id" placeholder="Type in Image ID" class="">
                                   </div>
-                                  <div class="license_filter">
-                                      <div class="row">
-                                      
-                                      <form class="reports_search">
-                                        <select class="inside_search_slc">
-                                            <option value=""> License Type </option>
-                                            <option value=""> Royalty Free </option>
-                                            <option value=""> Right Managed </option>
-                                            <option value=""> RF - Exclusive </option>
-                                            <option value=""> RM - Exclusive </option>
-                                              
-                                        </select>
-                                          <button type="submit" class="button btn_search">
-                                            Display
-                                        </button>
-                                      </form>
-                                      </div>
+                                  <div class="date_filter">
+                                  <label>From:</label>
+                                  <input type="date" name="from_date" placeholder="From" class="">
+                                  <label>To:</label>
+                                  <input type="date" name="to_date" placeholder="To" class="">
                                   </div>
-                                  <div class="files_filter"> 
-                                    <div class="row">
-                                      
-                                      <form class="reports_search">
-                                        <select class="inside_search_slc">
-                                            <option value="">My Files </option>
-                                            <option value=""> My Images </option>
-                                            <option value=""> My Videos</option>
-                                            <option value=""> My Illustrations </option>
-                                           
-                                              
-                                        </select>
-                                          <button type="submit" class="button btn_search">
-                                            Display
-                                        </button>
-                                      </form>
-                                    </div>
                                   </div>
+                                  <div class="large-3 columns">
+                                  <button type="submit" class="button btn_search">
+                                      Display
+                                  </button>
+                                  </div>
+                                </form>
+                                </div>
                             </div>
-                            <div style="clear: both"></div>
-                          </div>
+                            <div class="statement_filter">
+                                <div class="row">
+                                
+                                 <form class="reports_search collapse" method="post" <?php echo form_open('admin/sales_statement_filter'); ?>
+                                  <select name="statement_month" class="inside_search_slc">
+                                  <option>Sales Statement</option>
+                                  <?php
+                                    for ($i = -12; $i <= 24; ++$i) {
+                                      $time = strtotime(sprintf('+%d months', $i));
+                                      $value = date('Y-m', $time);
+                                      $label = date('F Y', $time);
+                                      printf('<option value="%s">%s</option>', $value, $label);
+                                    }
+                                    ?>
+                                  </select>
+                                    <button type="submit" class="button btn_search">
+                                      Display
+                                  </button>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="license_filter">
+                                <div class="row">
+                                
+                                <form class="reports_search collapse" method="post" <?php echo form_open('admin/license_type_filter'); ?>
+                                  <select class="inside_search_slc" name="license_type">
+                                      <option value=""> License Type </option>
+                                      <option value="Royalty Free"> Royalty Free </option>
+                                      <option value="Right Managed"> Right Managed </option>
+                                      <option value="Exclusive License"> RF - Exclusive </option>
+                                      <option value="RM Exclusive License"> RM - Exclusive </option>
+                                        
+                                  </select>
+                                    <button type="submit" class="button btn_search">
+                                      Display
+                                  </button>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="files_filter"> 
+                              <div class="row">
+                                
+                                <form class="reports_search">
+                                  <select class="inside_search_slc">
+                                      <option value="">My Files </option>
+                                      <option value=""> My Images </option>
+                                      <option value=""> My Videos</option>
+                                      <option value=""> My Illustrations </option>
+                                     
+                                        
+                                  </select>
+                                    <button type="submit" class="button btn_search">
+                                      Display
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
                       
                   <div class="tabs_content">
                        <div class="report_header">
@@ -2454,9 +2498,12 @@
                           <div class="large-1 column">
                               ID
                           </div>
-                          <div class="large-5 column">
+                          <div class="large-3 column">
                               Title
                           </div>
+                          <div class="large-2 column">
+                            License Type
+                        </div>
                           <div class="large-2 column">
                               No. of Sales
                           </div>
@@ -2469,6 +2516,13 @@
                           </div>
                        </div> 
                        <div class="report_content">
+                       <?php if(count($purchase_history)<1){
+                        ?>
+                          <div class="row">
+                              <p style="text-align:center">No Records Found!</p>
+                          </div>
+                        <?php
+                          } ?>
                         <?php 
                           $total = 0;
                           for($r=0; $r<count($purchase_history);$r++) { 
@@ -2482,8 +2536,21 @@
                               <div class="large-1 column report_col">
                                   <?php echo $purchase_history[$r]['upload_id']?>
                               </div>
-                              <div class="large-5 column report_col">
+                              <div class="large-3 column report_col">
                                   <?php echo $purchase_history[$r]['file_name']?>
+                              </div>
+                              <div class="large-2 column report_col">
+                                  <?php 
+                                     if( $purchase_history[$r]['product_license'] == "Exclusive License" ) {
+                                         echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'] ;
+                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" && $purchase_history[$r]['exclusive_duration'] !== NULL ) {
+                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration']." with ".$purchase_history[$r]['exclusive_duration']." Exclusive license";
+                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" ) {
+                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'];
+                                     }  else {
+                                         echo $purchase_history[$r]['product_license'];
+                                     }
+                                   ?>  
                               </div>
                               <div class="large-2 column report_col">
                                   (1)

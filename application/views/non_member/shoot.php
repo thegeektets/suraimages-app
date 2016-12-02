@@ -40,7 +40,7 @@
                         <select  name="orientation" class="accordion_select">
                            <option value="">Select Orientation</option>
                            <option value="landscape">Landscape </option>
-                           <option value="potrait">Potrait</option>
+                           <option value="Portrait">Portrait</option>
                         </select>
                       </li>
                     </ul>
@@ -131,15 +131,16 @@
         </div>
         <div class="large-4 columns medium-4 columns pull-right">
              <span class="search_pagination"> 
-               <select class="pagination_slc">
-                    <option value="">Files Per Page</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="150">150</option>
-                </select>
-               Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
-                  <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
-                  <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
+               <span class="search_pagination"> 
+               <select class="pagination_slc" name="files_per_page">
+                  <option value="">Files Per Page</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="150">150</option>
+              </select>
+             Page <input type="number" name="page_number" placeholder="1" value="1" class="page_number"> of <span class="total_pages">120</span> 
+                <a href="" class="prev_page"><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
+                <a href="" class="next_page"><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
              </span>
         </div>
     </div>
@@ -156,10 +157,13 @@
 
                ?>
     
-                <div class="mosaicflow__item search_results_img">
+                <div class="mosaicflow__item search_results_img page_item">
                   <a href="<?php echo base_url('index.php/main/details/'.$all_results[$i]['upload_id']); ?>" class="search_img">
                      <img src="<?php echo $all_results[$i]['file_thumbnail'] ?>" onerror="this.style.display='none'" >
                   </a>
+                 
+                   <?php if( $all_results[$i]['exclusive_to'] == 'NULL' || 
+                            $all_results[$i]['exclusive_to'] < date('Y-m-d')){
                   ?>
                                 <div class="search_img_details"> 
                                     <span class="search_img_title"> <?php echo $all_results[$i]['file_name'] ?></span>

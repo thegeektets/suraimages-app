@@ -230,8 +230,7 @@ class member extends CI_Controller {
 		$iframelink = 'https://demo.pesapal.com/api/PostPesapalDirectOrderV4';
 		 //$iframelink = 'https://www.pesapal.com/API/PostPesapalDirectOrderV4';
 
-		//get form details
-		$amount = $this->convertCurrency($user_cart[0]['order_cost'], 'USD', 'KES');
+		$amount = $user_cart[0]['order_cost'];
 		$amount = number_format($amount, 2);//format amount to 2 decimal places
 		$desc = 'Sura Images Order '.$user_cart[0]['order_id'].' Payment Request';
 		$type = 'MERCHANT'; //default value = MERCHANT
@@ -244,8 +243,10 @@ class member extends CI_Controller {
 
 		$callback_url = base_url().'/index.php/member/pesapal_res'; //redirect url, the page that will handle the response from pesapal.
 
-		$post_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><PesapalDirectOrderInfo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" Amount=\"".$amount."\" Description=\"".$desc."\" Type=\"".$type."\" Reference=\"".$reference."\" FirstName=\"".$first_name."\" LastName=\"".$last_name."\" Email=\"".$email."\" PhoneNumber=\"".$phonenumber."\" xmlns=\"http://www.pesapal.com\" />";
+		$post_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><PesapalDirectOrderInfo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" Amount=\"".$amount."\" Currency=\"".$currency."\" Description=\"".$desc."\" Type=\"".$type."\" Reference=\"".$reference."\" FirstName=\"".$first_name."\" LastName=\"".$last_name."\" Email=\"".$email."\" PhoneNumber=\"".$phonenumber."\" xmlns=\"http://www.pesapal.com\" />";
 		$post_xml = htmlentities($post_xml);
+
+
 
 		$consumer = new OAuthConsumer($consumer_key, $consumer_secret);
 
@@ -285,6 +286,7 @@ class member extends CI_Controller {
 
 
 	public function send_quote_email($email, $id, $user_cart ) {
+         $this->load->library('Pdf');
 
 		 $user_cart = json_decode(base64_decode($user_cart) , true);
 	  
@@ -305,22 +307,50 @@ class member extends CI_Controller {
 		 	</thead>
 		 	<tbody>
 		 ";
+		 $added_items = false;
+		 $total_cost = 0;
 		 for ($c = 0 ; $c < count($user_cart) ; $c++ ) {
-			 $cart_items = $cart_items . "
-					          <tr>
-					            <td class='image_thumb'>
-					              <img src='".$user_cart[$c]['file_thumbnail']."' alt='' height='100px'>
-					            </td>
-					            <td class='image_desc'>
-					              ".$user_cart[$c]['file_name']."
-					            </td>
-					            <td class='image_cost'>
-					              <strong> Amount : </strong>
-					              $ ".$user_cart[$c]['product_cost']."
-					            </td>
-					          </tr>
-					          " ;
+			 $check = $this->input->post("check_".$user_cart[$c]['product_id']);
+			 if($check == 'on'){
+			 	 $total_cost = $total_cost + $user_cart[$c]['product_cost'];
+			 	 $cart_items = $cart_items . "
+			 			          <tr>
+			 			            <td class='image_thumb'>
+			 			              <img src='".$user_cart[$c]['file_thumbnail']."' alt='' height='100px'>
+			 			            </td>
+			 			            <td class='image_desc'>
+			 			              ".$user_cart[$c]['file_name']."
+			 			            </td>
+			 			            <td class='image_cost'>
+			 			              <strong> Amount : </strong>
+			 			              $ ".$user_cart[$c]['product_cost']."
+			 			            </td>
+			 			          </tr>
+			 			          " ;	
+				$added_items = true;
+			 }
+			 
 		 } 
+		 if($added_items == false){
+		 	 for ($c = 0 ; $c < count($user_cart) ; $c++ ) {
+		 	 	 $total_cost = $total_cost + $user_cart[$c]['product_cost'];
+			 	 $cart_items = $cart_items . "
+			 			          <tr>
+			 			            <td class='image_thumb'>
+			 			              <img src='".$user_cart[$c]['file_thumbnail']."' alt='' height='100px'>
+			 			            </td>
+			 			            <td class='image_desc'>
+			 			              ".$user_cart[$c]['file_name']."
+			 			            </td>
+			 			            <td class='image_cost'>
+			 			              <strong> Amount : </strong>
+			 			              $ ".$user_cart[$c]['product_cost']."
+			 			            </td>
+			 			          </tr>
+			 			          " ;	
+			 
+		 	 } 
+		 }
 		  $cart_footer = "
 		  	</tbody>
 		  	</table>
@@ -435,13 +465,10 @@ class member extends CI_Controller {
 
 				<container class='body-drip'>
 
-				  <spacer size='16'></spacer>
-
-				  <spacer size='16'></spacer>
-
+				  
 				  <row>
 				    <div class='quote_head'>
-				      <h3 class='text-center'> Quotation for license(s) </h3>
+				      <h3 class='text-center' style='text-align:center'> Quotation for license(s) </h3>
 				    </div>
 				  </row>
 
@@ -450,11 +477,20 @@ class member extends CI_Controller {
 				    <columns>
 				      <p class='text-center'> 
 				          <div class='float-left'>
+				            <p>
 				            <strong>Attention:</strong> ".$user_cart[0]['firstname']." ".$user_cart[0]['middlename']." </br>
+				            </p>
+				            <p>
 				            <strong>Phone No:</strong> ".$user_cart[0]['telnumber']." </br>
+				            </p>
+				            <p>
 				            <strong>Email:</strong> ".$user_cart[0]['email']." </br>
+				            </p>
+				            <p>
 				            <strong>Currency:</strong> USD </br>
+				            </p>
 				          </div>
+				            
 				          <div class='float-right'>
 				           <strong>Date: </strong> ".date('d/m/Y')."
 				          </div>
@@ -464,7 +500,7 @@ class member extends CI_Controller {
 				          ".$cart_items."
 				          <row>
 				            <div class='float-right'>
-				                <strong>Total Amount : </strong>$".$user_cart[0]['order_cost']."
+				                <strong>Total Amount : </strong>$".$total_cost."
 				            </div>
 				          </row>
 				          <div style='clear: both'></div>
@@ -475,14 +511,25 @@ class member extends CI_Controller {
 				              <strong>Disclaimer: </strong>This is a system generated quote that doesn't require a stamp.
 				          </row>
 				</container>";
+	
+		  $newFile  = 'qoute'.$user_cart[0]['member_id'].'.pdf';
+		   $obj = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+		   $obj->SetSubject('SuraImages license Qoute'); // set document information
+		   $obj->AddPage(); // add a page
+		   $obj->SetFont('helvetica', '', 6);
+		   $obj->writeHTML("".$html, true, false, false, false, '');
+		   $obj->Output($newFile,'F');
 
+		  
 	     $this->initializemail();
 	     $this->load->helper('url');
 	     $this->load->library('email');
 	     $this->email->from('support@suraimages.com', 'SuraImages Support');
 	     $this->email->to($email); 
 	     $this->email->subject('SuraImages license Qoute');
-	     $this->email->message(''.$html); 
+	     $this->email->message(''.$html);
+	     $this->email->attach($newFile);
+ 
 	     
 	     if($this->email->send()){
 	     	 $data['success'] = 'true';

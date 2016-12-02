@@ -1,7 +1,18 @@
 $(document).foundation()
 
 $(document).ready(function(){
-	
+	$('.tab_link').click(function(){
+		$('.member_tabs').children('.tabs-title').each(function(){
+			$(this).removeClass('is-active');
+		});
+		$('.member_panel').each(function(){
+			$(this).removeClass('is-active');
+		});
+		$('#'+$(this).attr('data-id')+"_link").addClass('is-active');
+		$('#'+$(this).attr('data-id')).addClass('is-active');
+		return false;
+	});
+
 	var state = "open";
 	var popup_state = "closed";
 	var close_btn = "false";

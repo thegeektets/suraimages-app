@@ -154,7 +154,7 @@
                                     $release = $all_contributor_images[$i]['releases'][$m]['release_name'];
                                     $release_url = $all_contributor_images[$i]['releases'][$m]['release_url'];
                                     if(strlen($release)> 0){
-                                        echo '<a href=" class="red'.$release_url.'" target="_blank">'.$release.'</a><br/>';
+                                        echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
                                     }
                               }              
                               ; ?>

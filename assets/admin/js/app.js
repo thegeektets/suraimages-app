@@ -1,6 +1,24 @@
 $(document).foundation()
 
 $(document).ready(function(){
+	$('.image_id_filter').hide();
+	$('.date_filter').hide();
+	
+	$('.tab_link').click(function(){
+		$('.admin_tabs').children('.tabs-title').each(function(){
+			$(this).removeClass('is-active');
+		});
+		$('.admin_panel').each(function(){
+			$(this).removeClass('is-active');
+		});
+		$('#'+$(this).attr('data-id')+"_link").addClass('is-active');
+		$('#'+$(this).attr('data-id')).addClass('is-active');
+		if($(this).attr('data-id') == 'contributors'){
+			$('#contributor_link').addClass('is-active');
+		}
+		return false;
+	});
+
 	if(sessionStorage.getItem('onReload') === 'activateContributor') {
     	sessionStorage.setItem('onReload', '');
     	$("#account").removeClass('is-active');

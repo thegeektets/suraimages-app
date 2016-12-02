@@ -162,10 +162,13 @@
                             <div>
                                 <ul class="tabs" data-tabs id="example-tabs">
                                    <span class="">
-                                       <li class="tabs-title standard-title is-active">
+                                       <li class="tabs-title is-active">
                                          <a href="<?php echo "#panel1".trim($all_results[0]['upload_id'])?>" aria-selected="true">
                                             Standard License
                                          </a>
+                                       </li>
+                                       <li class="tabs-title exclusive_license disabled"><a href="
+                                       <?php echo "#panel2".trim($all_results[$i]['upload_id'])?>">Exclusive License</a>
                                        </li>
                                    </span>
                                  </ul>
@@ -228,7 +231,7 @@
                                          <div class="large-8 columns">
                                          
                                          <div class="details-adv-print-select">
-                                           <select class="standard-select standard-select-multiple" id="details-adv-print-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-adv-print-select" multiple data-prompt="Select the Details">
                                                <option id ="0" value="<?php echo $managed_pricing['0']['details_adv_print_newsp'] ?>"> Newspaper </option>
                                                <option id ="1" value="<?php echo $managed_pricing['0']['details_adv_print_mag'] ?>"> Magazine </option>
                                                <option id ="2" value="<?php echo $managed_pricing['0']['details_adv_print_outd'] ?>"> Outdoor </option>
@@ -237,30 +240,30 @@
                                            </select>
                                          </div> 
                                          <div class="details-edt-print-select">
-                                           <select class="standard-select standard-select-multiple" id="details-edt-print-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-edt-print-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_edt_print_newsp'] ?>"> Newspaper </option>
                                                <option value="<?php echo $managed_pricing['0']['details_edt_print_mag'] ?>"> Magazine </option>
                                                <option value="<?php echo $managed_pricing['0']['details_edt_print_book'] ?>"> Book </option>
                                            </select>
                                          </div>  
                                          <div class="details-int-print-select">
-                                           <select class="standard-select standard-select-multiple" id="details-int-print-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-int-print-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_edt_print_collateral'] ?>"> Collateral </option>
                                            </select>
                                          </div>
                                          <div class="details-adv-tv-select">
-                                           <select class="standard-select standard-select-multiple" id="details-adv-tv-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-adv-tv-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_adv_tv_commercial'] ?>"> TV </option>
                                            </select>
                                          </div>
                                          <div class="details-edt-tv-select">
-                                           <select class="standard-select standard-select-multiple" id="details-edt-tv-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-edt-tv-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_edt_tv_program'] ?>"> TV Program </option>
                                                <option value="<?php echo $managed_pricing['0']['details_edt_tv_film'] ?>"> Film </option>
                                            </select>
                                          </div>
                                          <div class="details-adv-digital-select">
-                                           <select class="standard-select standard-select-multiple" id="details-adv-digital-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-adv-digital-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_adv_digital_website'] ?>"> Website </option>
                                                <option value="<?php echo $managed_pricing['0']['details_adv_digital_mobile'] ?>"> Mobile App </option>
                                                <option value="<?php echo $managed_pricing['0']['details_adv_digital_social'] ?>"> Social Media </option>
@@ -268,7 +271,7 @@
                                            </select>
                                          </div>
                                          <div class="details-edt-digital-select">
-                                           <select class="standard-select standard-select-multiple" id="details-edt-digital-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-edt-digital-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_edt_digital_website'] ?>"> Website </option>
                                                <option value="<?php echo $managed_pricing['0']['details_edt_digital_mobile'] ?>"> Mobile App </option>
                                                <option value="<?php echo $managed_pricing['0']['details_edt_digital_social'] ?>"> Social Media </option>
@@ -276,7 +279,7 @@
                                            </select>
                                          </div>
                                          <div class="details-int-digital-select">
-                                           <select class="standard-select standard-select-multiple" id="details-int-digital-select" multiple data-prompt="Select the Details">
+                                           <select class="standard-select standard-select-details" id="details-int-digital-select" multiple data-prompt="Select the Details">
                                                <option value="<?php echo $managed_pricing['0']['details_int_digital_website'] ?>"> Website </option>
                                                <option value="<?php echo $managed_pricing['0']['details_int_digital_presentation'] ?>"> Presentation </option>
                                            </select>
@@ -327,22 +330,6 @@
                                            <input type="hidden" name="duration_txt">
                                            </div>
                                       </div>
-                                      <div class="row collapse">
-                                         <div class="large-4 columns">
-                                           Exlusive License :
-                                         </div>
-                                         <div class="large-8 columns exclusive-select"> 
-                                               <select class="standard-select" id="exclusive-select" data-prompt="Exclusive License">
-                                                   <option>Select Exclusive License</option>
-                                                   <option value="<?php echo $ex_pricing[0]['photo_1month']; ?>"> 1 Month  </option>
-                                                   <option value="<?php echo $ex_pricing[0]['photo_3month']; ?>"> 3 Months </option>
-                                                   <option value="<?php echo $ex_pricing[0]['photo_6month']; ?>"> 6 Months </option>
-                                                   <option value="<?php echo $ex_pricing[0]['photo_1year']; ?>"> 1 Year </option>
-                                                   <option value="<?php echo $ex_pricing[0]['photo_2year']; ?>"> 2 Years </option>
-                                               </select>
-                                          </div> 
-                                         <input type="hidden" name="exclusive_txt">
-                                      </div>
                                       
                                        <div class="row collapse">
                                          <div class="large-4 columns">
@@ -391,65 +378,34 @@
                                   </div>
                                  </form>
                                   <div class="tabs-panel" id="panel2">
-                                    <p>Exclusive license means that the licensee/ the buyer has exclusive rights to the content (Images, Videos) they
-                                      buy for a specified period of time. Meaning, the licensee will be the only person to use the content s for the
-                                      stipulated period of time and within that period the content s will be inactive for purchase from any other
-                                      licensee until the duration of the license e pires. See our Exclusivity & Control page for more information.</p>
+                                    <p>Exclusive license means that the licensee/ the buyer has exclusive rights to the content (Images, Videos) they buy for a specific period of time. Meaning, the licensee will be the only person to use the content(s) for the stipulated period of time and within that period the content(s) will be inactive for purchase from any other licensee until the duration of the license expires. See our Exclusivity & Control page for more information.</p>
 
-                                      <div class="row">
-                                        <div class="large-8 columns duration_col">
-                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_1month']; ?>"> 1 Month 
-                                        </div>
-                                        <div class="large-4 columns">
-                                            <span class="price">$<?php 
-                                               echo $ex_pricing[0]['photo_1month'];?>
-                                            </span>
-                                        </div>
-                                        <div class="large-8 columns duration_col">
-                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_3month']; ?>"> 3 Months </br> 
-                                        </div>
-                                        <div class="large-4 columns">
-                                            <span class="price">$<?php 
-                                               echo $ex_pricing[0]['photo_3month'];?>
-                                            </span>
-                                        </div>
-                                        <div class="large-8 columns duration_col">
-                                          <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_6month']; ?>"> 6 Months </br> 
-                                        </div>
-                                        <div class="large-4 columns">
-                                            <span class="price">$<?php 
-                                               echo $ex_pricing[0]['photo_6month'];?>
-                                            </span>
-                                        </div>
-                                        <div class="large-8 columns duration_col">
-                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_1year']; ?>"> 1 Year </br> 
-                                        </div>
-                                        <div class="large-4 columns">
-                                            <span class="price">$<?php 
-                                               echo $ex_pricing[0]['photo_1year'];?>
-                                            </span>
-                                        </div>
-                                        <div class="large-8 columns duration_col">
-                                           <input type="radio" name="duration" value="<?php echo $ex_pricing[0]['photo_2year']; ?>"> 2 Years </br> 
-                                        </div>
-                                        <div class="large-4 columns">
-                                            <span class="price">$<?php 
-                                               echo $ex_pricing[0]['photo_2year'];?>
-                                            </span>
-                                        </div>
-                                        
+                                      <div class="row collapse">
+                                         <div class="large-4 columns">
+                                           Exlusive License :
+                                         </div>
+                                         <div class="large-8 columns exclusive-select"> 
+                                               <select class="standard-select" id="exclusive-select" data-prompt="Exclusive License">
+                                                   <option>Select Exclusive License</option>
+                                                   <option value="<?php echo $ex_pricing[0]['photo_1month']; ?>"> 1 Month  </option>
+                                                   <option value="<?php echo $ex_pricing[0]['photo_3month']; ?>"> 3 Months </option>
+                                                   <option value="<?php echo $ex_pricing[0]['photo_6month']; ?>"> 6 Months </option>
+                                                   <option value="<?php echo $ex_pricing[0]['photo_1year']; ?>"> 1 Year </option>
+                                                   <option value="<?php echo $ex_pricing[0]['photo_2year']; ?>"> 2 Years </option>
+                                               </select>
+                                          </div> 
+                                         <input type="hidden" name="exclusive_txt">
                                       </div>
+                                      
 
                                       <div class="price_footer">
                                             License Fee : $
-                                            <span class="ex_file_price">
-                                             00
-                                            </span>
-                                            <input type="hidden" name="file_duration" value="">
-                                            <input type="hidden" name="file_license" value="Royalty Free">
+                                            <span class="file_price">
+                                            00
                                       </div>
                                       <div class="price_footer">
-                                            <button class="button success" type="submit"> Add to Basket</button>
+                                            <button class="button success add_to_basket" 
+                                            type="submit">Add to Basket</button>
                                       </div>
 
                                   </div>

@@ -9,10 +9,18 @@ class Main_model extends CI_Model {
         }
         public function optimize_all_uploads($search_term,
             $license_type,$image_type,$orientation,$people,$category,$contributor){
-            $query = $this->db->query("SELECT * FROM contributor_image_uploads,user_details WHERE user_details.user_id = 
-                contributor_image_uploads.user_id AND file_status = 1
-                AND file_name LIKE '%".$search_term."%' AND file_keywords LIKE '%".$search_term."%' AND file_type LIKE '%".$image_type."%' AND file_orentiation LIKE '%".$orientation."%'  AND file_license LIKE '%".$license_type."%' AND file_people LIKE '%".$people."%' AND file_category LIKE '%".$category."%' OR user_details.user_id  = '".$contributor."' GROUP BY upload_id");
 
+            if($contributor !== ''){
+                $search = "SELECT * FROM contributor_image_uploads,user_details WHERE user_details.user_id = 
+                contributor_image_uploads.user_id AND file_status = 1
+                AND file_name LIKE '%".$search_term."%' AND file_keywords LIKE '%".$search_term."%' AND file_type LIKE '%".$image_type."%' AND file_orentiation LIKE '%".$orientation."%'  AND file_license LIKE '%".$license_type."%' AND file_people LIKE '%".$people."%' AND file_category LIKE '%".$category."%' AND contributor_image_uploads.user_id  = '".$contributor."' GROUP BY upload_id";
+                
+            } else {
+                $search = "SELECT * FROM contributor_image_uploads,user_details WHERE user_details.user_id = 
+                contributor_image_uploads.user_id AND file_status = 1
+                AND file_name LIKE '%".$search_term."%' AND file_keywords LIKE '%".$search_term."%' AND file_type LIKE '%".$image_type."%' AND file_orentiation LIKE '%".$orientation."%' AND file_license LIKE '%".$license_type."%' AND file_people LIKE '%".$people."%' AND file_category LIKE '%".$category."%' GROUP BY upload_id";
+            }
+            $query = $this->db->query($search);
             $image = $query->result_array();
             return array_reverse($image);
         }
@@ -26,6 +34,11 @@ class Main_model extends CI_Model {
         public function get_all_uploads(){
             $query = $this->db->query("SELECT DISTINCT * FROM contributor_image_uploads,user_details WHERE user_details.user_id = 
                 contributor_image_uploads.user_id AND file_status = 1");
+            $image = $query->result_array();
+            return array_reverse($image);
+        }
+        public function get_all_resources(){
+            $query = $this->db->query("SELECT DISTINCT * FROM resources");
             $image = $query->result_array();
             return array_reverse($image);
         }

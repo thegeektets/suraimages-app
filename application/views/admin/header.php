@@ -40,11 +40,11 @@
               <li class="menu-text menu-divider"> 
                   <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false"> Admin </a>
                   <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-                    <li><a href="#">Account</a></li>
-                    <li><a href="#">Pricing </a></li>
-                    <li><a href="#">Member</a></li>
-                    <li><a href="#">Contributors</a></li>
-                    <li><a href="#">Sales History</a></li>
+                    <li><a href="#account" class="tab_link" data-id="account">Account</a></li>
+                    <li><a href="#pricing" class="tab_link" data-id="pricing">Pricing </a></li>
+                    <li><a href="#members" class="tab_link" data-id="members">Members</a></li>
+                    <li><a href="#contributors" class="tab_link" data-id="contributors">Contributors</a></li>
+                    <li><a href="#sales" class="tab_link" data-id="sales">Sales History</a></li>
 
                   </ul>
               </li>

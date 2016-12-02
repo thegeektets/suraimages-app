@@ -1,3 +1,13 @@
+  $('.sales_reports_select').change(function (){
+    $('.image_id_filter').hide();
+    $('.date_filter').hide();
+    if($(this).val() == 'id_filter') {
+       $('.image_id_filter').show();
+    } else if ($(this).val() == 'date_filter') {
+       $('.date_filter').show();
+    }
+    return false;
+  });
   $('select[type="hidden"]').each(function(){
     $(this).hide();
   });
@@ -165,7 +175,7 @@
               var model = newmodel;
           }
          
-          $(this).parents('#model_notification').find("input[name='file_releases[]']").val(model);
+          $(this).parents('#model_notification').find("input[name='file_models[]']").val(model);
           $(this).parents('#model_notification').find(".model").append(newmodel+'<br/>');
       }
 

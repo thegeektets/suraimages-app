@@ -259,4 +259,38 @@ class Admin_model extends CI_Model {
             $image = $query->result_array();
             return array_reverse($image);
         }
+        public function get_history_per_image($file_id) {
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND upload_id = ".$file_id." GROUP BY item_id");
+               
+                return $query->result_array();
+        }
+        public function get_history_per_date($from_date, $to_date) {
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
+                return $query->result_array();
+        }
+        public function get_history_per_month($month) {
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND date_purchased like '".$month."%' GROUP BY item_id");
+                return $query->result_array();
+        }
+        public function get_history_per_license($license) {
+
+                if($license == 'Royalty Free' || $license == 'Right Managed'){
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' AND product_duration = '' AND exclusive_duration = '' GROUP BY item_id");
+                   
+                } else {
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' AND product_duration != '' OR exclusive_duration != '' GROUP BY item_id");
+                }
+                
+                return $query->result_array();
+        }
+        public function upload_release($id,$name,$type) {
+            $this->load->helper('url');
+            $this->load->library('session');
+            $upload_data = $this->upload->data(); 
+            $ppic =   $upload_data['file_name'];
+            $url = base_url("assets/uploads/".$ppic); 
+            $query = 
+            $this->db->query(" INSERT INTO resources(user_id,resource_name,resource_url,resource_type) VALUES(".$this->db->escape($id).",".$this->db->escape($name).","
+                .$this->db->escape($url).",".$this->db->escape($type).")");
+        }
 }

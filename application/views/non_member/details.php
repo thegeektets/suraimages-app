@@ -354,7 +354,7 @@
                        }
                        ?>
                     <hr style="border-top: solid 1px;" />
-                    
+                  <!--  
                     <li class="accordion-item search_details_accordion_item" data-accordion-item>
                       
                       <a href="#" class="accordion-title">
@@ -395,7 +395,7 @@
                              
                     </li>
                        <hr style="border-top: solid 1px;" />
-                  
+                  -->
                     <li class="accordion-item search_details_accordion_item" data-accordion-item>
                       <a href="#" class="accordion-title">
                         <i class="fa fa-clone" aria-hidden="true"></i>

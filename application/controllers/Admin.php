@@ -10,12 +10,16 @@ class admin extends CI_Controller {
        $this->load->model('contributor_model');
        $this->load->model('member_model');
    	}
-	public function index()
+	public function index($data = NULL)
 	{
 		$this->load->helper('url'); 
 		$this->load->library('session');
 		$this->load->helper(array('form', 'url'));
-		$data['success'] ='';	
+		if ($data == NULL ){
+			$data['success'] ='';	
+		} else {
+			$data = $data;
+		}	
 		$data['user_session']=$this->session->all_userdata();;
 
 		if (isset($data['user_session']['logged_in'])) {
@@ -24,8 +28,9 @@ class admin extends CI_Controller {
 				$id = $data['user_details'][0]['user_id'];
 
 				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
-				$data['purchase_history'] = $this->member_model->get_all_history();
-
+				if(!isset($data['purchase_history'])){
+					$data['purchase_history'] = $this->member_model->get_all_history();
+				}
 				for($f = 0; $f < count($data['all_contributor_images']); $f++){
 					
 					$file_id = $data['all_contributor_images'][$f]['upload_id'];
@@ -93,6 +98,187 @@ class admin extends CI_Controller {
    		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();;
 		return $this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+	}
+
+	public function sales_history_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$filter_type = $this->input->post("sales_reports_select");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($filter_type =="id_filter"){
+			$image_id = $this->input->post("image_id");	
+			if($image_id !== ''){
+				$data['purchase_history'] = $this->admin_model->get_history_per_image($image_id);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'image id is required to filter images';
+			}
+			
+		} else if ($filter_type == 'date_filter'){
+			$from_date = $this->input->post("from_date");	
+			$to_date = $this->input->post("to_date");	
+			if($from_date !== '' && $to_date !== '' ){
+				$data['purchase_history'] = $this->admin_model->get_history_per_date($from_date,$to_date);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'dates are required to search by date';
+			}
+
+			
+		}
+		$this->index($data);		
+	}
+	public function sales_statement_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$statement_month = $this->input->post("statement_month");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($statement_month !==""){
+			$data['purchase_history'] = $this->admin_model->get_history_per_month($statement_month);
+		} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'Month is required to display Sale Statement';
+		}
+		$this->index($data);		
+	}
+	public function license_type_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$license_type = $this->input->post("license_type");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($license_type !==""){
+			$data['purchase_history'] = $this->admin_model->get_history_per_license($license_type);
+		} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'license type is required for this filter to work';
+		}
+		$this->index($data);		
+	}
+	public function upload_model_release() {
+		 
+		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
+		 $this->load->helper(array('form', 'url'));
+		 $config['upload_path'] = './assets/uploads/';
+		 $config['allowed_types'] = 'pdf|jpg|png';
+		 $config['overwrite'] = FALSE; 
+
+		 $this->load->library('upload', $config);
+		 $this->upload->initialize($config);
+
+		 $files = $_FILES;
+		 $count = count($_FILES['releasefiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
+
+			 $releasefiles = 'releasefiles';
+		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
+		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
+		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
+		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
+		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($releasefiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->admin_model->upload_release($id, $_FILES['releasefiles']['name'],'model release');
+		           $success = 1;
+         	  }
+		    $i++;
+		}
+		echo $success;
+	}
+	public function upload_property_release() {
+		 
+		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
+		 $this->load->helper(array('form', 'url'));
+		 $config['upload_path'] = './assets/uploads/';
+		 $config['allowed_types'] = 'pdf|jpg|png';
+		 $config['overwrite'] = FALSE; 
+
+		 $this->load->library('upload', $config);
+		 $this->upload->initialize($config);
+
+		 $files = $_FILES;
+		 $count = count($_FILES['releasefiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
+
+			 $releasefiles = 'releasefiles';
+		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
+		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
+		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
+		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
+		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($releasefiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->admin_model->upload_release($id, $_FILES['releasefiles']['name'],'property release');
+		           $success = 1;
+         	  }
+		    $i++;
+		}
+		echo $success;
+	}
+	public function upload_other_release() {
+		 
+		 $this->load->library('session');
+		 $data['user_session']=$this->session->all_userdata();;
+		 $this->load->helper(array('form', 'url'));
+		 $config['upload_path'] = './assets/uploads/';
+		 $config['allowed_types'] = 'pdf|jpg|png';
+		 $config['overwrite'] = FALSE; 
+
+		 $this->load->library('upload', $config);
+		 $this->upload->initialize($config);
+
+		 $files = $_FILES;
+		 $count = count($_FILES['releasefiles']['name']);
+		 $i = 0;
+		 $_FILES = array();
+		 $success = 0;
+		 while ($i < $count) { 
+
+			 $releasefiles = 'releasefiles';
+		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
+		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
+		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
+		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
+		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+
+
+		    if (!$this->upload->do_upload($releasefiles)) {
+		           $error = array('error' => $this->upload->display_errors());
+		    	   echo $this->upload->display_errors();
+		 	  } else {
+		 	       $id = $data['user_session']['user_meta']['0']['id'];
+		           $this->admin_model->upload_release($id, $_FILES['releasefiles']['name'],'resource file');
+		           $success = 1;
+         	  }
+		    $i++;
+		}
+		echo $success;
 	}
 	public function update_account() {
 	    $this->load->library('session');

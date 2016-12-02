@@ -51,8 +51,11 @@
             </div>
         </div>          
         <div class="contributor_tab">
+
             <ul class="tabs contributor_tabs" data-tabs id="contributor-tabs">
-              <li class="tabs-title is-active" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
+              <li class="tabs-title <?php if(!isset($act_history) && $act_history !== true){
+                  echo 'is-active';
+              } ?>" id="account_link"><a href="#account" aria-selected="true"> Account </a></li>
               <li class="tabs-title
                 <?php 
                   if ( (strlen($user_details['0']['id_file']) == 0) || (strlen(trim($user_details['0']['firstname'])) == 0) ) { ;?>
@@ -60,6 +63,9 @@
                 <?php } ?> 
                 " id="uploads_link"><a href="#uploads">Uploads (<?php echo count($contributor_images)+count($contributor_videos); ?>)</a></li>
               <li class="tabs-title
+                <?php if(isset($act_history) && $act_history == true){
+                                 echo 'is-active';
+                             } ?>
                 <?php 
                   if ( (strlen($user_details['0']['id_file']) == 0) || (strlen(trim($user_details['0']['firstname'])) == 0 ) ) { ;?>
                    disabled
@@ -67,7 +73,9 @@
             </ul>
         </div>
         <div class="tabs-content" data-tabs-content="contributor-tabs">
-          <div class="tabs-panel is-active contributor_panel" id="account">
+          <div class="tabs-panel <?php if(!isset($act_history) && $act_history !== true){
+                  echo 'is-active';
+              } ?> contributor_panel" id="account">
               <ul class="tabs inner_contributor_tabs" data-tabs id="account-tabs">
                     <li class="tabs-title is-active"><a href="#identification" aria-selected="true"> Identification </a></li>
                     <li class="tabs-title 
@@ -760,17 +768,21 @@
                   </div>
               </div>
           </div>
-          <div class="tabs-panel contributor_panel" id="sales">
+          <div class="tabs-panel <?php if(isset($act_history) && $act_history == true){
+                  echo 'is-active';
+              } ?> contributor_panel" id="sales">
                 <div class="tab_header">
                     <div class="row collapse">
                         <div class="large-5 columns medium-5 columns pull-left">
                             <form class="reports_search">
                               <select class="inside_search_slc" id="report_slc">
-                                  <option value=""> Report </option>
+                                  <option value=""> Reports </option>
                                   <option value="sales">Sales</option>
                                   <option value="statement">Sales Statement</option>
                                   <option value="license">License Type</option>
+                                  <!--
                                   <option value="files">My Files</option>
+                                  -->
                               </select>
                                 
                             </form>
@@ -790,29 +802,50 @@
                         </div>
                     </div>
                     <div class="row collapse report_filters">
-                        <div class="large-12 columns">
+                        <div class="large-6 columns">
                             <div class="sales_filter">
                                 <div class="row">
-                                <form class="reports_search">
-                                  <select class="inside_search_slc">
+                                <form class="reports_search collapse" method="post" <?php echo form_open('contributor/sales_history_filter'); ?>
+                                  <div class="large-5 columns">
+                                  <select class="sales_reports_select" name="sales_reports_select">
                                       <option value=""> Sales </option>
-                                      <option value=""> Per Image ID </option>
-                                      <option value="">Per Date </option>
-
+                                      <option value="id_filter"> Per Image ID </option>
+                                      <option value="date_filter">Per Date </option>
                                   </select>
-                                    <button type="submit" class="button btn_search">
+                                  </div>
+                                  <div class="large-4 columns">
+                                  <div class="image_id_filter">
+                                  <input type="text" name="image_id" placeholder="Type in Image ID" class="">
+                                  </div>
+                                  <div class="date_filter">
+                                  <label>From:</label>
+                                  <input type="date" name="from_date" placeholder="From" class="">
+                                  <label>To:</label>
+                                  <input type="date" name="to_date" placeholder="To" class="">
+                                  </div>
+                                  </div>
+                                  <div class="large-3 columns">
+                                  <button type="submit" class="button btn_search">
                                       Display
                                   </button>
+                                  </div>
                                 </form>
                                 </div>
                             </div>
                             <div class="statement_filter">
                                 <div class="row">
                                 
-                                <form class="reports_search">
-                                  <select class="inside_search_slc">
-                                      <option value=""> Sales Statement </option>
-                                        
+                                 <form class="reports_search collapse" method="post" <?php echo form_open('contributor/sales_statement_filter'); ?>
+                                  <select name="statement_month" class="inside_search_slc">
+                                  <option>Sales Statement</option>
+                                  <?php
+                                    for ($i = -12; $i <= 24; ++$i) {
+                                      $time = strtotime(sprintf('+%d months', $i));
+                                      $value = date('Y-m', $time);
+                                      $label = date('F Y', $time);
+                                      printf('<option value="%s">%s</option>', $value, $label);
+                                    }
+                                    ?>
                                   </select>
                                     <button type="submit" class="button btn_search">
                                       Display
@@ -823,13 +856,13 @@
                             <div class="license_filter">
                                 <div class="row">
                                 
-                                <form class="reports_search">
-                                  <select class="inside_search_slc">
+                                <form class="reports_search collapse" method="post" <?php echo form_open('contributor/license_type_filter'); ?>
+                                  <select class="inside_search_slc" name="license_type">
                                       <option value=""> License Type </option>
-                                      <option value=""> Royalty Free </option>
-                                      <option value=""> Right Managed </option>
-                                      <option value=""> RF - Exclusive </option>
-                                      <option value=""> RM - Exclusive </option>
+                                      <option value="Royalty Free"> Royalty Free </option>
+                                      <option value="Right Managed"> Right Managed </option>
+                                      <option value="Exclusive License"> RF - Exclusive </option>
+                                      <option value="RM Exclusive License"> RM - Exclusive </option>
                                         
                                   </select>
                                     <button type="submit" class="button btn_search">
@@ -856,8 +889,28 @@
                                 </form>
                               </div>
                             </div>
-                      </div>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
+                  <div class="large-12 columns">
+                    <?php if(isset($success)){
+                        if($success ==  TRUE){
+                    ?>
+                        <div class="message alert-box success">
+                          <?php echo $message.'<a href="#"" class="close" id="close">&times;</a>';?>
+                        </div>
+                    <?php
+                        } elseif ($success == FALSE) {
+                    ?>
+                          <div class="message alert-box warning">
+                            <?php echo $message.'<a href="#"" class="close" id="close">&times;</a>';?>
+                          </div>
+                          
+                    <?php
+                        }
+                      }?>
+                  </div>
                 </div>
                 <div class="large-12 columns">
                      <div class="report_header">
@@ -869,8 +922,11 @@
                         <div class="large-1 column">
                             ID
                         </div>
-                        <div class="large-5 column">
+                        <div class="large-3 column">
                             Title
+                        </div>
+                        <div class="large-2 column">
+                            License Type
                         </div>
                         <div class="large-2 column">
                             No. of Sales
@@ -884,6 +940,13 @@
                         </div>
                      </div> 
                      <div class="report_content">
+                        <?php if(count($purchase_history)<1){
+                        ?>
+                          <div class="row">
+                              <p style="text-align:center">No Records Found!</p>
+                          </div>
+                        <?php
+                          } ?>
                         <?php 
                           $total = 0;
                           for($r=0; $r<count($purchase_history);$r++) { 
@@ -897,8 +960,21 @@
                               <div class="large-1 column report_col">
                                   <?php echo $purchase_history[$r]['upload_id']?>
                               </div>
-                              <div class="large-5 column report_col">
+                              <div class="large-3 column report_col">
                                   <?php echo $purchase_history[$r]['file_name']?>
+                              </div>
+                              <div class="large-2 column report_col">
+                                  <?php 
+                                     if( $purchase_history[$r]['product_license'] == "Exclusive License" ) {
+                                         echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'] ;
+                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" && $purchase_history[$r]['exclusive_duration'] !== NULL ) {
+                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration']." with ".$purchase_history[$r]['exclusive_duration']." Exclusive license";
+                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" ) {
+                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'];
+                                     }  else {
+                                         echo $purchase_history[$r]['product_license'];
+                                     }
+                                   ?>  
                               </div>
                               <div class="large-2 column report_col">
                                   (1)

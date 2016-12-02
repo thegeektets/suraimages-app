@@ -343,7 +343,7 @@
                         <input type="hidden" name="file_id[]" class="file_id" value="<?php echo $edit_contributor_images[$i]['upload_id']; ?>">
                         <input type="text" required="required" name="file_name[]" placeholder="Name" class="file_name" value="<?php echo $edit_contributor_images[$i]['file_name']; ?>">
                         <label> Key Words : <span class="required_asteric">*</span></label>
-                        <textarea  required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="Not less than 7 keywords" style="text-align:left"><?php if(strlen((trim($edit_contributor_images[$i]['file_keywords'])))>0){echo (trim($edit_contributor_images[$i]['file_keywords']));}?></textarea>
+                        <textarea rows="7" required="required"   name="file_keywords[]" class="form_group" type="text" placeholder="Not less than 7 keywords" style="text-align:left"><?php if(strlen((trim($edit_contributor_images[$i]['file_keywords'])))>0){echo (trim($edit_contributor_images[$i]['file_keywords']));}?></textarea>
                 </div>
                 <div class="large-3 column">
                       Set Price 

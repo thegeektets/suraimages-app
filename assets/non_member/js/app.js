@@ -4,18 +4,26 @@ $(document).foundation();
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Byte';
    var k = 1000;
-   var dm = decimals + 1 || 3;
+   var dm = 1;
    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
    var i = Math.floor(Math.log(bytes) / Math.log(k));
-   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+   var result = parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+   return result;
 }
 
 $(document).ready(function(){
+
 	
 	$(function() {
             $('.standard-select-multiple').change(function() {
             }).multipleSelect({
-                width: '100%'
+                width: '100%',
+                selectAll: true
+            });
+            $('.standard-select-details').change(function() {
+            }).multipleSelect({
+                width: '100%',
+                selectAll: false
             });
         });
 	var url = ""+window.location.href;
@@ -70,6 +78,7 @@ $(document).ready(function(){
 	   	$(this).parents('.search_results_img').find(".search_img_popup").css("display","block");
 	   	var left =  ((window.innerWidth - 
 	   				$(this).parents('.search_results_img').find(".search_img_popup").width())/2);
+	   	  //var left = 0;				
 		$(this).parents('.search_results_img').find(".search_img_popup").css("left",(left-50)+"px");
 
 	   	if( $(this).parents('.search_results_img').find(".search_img_popup").find(".pop-similar-images").length ){
@@ -94,7 +103,8 @@ $(document).ready(function(){
 	   	$(this).parent().find(".search_img_popup").css("display","block");
 	   	var left =  ((window.innerWidth - 
 	   				$(this).parent().find(".search_img_popup").width())/2);
-		$(this).parent().find(".search_img_popup").css("left",(left-50)+"px");
+	   	
+		$(this).parent().find(".search_img_popup").css("left",(left)+"px");
 
 	   	if( $(this).parent().find(".search_img_popup").find(".pop-similar-images").length ){
 	   		try {

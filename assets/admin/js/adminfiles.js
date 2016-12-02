@@ -1,3 +1,13 @@
+$('.sales_reports_select').change(function (){
+  $('.image_id_filter').hide();
+  $('.date_filter').hide();
+  if($(this).val() == 'id_filter') {
+     $('.image_id_filter').show();
+  } else if ($(this).val() == 'date_filter') {
+     $('.date_filter').show();
+  }
+  return false;
+});
 function set_session() {
 	console.log('setting session');
 	sessionStorage.setItem('onReload', 'activateContributor');

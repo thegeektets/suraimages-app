@@ -15,10 +15,10 @@
               <div class="large-4 columns pull-right no-padding">
                    <span class="search_pagination"> 
                  
-                     Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
-                        <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
-                        <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
-                   </span>
+                     Page <input type="number" name="page_number" placeholder="1" value="1" class="page_number"> of <span class="total_pages">120</span> 
+                    <a href="" class="prev_page"><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
+                    <a href="" class="next_page"><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
+                 </span>
               </div>
     </div>
     <div style="clear: both"></div>

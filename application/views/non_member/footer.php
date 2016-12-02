@@ -5,13 +5,14 @@
             <div class="footer-menu">
 
               <ul class="menu">
-                  <li class="menu-text menu-divider"> <a href="#"> Home </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> About Us </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Terms & Conditions </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Contact Us </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> Resources </a></li>
-                  <li class="menu-text menu-divider"><a href="#"> FAQs </a></li>
-                  <li class="menu-text"><a href="#"> Blog </a></li>
+                  <li class="menu-text menu-divider"> <a href="<?php echo base_url(); ?>"> Home </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/about'); ?>"> About Us </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/terms'); ?>"> Terms & Conditions </a></li>
+                  <li class="menu-text menu-divider"><a href="
+                  <?php echo base_url('index.php/main/contact'); ?>"> Contact Us </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/resources'); ?>"> Resources </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/faqs'); ?>"> FAQs </a></li>
+                  <li class="menu-text"><a href="<?php echo base_url('index.php/main/blog'); ?>"> Blog </a></li>
               </ul>
               
             </div>
@@ -42,6 +43,7 @@
     <script src="<?php echo base_url('/assets/non_member/js/vendor/slick.min.js')?>"></script>
     <script src="<?php echo base_url('/assets/contributor/multiselect/multiple-select.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/paginations.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/mainfile.js')?>"></script>
     <script type="text/javascript">
       $('.add_to_cart_form').submit( function () {

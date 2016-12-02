@@ -10,13 +10,16 @@ class contributor extends CI_Controller {
        $this->load->model('member_model');
        $this->load->model('admin_model');
    	}
-	public function index()
+	public function index($data = NULL)
 	{
 		$this->load->helper(array('form', 'url'));	
 		$this->load->library('session');
 		$data['user_session']=$this->session->all_userdata();
-		//var_dump($data['user_session']);
-		$data['success'] = '' ;
+		if ($data == NULL ){
+			$data['success'] ='';	
+		} else {
+			$data = $data;
+		}
 		
 	if (isset($data['user_session']['logged_in'])) {
 		
@@ -29,8 +32,10 @@ class contributor extends CI_Controller {
 			$data['contributor_images'] = $this->contributor_model->get_contributor_images($id);
 			$data['contributor_releases'] = $this->contributor_model->get_contributor_releases($id);
 			$data['contributor_videos'] = $this->contributor_model->get_contributor_videos($id);
-			$data['purchase_history'] = $this->member_model->get_contributor_history($id);
-
+			if(!isset($data['purchase_history'])){
+				$data['purchase_history'] = $this->member_model->get_contributor_history($id);
+			}
+			
 			for($f = 0; $f < count($data['contributor_videos']); $f++){
 				
 				$file_id = $data['contributor_videos'][$f]['upload_id'];
@@ -80,6 +85,69 @@ class contributor extends CI_Controller {
    		$this->load->view('registration/footer');
    	}
 
+	}
+	public function sales_history_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$filter_type = $this->input->post("sales_reports_select");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($filter_type =="id_filter"){
+			$image_id = $this->input->post("image_id");	
+			if($image_id !== ''){
+				$data['purchase_history'] = $this->contributor_model->get_history_per_image($id,$image_id);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'image id is required to filter images';
+			}
+			
+		} else if ($filter_type == 'date_filter'){
+			$from_date = $this->input->post("from_date");	
+			$to_date = $this->input->post("to_date");	
+			if($from_date !== '' && $to_date !== '' ){
+				$data['purchase_history'] = $this->contributor_model->get_history_per_date($id,$from_date,$to_date);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'dates are required to search by date';
+			}
+
+			
+		}
+		$this->index($data);		
+	}
+	public function sales_statement_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$statement_month = $this->input->post("statement_month");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($statement_month !==""){
+			$data['purchase_history'] = $this->contributor_model->get_history_per_month($id,$statement_month);
+		} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'Month is required to display Sale Statement';
+		}
+		$this->index($data);		
+	}
+	public function license_type_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$license_type = $this->input->post("license_type");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($license_type !==""){
+			$data['purchase_history'] = $this->contributor_model->get_history_per_license($id,$license_type);
+		} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'license type is required for this filter to work';
+		}
+		$this->index($data);		
 	}
 	public function update_account() {
 	    $this->load->helper('url'); 
@@ -273,15 +341,28 @@ class contributor extends CI_Controller {
 		     $_FILES['trialfiles']['error'] = $files['trialfiles']['error'][$i];
 		     $_FILES['trialfiles']['type'] = $files['trialfiles']['type'][$i];
 
-
 		    if (!$this->upload->do_upload($trialfiles)) {
 		           $error = array('error' => $this->upload->display_errors());
 		    	   echo $this->upload->display_errors();
 		 	  } else {
+
 		 	  	 	$ppic = $_FILES['trialfiles']['name'];
 		 	  	 	$url = "./assets/uploads/".$ppic; 
-	             
-	                $config2['image_library'] = 'gd2';
+		 	  	 	getimagesize($url, $info);
+		 	  	 	$file_keywords = '';
+		 	  	 	if(isset($info['APP13']))
+		 	  	 	{
+		 	  	 	    $iptc = iptcparse($info['APP13']);
+		 	  	 	    if(isset($iptc["2#025"])){
+		 	  	 	    	if(count($iptc["2#025"]) > 0){
+		 	  	 	    		for ($i=0; $i < count($iptc["2#025"]); $i++) { 
+		 	  	 	    			$file_keywords .= $iptc["2#025"][$i];
+		 	  	 	    		}
+		 	  	 	    	}
+		 	  	 	    }
+		 	  	 	}
+		 	  	 	
+		 	  	 	$config2['image_library'] = 'gd2';
 		 	  	 	$config2['source_image'] = $url;
 	                $config2['new_image'] = './assets/uploads/thumbs/';
 		            $config2['maintain_ratio'] = TRUE;
@@ -312,13 +393,11 @@ class contributor extends CI_Controller {
 	          				echo $this->image_lib->display_errors();
 	          			} else {
 							$this->image_lib->clear();
-		          			$this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size'], $thumbnail_path);
+		          			$this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size'], $thumbnail_path ,$file_keywords);
 			           		$success = 1;		          				
 	          			}
 	          		}
-
-		           
-         	    }
+	          	}
 		    $i++;
 		}
 		if($success === 1 &&  $count > 0){

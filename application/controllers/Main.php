@@ -30,6 +30,127 @@ class Main extends CI_Controller {
 		$this->load->view('non_member/index');
 		$this->load->view('non_member/footer');
 	}
+	public function about()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/about', $data);
+		$this->load->view('non_member/footer');	
+	}
+	public function terms()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/terms', $data);
+		$this->load->view('non_member/footer');	
+	}
+	public function contact()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/contact', $data);
+		$this->load->view('non_member/footer');	
+	}
+	public function resources()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			$data['resources'] = $this->main_model->get_all_resources();
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/resources', $data);
+		$this->load->view('non_member/footer');	
+	}
+	public function faqs()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/faqs', $data);
+		$this->load->view('non_member/footer');	
+	}
+	public function blog()
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('session');
+		$data['user_session']=$this->session->all_userdata();
+		if(isset($data['user_session']['logged_in'])) {
+			$data['user_details'] = 
+			$this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
+			$member_id = $data['user_details'][0]['user_id'];
+			$data['user_cart'] = $this->member_model->get_user_cart($member_id);
+			if (count($data['user_cart']) > 0) {
+				$order_id = $data['user_cart'][0]['order_id'];
+				$data['cart_items'] = $this->member_model->get_cart_items($order_id);	
+			}
+		}
+		$this->load->view('non_member/header');
+		$this->load->view('non_member/header_min', $data);
+		$this->load->view('non_member/blog', $data);
+		$this->load->view('non_member/footer');	
+	}
 	public function start_search() {
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('session');
@@ -67,8 +188,10 @@ class Main extends CI_Controller {
 		$data['ex_pricing'] = $this->admin_model->get_ex_pricing();
 		$data['search_term'] = $search_term; 
 		$data['contributors'] =$this->admin_model->get_excontributor_users();
+		
 		$data['all_results'] = $this->main_model->optimize_all_uploads($search_term,
 			$license_type,$image_type,$orientation,$people,$category,$contributor);
+		
 		for($f = 0; $f < count($data['all_results']); $f++){
 				$file_id = $data['all_results'][$f]['upload_id'];
 				$same_shoot = $data['all_results'][$f]['file_same_shoot_code'];
@@ -86,7 +209,7 @@ class Main extends CI_Controller {
 		$this->load->view('non_member/results', $data);
 		$this->load->view('non_member/footer_min');
 		$this->load->view('non_member/footer');
-	
+		
 	}
 	public function search($search_term = NULL)
 	{

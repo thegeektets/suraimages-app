@@ -4,13 +4,14 @@
         <div class="large-6 columns medium-7 columns">
           <div class="footer-menu">
             <ul class="menu">
-                <li class="menu-text menu-divider"> <a href="#"> Home </a></li>
-                <li class="menu-text menu-divider"><a href="#"> About Us </a></li>
-                <li class="menu-text menu-divider"><a href="#"> Terms & Conditions </a></li>
-                <li class="menu-text menu-divider"><a href="#"> Contact Us </a></li>
-                <li class="menu-text menu-divider"><a href="#"> Resources </a></li>
-                <li class="menu-text menu-divider"><a href="#"> FAQs </a></li>
-                <li class="menu-text"><a href="#"> Blog </a></li>
+              <li class="menu-text menu-divider"> <a href="<?php echo base_url(); ?>"> Home </a></li>
+              <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/about'); ?>"> About Us </a></li>
+              <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/terms'); ?>"> Terms & Conditions </a></li>
+              <li class="menu-text menu-divider"><a href="
+              <?php echo base_url('index.php/main/contact'); ?>"> Contact Us </a></li>
+              <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/resources'); ?>"> Resources </a></li>
+              <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/faqs'); ?>"> FAQs </a></li>
+              <li class="menu-text"><a href="<?php echo base_url('index.php/main/blog'); ?>"> Blog </a></li>
             </ul>
           </div>
         </div>
@@ -48,7 +49,369 @@
   
 ?>   
 <script type="text/javascript">
-    
+    function submit_other_release_forms(){
+        var success = "FALSE";
+        if($( ".jFiler-item" ).length < 1){
+
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text("Make sure the number of files uploaded is not less than one"); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            $('.message').show();
+        
+        } else {
+            $( ".jFiler-item" ).each(function( index ) {
+               success = "FALSE";
+               var text = $( this ).text();
+               var size = text.substring(text.lastIndexOf("size:"), text.indexOf('type:'));
+                   size = $.trim(size);
+               var type = text.substring(text.indexOf('type:'));
+                   type = $.trim(type);
+               if(size.includes("KB")){
+                  var tstr = type.substring(6);
+                  tstr = tstr.toUpperCase();
+                  tstr = $.trim(tstr);
+                  
+                  if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                     $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                     $(this ).append('File format not allowed');
+                     return false;
+                  } else {
+                    success = "TRUE";
+                    $(this).append('<div class ="loading"></div>');
+                        $('.btn_upload_multi').addClass('processing');
+                        $('.processing').removeClass('btn_upload_multi');
+                        $('.processing').removeClass('button');
+                        $('.processing').text("Upload processing ,please wait..");
+                  }
+               } else {
+                    var mbsize = size.substring(6,size.indexOf('M'));
+                    if(mbsize > 2 ){
+                      $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                      $( this ).append('Release form file should not be more than 2MB');
+                      return false
+                    } else {
+                      var tstr = type.substring(6);
+                      tstr = tstr.toUpperCase();
+                      tstr = $.trim(tstr);
+                      
+                      if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                         $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                         $(this ).append('File format not allowed');
+                         return false;
+                      } else {
+                        success = "TRUE";
+                        $(this).addClass('loading');
+                        $(this).css({'text-align':'center'});
+                        $(this ).append('File is uploading');
+                      }
+                    }
+               }
+            });
+        }
+
+        if(success === "TRUE"){
+              var form = document.getElementById('property_release');
+              var myfd = new FormData(form);
+              $.ajax({
+              xhr: function () {
+                  var xhr = new window.XMLHttpRequest();
+                  xhr.upload.addEventListener("progress", function (evt) {
+                      if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                        if(percentComplete === 1) {
+                          // $('.loading').addClass('hide');
+                        }
+                      }
+                  }, false);
+                  xhr.addEventListener("progress", function (evt) {
+                    if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                      }
+                  }, false);
+                  return xhr;
+              },          
+              type: 'post',
+              url:'<?php echo base_url("/index.php/admin/upload_other_release")?>',
+              data:myfd,
+              processData: false,
+              contentType:false,
+              success:
+                function(data){
+                  if (data === '1'){
+                     $('.message').attr("class" ,"message alert-box success");
+                     $('.message').text("File have been uploaded successfully!"); 
+                     $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                        sessionStorage.setItem('onReload', 'activateUpload');
+                        location.reload();
+                  } else {
+                    $('.message').attr("class" ,"message alert-box success");
+                    $('.message').text("Files edited successfully!"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    console.log(data);
+                    
+                  }
+                  $('.message').show();
+                },
+              fail:
+                function(data){
+                  console.log(data);
+                }
+
+            });
+
+        }
+        return false;
+    }
+    function submit_property_release_forms(){
+        var success = "FALSE";
+        if($( ".jFiler-item" ).length < 1){
+
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text("Make sure the number of files uploaded is not less than one"); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            $('.message').show();
+        
+        } else {
+            $( ".jFiler-item" ).each(function( index ) {
+               success = "FALSE";
+               var text = $( this ).text();
+               var size = text.substring(text.lastIndexOf("size:"), text.indexOf('type:'));
+                   size = $.trim(size);
+               var type = text.substring(text.indexOf('type:'));
+                   type = $.trim(type);
+               if(size.includes("KB")){
+                  var tstr = type.substring(6);
+                  tstr = tstr.toUpperCase();
+                  tstr = $.trim(tstr);
+                  
+                  if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                     $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                     $(this ).append('File format not allowed');
+                     return false;
+                  } else {
+                    success = "TRUE";
+                    $(this).append('<div class ="loading"></div>');
+                        $('.btn_upload_multi').addClass('processing');
+                        $('.processing').removeClass('btn_upload_multi');
+                        $('.processing').removeClass('button');
+                        $('.processing').text("Upload processing ,please wait..");
+                  }
+               } else {
+                    var mbsize = size.substring(6,size.indexOf('M'));
+                    if(mbsize > 2 ){
+                      $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                      $( this ).append('Release form file should not be more than 2MB');
+                      return false
+                    } else {
+                      var tstr = type.substring(6);
+                      tstr = tstr.toUpperCase();
+                      tstr = $.trim(tstr);
+                      
+                      if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                         $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                         $(this ).append('File format not allowed');
+                         return false;
+                      } else {
+                        success = "TRUE";
+                        $(this).addClass('loading');
+                        $(this).css({'text-align':'center'});
+                        $(this ).append('File is uploading');
+                      }
+                    }
+               }
+            });
+        }
+
+        if(success === "TRUE"){
+              var form = document.getElementById('property_release');
+              var myfd = new FormData(form);
+              $.ajax({
+              xhr: function () {
+                  var xhr = new window.XMLHttpRequest();
+                  xhr.upload.addEventListener("progress", function (evt) {
+                      if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                        if(percentComplete === 1) {
+                          // $('.loading').addClass('hide');
+                        }
+                      }
+                  }, false);
+                  xhr.addEventListener("progress", function (evt) {
+                    if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                      }
+                  }, false);
+                  return xhr;
+              },          
+              type: 'post',
+              url:'<?php echo base_url("/index.php/admin/upload_property_release")?>',
+              data:myfd,
+              processData: false,
+              contentType:false,
+              success:
+                function(data){
+                  if (data === '1'){
+                     $('.message').attr("class" ,"message alert-box success");
+                     $('.message').text("File have been uploaded successfully!"); 
+                     $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                        sessionStorage.setItem('onReload', 'activateUpload');
+                        location.reload();
+                  } else {
+                    $('.message').attr("class" ,"message alert-box success");
+                    $('.message').text("Files edited successfully!"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    console.log(data);
+                    
+                  }
+                  $('.message').show();
+                },
+              fail:
+                function(data){
+                  console.log(data);
+                }
+
+            });
+
+        }
+        return false;
+    }
+    function submit_model_release_forms(){
+        var success = "FALSE";
+        if($( ".jFiler-item" ).length < 1){
+
+            $('.message').attr("class" ,"message alert-box warning");
+            $('.message').text("Make sure the number of files uploaded is not less than one"); 
+            $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+            $('.message').show();
+        
+        } else {
+            $( ".jFiler-item" ).each(function( index ) {
+               success = "FALSE";
+               var text = $( this ).text();
+               var size = text.substring(text.lastIndexOf("size:"), text.indexOf('type:'));
+                   size = $.trim(size);
+               var type = text.substring(text.indexOf('type:'));
+                   type = $.trim(type);
+               if(size.includes("KB")){
+                  var tstr = type.substring(6);
+                  tstr = tstr.toUpperCase();
+                  tstr = $.trim(tstr);
+                  
+                  if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                     $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                     $(this ).append('File format not allowed');
+                     return false;
+                  } else {
+                    success = "TRUE";
+                    $(this).append('<div class ="loading"></div>');
+                        $('.btn_upload_multi').addClass('processing');
+                        $('.processing').removeClass('btn_upload_multi');
+                        $('.processing').removeClass('button');
+                        $('.processing').text("Upload processing ,please wait..");
+                  }
+               } else {
+                    var mbsize = size.substring(6,size.indexOf('M'));
+                    if(mbsize > 2 ){
+                      $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                      $( this ).append('Release form file should not be more than 2MB');
+                      return false
+                    } else {
+                      var tstr = type.substring(6);
+                      tstr = tstr.toUpperCase();
+                      tstr = $.trim(tstr);
+                      
+                      if (tstr !== "PNG" && tstr !== "JPG" && tstr !== "PDF") {
+                         $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
+                         $(this ).append('File format not allowed');
+                         return false;
+                      } else {
+                        success = "TRUE";
+                        $(this).addClass('loading');
+                        $(this).css({'text-align':'center'});
+                        $(this ).append('File is uploading');
+                      }
+                    }
+               }
+            });
+        }
+
+        if(success === "TRUE"){
+              var form = document.getElementById('model_release');
+              var myfd = new FormData(form);
+              $.ajax({
+              xhr: function () {
+                  var xhr = new window.XMLHttpRequest();
+                  xhr.upload.addEventListener("progress", function (evt) {
+                      if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                        if(percentComplete === 1) {
+                          // $('.loading').addClass('hide');
+                        }
+                      }
+                  }, false);
+                  xhr.addEventListener("progress", function (evt) {
+                    if(evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        $('.loading').css({
+                            width: percentComplete * 100 + "%"
+                        });
+                      }
+                  }, false);
+                  return xhr;
+              },          
+              type: 'post',
+              url:'<?php echo base_url("/index.php/admin/upload_model_release")?>',
+              data:myfd,
+              processData: false,
+              contentType:false,
+              success:
+                function(data){
+                  if (data === '1'){
+                     $('.message').attr("class" ,"message alert-box success");
+                     $('.message').text("File have been uploaded successfully!"); 
+                     $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                        sessionStorage.setItem('onReload', 'activateUpload');
+                        location.reload();
+                  } else {
+                    $('.message').attr("class" ,"message alert-box success");
+                    $('.message').text("Files edited successfully!"); 
+                    $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                    console.log(data);
+                    
+                  }
+                  $('.message').show();
+                },
+              fail:
+                function(data){
+                  console.log(data);
+                }
+
+            });
+
+        }
+        return false;
+    }
     function update_rr_pricing() {
          $.ajax({
           type: 'post',

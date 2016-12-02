@@ -1,4 +1,4 @@
-body {
+body , h1, h2, h3, h4, h5, h6{
   font-family: 'Calibri';
 }
 [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea {
@@ -21,13 +21,15 @@ body {
    display: block;
    height: 200px;
    width: 300px;
-   margin-top: 20px;
+   margin-top: -40px;
 }
+
 .top-bar-left > .home_logo {
   height: 60px;
   width: 150px;
   background: url('../img/sura_logo_small.png') no-repeat;
   padding-left: 10px;
+  margin-top: 10px;
 }
 .top-bar , .top-bar ul {
 	background-color: #262134;	
@@ -511,17 +513,20 @@ body {
     padding-right: 5%;
     padding-left: 5%;
     padding-bottom: 5%;
-    margin:0px auto;
+    margin: 0px auto;
     left: 22.32rem;
-
+    max-height: 100% !important;
+    overflow: scroll;
 }
 .search_display_img {
-	padding: 10px;
-	width: 100%;
-	object-fit: cover;
-  padding-left: 0px;	
-  position: relative;
-  padding-bottom: 0px;
+      padding: 10px;
+      width: 100% !important;
+      height: auto !important;
+      max-height: 90vh !important;
+      object-fit: cover;
+      padding-left: 0px;
+      position: relative;
+      padding-bottom: 0px;
 }
 .search_popup_details {
     font-size: 14px;
@@ -958,11 +963,11 @@ button.ms-choice {
     
 }
 
-.ms-parent.standard-select.standard-select-multiple {
+.ms-parent.standard-select.standard-select-multiple ,.ms-parent.standard-select.standard-select-details {
     margin-bottom: 16px;
 }
 
-.ms-parent.standard-select.standard-select-multiple > button.ms-choice {
+.ms-parent.standard-select.standard-select-multiple > button.ms-choice ,.ms-parent.standard-select.standard-select-details > button.ms-choice {
    width: 100%;
    height: inherit;
    position: absolute;

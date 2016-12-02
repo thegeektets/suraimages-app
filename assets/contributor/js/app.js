@@ -1,6 +1,22 @@
 $(document).foundation()
 
 $(document).ready(function(){
+	$('.image_id_filter').hide();
+	$('.date_filter').hide();
+	$('.tab_link').click(function(){
+		$('.contributor_tabs').children('.tabs-title').each(function(){
+			$(this).removeClass('is-active');
+		});
+		$('.contributor_panel').each(function(){
+			$(this).removeClass('is-active');
+		});
+		console.log($(this).attr('data-id'));
+
+		$('#'+$(this).attr('data-id')+"_link").addClass('is-active');
+		$('#'+$(this).attr('data-id')).addClass('is-active');
+		return false;
+	});
+	
 	$("#upload_video").hide();
 	$(".video_filer").click(function(){
 		$("#upload_video").show();

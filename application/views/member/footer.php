@@ -3,14 +3,15 @@
     <div class="large-6 columns medium-7 columns">
       <div class="footer-menu">
         <ul class="menu">
-            <li class="menu-text menu-divider"> <a href="#"> Home </a></li>
-            <li class="menu-text menu-divider"><a href="#"> About Us </a></li>
-            <li class="menu-text menu-divider"><a href="#"> Terms & Conditions </a></li>
-            <li class="menu-text menu-divider"><a href="#"> Contact Us </a></li>
-            <li class="menu-text menu-divider"><a href="#"> Resources </a></li>
-            <li class="menu-text menu-divider"><a href="#"> FAQs </a></li>
-            <li class="menu-text"><a href="#"> Blog </a></li>
-        </ul>
+                  <li class="menu-text menu-divider"> <a href="<?php echo base_url(); ?>"> Home </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/about'); ?>"> About Us </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/terms'); ?>"> Terms & Conditions </a></li>
+                  <li class="menu-text menu-divider"><a href="
+                  <?php echo base_url('index.php/main/contact'); ?>"> Contact Us </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/resources'); ?>"> Resources </a></li>
+                  <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/faqs'); ?>"> FAQs </a></li>
+                  <li class="menu-text"><a href="<?php echo base_url('index.php/main/blog'); ?>"> Blog </a></li>
+              </ul>
       </div>
     </div>
     <div class="large-6 columns medium-3 columns">
@@ -19,6 +20,7 @@
   </div>
 </footer>
 <script src="<?php echo base_url('/assets/member/js/vendor/jquery.js')?>"></script>
+<script src="<?php echo base_url('/assets/member/js/vendor/pagination.js')?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/member/filer/js/jquery.filer.min.js?v=1.0.5')?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/member/filer/js/custom.js?v=1.0.5')?>"></script>
 <script src="<?php echo base_url('/assets/member/js/vendor/what-input.js')?>"></script>
@@ -26,6 +28,7 @@
 <script src="<?php echo base_url('/assets/member/js/vendor/fontAwesome.js')?>"></script>
 <script src="<?php echo base_url('/assets/member/js/vendor/slick.min.js')?>"></script>
 <script src="<?php echo base_url('/assets/member/js/app.js')?>"></script>
+<script src="<?php echo base_url('/assets/member/js/paginations.js')?>"></script>
 <script type="text/javascript">
   function remove_cart_item (item_id,item_cost,order_id) {
     console.log(""+item_cost);

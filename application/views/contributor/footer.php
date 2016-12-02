@@ -3,13 +3,14 @@
   <div class="large-6 columns medium-7 columns">
     <div class="footer-menu">
       <ul class="menu">
-          <li class="menu-text menu-divider"> <a href="#"> Home </a></li>
-          <li class="menu-text menu-divider"><a href="#"> About Us </a></li>
-          <li class="menu-text menu-divider"><a href="#"> Terms & Conditions </a></li>
-          <li class="menu-text menu-divider"><a href="#"> Contact Us </a></li>
-          <li class="menu-text menu-divider"><a href="#"> Resources </a></li>
-          <li class="menu-text menu-divider"><a href="#"> FAQs </a></li>
-          <li class="menu-text"><a href="#"> Blog </a></li>
+        <li class="menu-text menu-divider"> <a href="<?php echo base_url(); ?>"> Home </a></li>
+        <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/about'); ?>"> About Us </a></li>
+        <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/terms'); ?>"> Terms & Conditions </a></li>
+        <li class="menu-text menu-divider"><a href="
+        <?php echo base_url('index.php/main/contact'); ?>"> Contact Us </a></li>
+        <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/resources'); ?>"> Resources </a></li>
+        <li class="menu-text menu-divider"><a href="<?php echo base_url('index.php/main/faqs'); ?>"> FAQs </a></li>
+        <li class="menu-text"><a href="<?php echo base_url('index.php/main/blog'); ?>"> Blog </a></li>
       </ul>
     </div>
   </div>
@@ -221,7 +222,7 @@
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
         } else {
           $('.message').addClass("alert-box warning");
-          $('.message').text("Internal server error , thats all we know"); 
+          $('.message').text("Internal server error , please try again"); 
           $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
 
         }
@@ -410,7 +411,7 @@ function submit_trial_images(){
                     location.reload();
               } else {
                 $('.message').attr("class" ,"message alert-box warning");
-                $('.message').text(""+data); 
+                $('.message').text("An error occured while uploading images please try again!");  
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                 
                 $('.processing').addClass('btn_upload_multi');
@@ -419,6 +420,7 @@ function submit_trial_images(){
                 $('.btn_upload_multi').text("Continue");
               }
               $('.message').show();
+              console.log(data);
             },
           fail:
             function(data){
@@ -646,7 +648,7 @@ function submit_videos(){
                     location.reload();
               } else {
                 $('.message').attr("class" ,"message alert-box success");
-                $('.message').text("Files edited successfully!"); 
+                $('.message').text("An error occured while uploading files please try again!");  
                 $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                 console.log(data)
                 

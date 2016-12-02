@@ -65,11 +65,11 @@
                 </div>
             </div>
             <ul class="tabs member_tabs" data-tabs id="member-tabs">
-                  <li class="tabs-title <?php if($checkout == false ){echo "is-active" ;} ?>"><a href="#account" aria-selected="true"> Account </a></li>
+                  <li id="account_link" class="tabs-title <?php if($checkout == false ){echo "is-active" ;} ?>"><a href="#account" aria-selected="true"> Account </a></li>
 
-                  <li class="tabs-title <?php if($checkout == true ){echo "is-active" ;} ?>"><a href="#basket">Shopping Basket (<?php echo count($cart_items)?>)</a></li>
+                  <li id="basket_link" class="tabs-title <?php if($checkout == true ){echo "is-active" ;} ?>"><a href="#basket">Shopping Basket (<?php echo count($cart_items)?>)</a></li>
 
-                  <li class="tabs-title"><a href="#history">Purchase History (<?php echo count($purchase_history); ?>)</a></li>
+                  <li id="history_link" class="tabs-title"><a href="#history">Purchase History (<?php echo count($purchase_history); ?>)</a></li>
                   
             </ul>
 
@@ -442,12 +442,13 @@
                                          </div>
                                          </div>
                                       </div> 
+                                      <form name="qoute_form" id="qoute_form" <?php echo form_open('member/send_quote'); ?> 
                                       <div class="report_content">
                                         <?php for($c=0; $c < count($cart_items); $c++) { ?>   
                                            <div class="report_item" id="<?php echo 'report_item'.$cart_items[$c]['item_id'] ?>">
                                              <div class="row">
                                                <div class="large-2 column report_col">
-                                                   <input type="checkbox" name="">
+                                                   <input type="checkbox" name="<?php echo 'check_'.$cart_items[$c]['product_id'] ?>">
                                                    <img src="<?php echo $cart_items[$c]['file_thumbnail']?>" class="search_image">
                                                </div>
                                                <div class="large-1 column report_col">
@@ -487,7 +488,6 @@
                                              <div class="row">
                                                <div class="large-5 columns pull-left">
                                                   <div class="large-12 columns">
-                                                    <form name="qoute_form" id="qoute_form" <?php echo form_open('member/send_quote'); ?>    
                                                         <div class="row collapse">
                                                           <div class="small-7 columns">
                                                             <input type="email" name="qoute_email" placeholder="Email Address" required>
@@ -565,15 +565,15 @@
                         <div class="large-12 columns">
                           <div class="large-4 columns medium-4 columns pull-right">
                                <span class="search_pagination"> 
-                                 <select class="pagination_slc">
+                                 <select class="pagination_slc" name="files_per_page">
                                       <option value="">Files Per Page</option>
                                       <option value="50">50</option>
                                       <option value="100">100</option>
                                       <option value="150">150</option>
                                   </select>
-                                 Page <input type="number" name="page_number" placeholder="1" class="page_number"> of 120 
-                                    <a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
-                                    <a href=""><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
+                                 Page <input type="number" name="page_number" placeholder="1" value="1" class="page_number"> of <span class="total_pages">120</span> 
+                                    <a href="" class="prev_page"><i class="fa fa-arrow-left" aria-hidden="true"></i> </a>
+                                    <a href="" class="next_page"><i class="fa fa-arrow-right" aria-hidden="true"></i> </a>
                                </span>
                           </div>
                         </div>
@@ -588,18 +588,20 @@
                           <div class="large-1 column">
                               ID
                           </div>
-                          <div class="large-3 column">
+                          <div class="large-4 column">
                               Title
                           </div>
-                          <div class="large-2 column">
+                          <div class="large-3 column">
                               License Type
                           </div>
                           <div class="large-2 column">
                               Date Purchased
                           </div>
+                          <!--
                           <div class="large-2 column">
                               Download Package
                           </div>
+                          -->
                           <div class="large-1 column">
                               Price
                           </div>
@@ -609,7 +611,7 @@
                           <?php for($i=0; $i < count($purchase_history); $i++ ) { ?> 
 
 
-                            <div class="report_item">
+                            <div class="report_item page_item">
                               <div class="row">
                                 <div class="large-1 column ">
                                   <img src="<?php echo $purchase_history[$i]['file_thumbnail'] ;?>">
@@ -617,20 +619,23 @@
                                 <div class="large-1 column ">
                                     <?php echo $purchase_history[$i]['upload_id'] ;?>
                                 </div>
-                                <div class="large-3 column ">
+                                <div class="large-4 column ">
                                     <?php echo $purchase_history[$i]['file_name'] ;?>
                                 </div>
-                                <div class="large-2 column ">
+                                <div class="large-3 column ">
                                     <?php echo $purchase_history[$i]['file_license'] ;?>
                                 </div>
                                 <div class="large-2 column ">
                                      <?php echo $purchase_history[$i]['date_purchased'] ;?>
                                 </div>
+                                <!--
                                 <div class="large-2 column ">
-                                     <a  target="_blank" href="<?php echo base_url('index.php/member/download_package/'.$purchase_history[$i]['order_id']); ?>"                                        >
+                                     <a  target="_blank" href="
+                                      <?php //echo base_url('index.php/member/download_package/'.$purchase_history[$i]['order_id']); ?><!--"                                        >
                                               Download Package
                                           </a>
                                 </div>
+                                -->
                                 <div class="large-1 column ">
                                     $<?php echo $purchase_history[$i]['product_cost'] ;?>
                                 </div>
