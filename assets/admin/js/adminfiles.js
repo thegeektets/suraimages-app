@@ -1,3 +1,14 @@
+$('.files_reports_select').change(function (){
+  $('.files_id_filter').hide();
+  $('.files_date_filter').hide();
+  if($(this).val() == 'file_id') {
+     $('.files_id_filter').show();
+     $('.files_date_filter').show();
+  } else  {
+     $('.files_date_filter').show();
+  }
+  return false;
+});
 $('.sales_reports_select').change(function (){
   $('.image_id_filter').hide();
   $('.date_filter').hide();

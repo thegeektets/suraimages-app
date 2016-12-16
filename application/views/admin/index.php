@@ -2289,7 +2289,7 @@
                                     </div>
                                     
                                      <div class="large-8 columns pull-left">   
-                                            <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
+                                            <input type="file" name="modelrelease[]"  class="release_filer" multiple="multiple">
                                      </div>
                                      <div class="large-2 columns pull-right">
                                          <button class="button btn_search" type="submit">
@@ -2324,14 +2324,14 @@
                                 Other resources necessary for contributors
                              </div>
                              <div class="row resource_item">
-                                <form id="model_release" method="post" enctype ='multipart/form-data' onsubmit="return submit_other_release_forms();">
+                                <form id="other_release" method="post" enctype ='multipart/form-data' onsubmit="return submit_other_release_forms();">
                                 <div class="row colllapse">
                                     <div class="large-2 columns">
                                         Other resources Form:
                                     </div>
                                     
                                      <div class="large-8 columns pull-left">   
-                                            <input type="file" name="releasefiles[]"  class="release_filer" multiple="multiple">
+                                            <input type="file" name="resourcefiles[]"  class="release_filer" multiple="multiple">
                                      </div>
                                      <div class="large-2 columns pull-right">
                                          <button class="button btn_search" type="submit">
@@ -2359,9 +2359,8 @@
                                     <option value="sales">Sales Reports </option>
                                     <option value="statement">Sales Statement</option>
                                     <option value="license">License Type</option>
-                                    <!--
-                                    <option value="files">My Files</option>
-                                    -->
+                                    <option value="files"> Files</option>
+                                    <option value="contributor"> Contributor </option>
                                 </select>
                                   
                                 <span class="question_wrap">
@@ -2470,18 +2469,64 @@
                             <div class="files_filter"> 
                               <div class="row">
                                 
-                                <form class="reports_search">
-                                  <select class="inside_search_slc">
-                                      <option value="">My Files </option>
-                                      <option value=""> My Images </option>
-                                      <option value=""> My Videos</option>
-                                      <option value=""> My Illustrations </option>
-                                     
-                                        
+                                <form class="reports_search collapse" method="post" <?php echo form_open('admin/files_reports_filter'); ?>
+                                
+                                <div class="large-5 columns">
+                                  <select class="files_reports_select" name="files_reports_select">
+                                      <option value=""> Files </option>
+                                      <option value="all"> All </option>
+                                      <option value="images"> Images </option>
+                                      <option value="videos"> Videos</option>
+                                      <option value="illustrations"> Illustrations </option>
+                                      <option value="file_id"> File ID </option>
                                   </select>
-                                    <button type="submit" class="button btn_search">
+                                </div>
+                                <div class="large-4 columns">
+                                      <div class="files_id_filter">
+                                      <input type="text" name="image_id" placeholder="Type in Image ID" class="">
+                                      </div>
+                                      <div class="files_date_filter">
+                                      <label>From:</label>
+                                      <input type="date" name="from_date" placeholder="From" class="">
+                                      <label>To:</label>
+                                      <input type="date" name="to_date" placeholder="To" class="">
+                                      </div>
+                                </div>
+                                <div class="large-3 columns">
+                                  <button type="submit" class="button btn_search">
                                       Display
                                   </button>
+                                </div>   
+                                </form>
+                              </div>
+                            </div>
+                            <div class="contributor_filter"> 
+                              <div class="row">
+                                
+                                <form class="reports_search collapse" method="post" <?php echo form_open('admin/contributor_files_filter'); ?>
+                                
+                                <div class="large-5 columns">
+                                  <select class="contributor_reports_select" name="contributor_reports_select">
+                                      <option value=""> Contributor </option>
+                                      <?php for($i=0;$i<count($contributors);$i++){ ?>
+                                       <option value="<?php echo $contributors[$i]['user_id'] ?>">
+                                          <?php echo $contributors[$i]['firstname']." ".$contributors[$i]['middlename']; ?> </option>
+                                       <?php } ?>
+                                  </select>
+                                </div>
+                                <div class="large-4 columns">
+                                      <div class="contributor_date_filter">
+                                      <label>From:</label>
+                                      <input type="date" name="from_date" placeholder="From" class="">
+                                      <label>To:</label>
+                                      <input type="date" name="to_date" placeholder="To" class="">
+                                      </div>
+                                </div>
+                                <div class="large-3 columns">
+                                  <button type="submit" class="button btn_search">
+                                      Display
+                                  </button>
+                                </div>   
                                 </form>
                               </div>
                             </div>
@@ -2541,8 +2586,8 @@
                               </div>
                               <div class="large-2 column report_col">
                                   <?php 
-                                     if( $purchase_history[$r]['product_license'] == "Exclusive License" ) {
-                                         echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'] ;
+                                    if( $purchase_history[$r]['product_license'] == "Exclusive License" ) {
+                                                          echo "Royalty Free - ".$purchase_history[$r]['product_size']." with ".$purchase_history[$r]['product_duration']." ".$purchase_history[$r]['product_license'];  
                                      } else if ($purchase_history[$r]['product_license'] == "Right Managed" && $purchase_history[$r]['exclusive_duration'] !== NULL ) {
                                           echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration']." with ".$purchase_history[$r]['exclusive_duration']." Exclusive license";
                                      } else if ($purchase_history[$r]['product_license'] == "Right Managed" ) {

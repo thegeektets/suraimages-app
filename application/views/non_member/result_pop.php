@@ -260,7 +260,7 @@
                  ?>
             <hr style="border-top: solid 1px;" />
           </form>  
-          
+          <!--
             <li class="accordion-item search_accordion_item" data-accordion-item>
               
               <a href="#" class="accordion-title">
@@ -300,7 +300,7 @@
                                       </div>
             </li>
                <hr style="border-top: solid 1px;" />
-          
+          -->
             <li class="accordion-item search_accordion_item" data-accordion-item>
               <a target="_blank" href="<?php echo base_url('index.php/main/similar_images/'.$all_results[$i]['upload_id']); ?>" class="accordion-title">
                 <i class="fa fa-clone" aria-hidden="true"></i>

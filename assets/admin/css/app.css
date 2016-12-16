@@ -1525,8 +1525,8 @@ button.slick-next.slick-arrow {
        border-color: #f8991c transparent transparent;
        border-top-style: solid;
        border-bottom-width: 0;
-       right: 5px;
-       margin-top: -2px;
+       position: absolute;
+       right: 0px;
    }
    label {
        position: relative;

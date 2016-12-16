@@ -1,6 +1,8 @@
 $(document).foundation()
 
 $(document).ready(function(){
+	$('.files_id_filter').hide();
+	$('.files_date_filter').hide();
 	$('.image_id_filter').hide();
 	$('.date_filter').hide();
 	
@@ -135,6 +137,7 @@ $(document).ready(function(){
 	$(".statement_filter").hide();
 	$(".license_filter").hide();
 	$(".files_filter").hide();
+	$(".contributor_filter").hide();
 
 	$("#report_slc").on('change',function(){
 		if($(this).val().length > 1) {
@@ -144,7 +147,7 @@ $(document).ready(function(){
 				$(".statement_filter").hide();
 				$(".license_filter").hide();
 				$(".files_filter").hide();	
-
+				$(".contributor_filter").hide();
 				$(".sales_filter").show();
 					
 			}
@@ -155,6 +158,7 @@ $(document).ready(function(){
 				$(".license_filter").hide();
 				$(".files_filter").hide();
 				$(".sales_filter").hide();
+				$(".contributor_filter").hide();
 					
 			}
 			
@@ -164,6 +168,7 @@ $(document).ready(function(){
 				$(".license_filter").show();
 				$(".files_filter").hide();
 				$(".sales_filter").hide();
+				$(".contributor_filter").hide();
 					
 			}
 			if($(this).val() === 'files'){
@@ -172,9 +177,18 @@ $(document).ready(function(){
 				$(".license_filter").hide();
 				$(".files_filter").show();
 				$(".sales_filter").hide();
+				$(".contributor_filter").hide();
 					
 			}
-			
+			if($(this).val() === 'contributor'){
+				
+				$(".statement_filter").hide();
+				$(".license_filter").hide();
+				$(".files_filter").hide();
+				$(".sales_filter").hide();
+				$(".contributor_filter").show();
+					
+			}
 
 
 		} else {

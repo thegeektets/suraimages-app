@@ -361,9 +361,10 @@ class contributor extends CI_Controller {
 		 	  	 	    	}
 		 	  	 	    }
 		 	  	 	}
-		 	  	 	
+		 	  	 	$pathinfo = pathinfo($_FILES['trialfiles']['name']);
+		 	  	 	$image_path = 'assets/uploads/'. $pathinfo['filename'] . "." . $pathinfo['extension'];
 		 	  	 	$config2['image_library'] = 'gd2';
-		 	  	 	$config2['source_image'] = $url;
+		 	  	 	$config2['source_image'] = './'.$image_path;
 	                $config2['new_image'] = './assets/uploads/thumbs/';
 		            $config2['maintain_ratio'] = TRUE;
 	                $config2['create_thumb'] = TRUE;
@@ -379,8 +380,7 @@ class contributor extends CI_Controller {
 	          	
 	          		} else {
 						$this->image_lib->clear();
-						$pathinfo = pathinfo($_FILES['trialfiles']['name']);
-		            	$thumbnail_path = 'assets/uploads/thumbs/'. $pathinfo['filename'] . "_thumb." . $pathinfo['extension'];
+						$thumbnail_path = 'assets/uploads/thumbs/'. $pathinfo['filename'] . "_thumb." . $pathinfo['extension'];
 	                
 						$config3['image_library'] = 'gd2';
 		                $config3['source_image'] = './'.$thumbnail_path;

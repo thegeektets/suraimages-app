@@ -39,8 +39,7 @@ class Main_model extends CI_Model {
         }
         public function get_all_resources(){
             $query = $this->db->query("SELECT DISTINCT * FROM resources");
-            $image = $query->result_array();
-            return array_reverse($image);
+            return $query->result_array();
         }
         public function get_same_shoots($same_shoot){
             $query = $this->db->query("SELECT * FROM contributor_image_uploads,user_details WHERE user_details.user_id = 

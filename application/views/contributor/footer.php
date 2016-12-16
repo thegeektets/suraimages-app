@@ -342,7 +342,7 @@ function submit_trial_images(){
                 var mbsize = size.substring(6,size.indexOf('M'));
                 if(mbsize < 8 ){
                   $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
-                  $( this ).append('Image should not be smaller than 2MB');
+                  $( this ).append('Image should not be smaller than 8MB');
                   return false
                 } else {
                   var tstr = type.substring(6);
@@ -403,12 +403,23 @@ function submit_trial_images(){
           contentType:false,
           success:
             function(data){
-              if (data === '1'){
+              if (data === '1' || data.includes('</div>1')){
                  $('.message').attr("class" ,"message alert-box success");
                  $('.message').text("Images have been uploaded successfully!"); 
                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                     sessionStorage.setItem('onReload', 'activateUpload');
                     location.reload();
+              } else if (data.includes('POST Content-Length')){
+                  $('.message').attr("class" ,"message alert-box warning");
+                  $('.message').text(data.replace(/<\/?[^>]+(>|$)/g, "")); 
+                  $('.message').append('Please upload fewer images at a time');
+                  $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
+                  
+                  $('.processing').addClass('btn_upload_multi');
+                  $('.btn_upload_multi').removeClass('processing');
+                  $('.btn_upload_multi').addClass('button');
+                  $('.btn_upload_multi').text("Continue");
+
               } else {
                 $('.message').attr("class" ,"message alert-box warning");
                 $('.message').text("An error occured while uploading images please try again!");  

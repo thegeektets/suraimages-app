@@ -513,17 +513,17 @@
                          Orientation: <?php echo $contributor_images[$i]['file_orentiation'] ?> </br>
                          People: <?php echo $contributor_images[$i]['file_people'] ?> </br>
                          Model Notification: <?php 
-                                    for($m = 0 ; $m < count($edit_contributor_images[$i]['models']); $m++){
-                                          $email = $edit_contributor_images[$i]['models'][$m]['model_email'];
+                                    for($m = 0 ; $m < count($contributor_images[$i]['models']); $m++){
+                                          $email = $contributor_images[$i]['models'][$m]['model_email'];
                                           if(strlen($email)> 0){
                                               echo $email.'<br/>';
                                           }
                                     }              
                                     ; ?> </br>
                         Release: <?php 
-                                for($m = 0 ; $m < count($edit_contributor_images[$i]['releases']); $m++){
-                                      $release = $edit_contributor_images[$i]['releases'][$m]['release_name'];
-                                      $release_url = $edit_contributor_images[$i]['releases'][$m]['release_url'];
+                                for($m = 0 ; $m < count($contributor_images[$i]['releases']); $m++){
+                                      $release = $contributor_images[$i]['releases'][$m]['release_name'];
+                                      $release_url = $contributor_images[$i]['releases'][$m]['release_url'];
                                       if(strlen($release)> 0){
                                           echo '<a href="'.$release_url.'" target="_blank">'.$release.'</a><br/>';
                                       }

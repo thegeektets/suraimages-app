@@ -51,6 +51,12 @@ class Member_model extends CI_Model {
                 if($order_cost < 0){
                         // set it to zero 
                         $order_cost = 0;
+                } else {
+                       $cart_items = $this->get_cart_items($order_id);
+                       $order_cost = 0;
+                       for($i=0; $i < count($cart_items); $i++){
+                            $order_cost += $cart_items[$i]['product_cost'];
+                        }
                 }
         	$query = "UPDATE orders SET order_cost = ".$this->db->escape($order_cost)." WHERE order_id = ". $this->db->escape($order_id)."";
         	 $this->db->query($query);	

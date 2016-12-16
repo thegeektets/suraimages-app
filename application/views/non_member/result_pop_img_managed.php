@@ -119,7 +119,6 @@
                                   <select class="standard-select" id="media-int-select"  data-prompt="Select the Media">
                                       <option>Select the Media</option>
                                       <option value="<?php echo $managed_pricing['0']['media_int_print'] ?>"> Print </option>
-                                      <option value="<?php echo $managed_pricing['0']['media_int_tv'] ?>"> TV </option>
                                       <option value="<?php echo $managed_pricing['0']['media_int_digital'] ?>"> Digital </option>
                                   </select>
                                 </div> 
@@ -218,7 +217,7 @@
                                       </select>
                                   </div>
                                   <div class="duration-int-select">
-                                      <select class="standard-select" id="duration-select" data-prompt="Select the Duration">
+                                      <select class="standard-select" id="duration-int-select" data-prompt="Select the Duration">
                                           <option>Select the Duration</option>
                                           <option value="<?php echo $managed_pricing['0']['duration_int_1day'] ?>"> 1 day </option>
                                           <option value="<?php echo $managed_pricing['0']['duration_int_1week'] ?>"> 1 week </option>
@@ -270,7 +269,7 @@
                                    <input type="hidden" name="file_price" value="">
                                    <input type="hidden" name="current_url" value="">
                                    <input type="hidden" name="file_duration" value="">
-                                   <input type="hidden" name="exclusive_duration" value="">
+                                   <input type="hidden" name="exclusive_duration" value="NULL">
                                    <input type="hidden" name="file_license" value="Right Managed">
                              </div>
                              <div class="price_footer">

@@ -264,6 +264,16 @@ class Admin_model extends CI_Model {
                
                 return $query->result_array();
         }
+        public function get_files_per_id($file_id, $from_date, $to_date) {
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND upload_id = ".$file_id." AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
+               
+                return $query->result_array();
+        }
+        public function get_files_per_contributor($contributor, $from_date, $to_date) {
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND contributor_image_uploads.user_id = ".$contributor." AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
+               
+                return $query->result_array();
+        }
         public function get_history_per_date($from_date, $to_date) {
                 $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id  AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
                 return $query->result_array();
@@ -288,9 +298,12 @@ class Admin_model extends CI_Model {
             $this->load->library('session');
             $upload_data = $this->upload->data(); 
             $ppic =   $upload_data['file_name'];
-            $url = base_url("assets/uploads/".$ppic); 
+            $url = base_url("assets/uploads/".$ppic);
+            if($type == 'property release' || $type == 'model release' ){
+                $this->db->query(" DELETE FROM resources WHERE resource_type = ".$this->db->escape($type)."");
+            } 
             $query = 
-            $this->db->query(" INSERT INTO resources(user_id,resource_name,resource_url,resource_type) VALUES(".$this->db->escape($id).",".$this->db->escape($name).","
+                $this->db->query(" INSERT INTO resources(user_id,resource_name,resource_url,resource_type) VALUES(".$this->db->escape($id).",".$this->db->escape($name).","
                 .$this->db->escape($url).",".$this->db->escape($type).")");
         }
 }

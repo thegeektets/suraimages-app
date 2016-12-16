@@ -22,77 +22,81 @@ class admin extends CI_Controller {
 		}	
 		$data['user_session']=$this->session->all_userdata();;
 
-		if (isset($data['user_session']['logged_in'])) {
-			if($data['user_session']['logged_in'] === TRUE && $data['user_session']['user_meta'][0]['account'] === 'admin'){
-				$data['user_details'] = $this->fetch_user_details();
-				$id = $data['user_details'][0]['user_id'];
+		if (isset($data['user_session']['logged_in']) 
+			&& $data['user_session']['logged_in'] === TRUE){
+			  $data['user_details'] = $this->fetch_user_details();
+			  if($data['user_details'][0]['account'] == 'admin'){
+					$id = $data['user_details'][0]['user_id'];
 
-				$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
-				if(!isset($data['purchase_history'])){
-					$data['purchase_history'] = $this->member_model->get_all_history();
-				}
-				for($f = 0; $f < count($data['all_contributor_images']); $f++){
-					
-					$file_id = $data['all_contributor_images'][$f]['upload_id'];
-					$models = $this->contributor_model->get_image_models($file_id);
-					$releases= $this->contributor_model->get_image_releases($file_id);
-					$data['all_contributor_images'][$f]['models']=$models;
-					$data['all_contributor_images'][$f]['releases']=$releases;
-				}
-				$data['all_contributor_videos'] = $this->admin_model->get_contributor_videos();
-				for($f = 0; $f < count($data['all_contributor_videos']); $f++){
-					
-					$file_id = $data['all_contributor_videos'][$f]['upload_id'];
-					$models = $this->contributor_model->get_video_models($file_id);
-					$releases= $this->contributor_model->get_video_releases($file_id);
-					$data['all_contributor_videos'][$f]['models']=$models;
-					$data['all_contributor_videos'][$f]['releases']=$releases;
-				}
+					$data['all_contributor_images'] = $this->admin_model->get_contributor_images();
+					if(!isset($data['purchase_history'])){
+						$data['purchase_history'] = $this->member_model->get_all_history();
+					}
+					for($f = 0; $f < count($data['all_contributor_images']); $f++){
+						
+						$file_id = $data['all_contributor_images'][$f]['upload_id'];
+						$models = $this->contributor_model->get_image_models($file_id);
+						$releases= $this->contributor_model->get_image_releases($file_id);
+						$data['all_contributor_images'][$f]['models']=$models;
+						$data['all_contributor_images'][$f]['releases']=$releases;
+					}
+					$data['all_contributor_videos'] = $this->admin_model->get_contributor_videos();
+					for($f = 0; $f < count($data['all_contributor_videos']); $f++){
+						
+						$file_id = $data['all_contributor_videos'][$f]['upload_id'];
+						$models = $this->contributor_model->get_video_models($file_id);
+						$releases= $this->contributor_model->get_video_releases($file_id);
+						$data['all_contributor_videos'][$f]['models']=$models;
+						$data['all_contributor_videos'][$f]['releases']=$releases;
+					}
 				
-				$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
-				$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
-				$data['rf_pricing'] = $this->fetch_rf_pricing();
-	     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
-	     	   	$data['members'] = $this->fetch_member_users();
-	     	   	$data['newcontributors'] = $this->fetch_newcontributor_users();
-	     	   	for ( $i=0;$i<count($data['newcontributors']);$i++ ) {
-	     	   		$user_id = $data['newcontributors'][$i]['user_id'];
-	     	   		$data['newcontributors'][$i]['uploads']=
-	     	   		$this->admin_model->get_all_image_uploads($user_id);
-	     	   		$data['newcontributors'][$i]['new_uploads']=
-	     	   		$this->admin_model->get_new_image_uploads($user_id);
-	     	   	}
-	     	   	$data['exscontributors'] = $this->fetch_excontributor_users();
-	     	   	for ( $i=0;$i<count($data['exscontributors']);$i++ ) {
-	     	   		$user_id = $data['exscontributors'][$i]['user_id'];
-	     	   		$data['exscontributors'][$i]['uploads']=
-	     	   		$this->admin_model->get_all_image_uploads($user_id);
-	     	   		$data['exscontributors'][$i]['new_uploads']=
-	     	   		$this->admin_model->get_new_image_uploads($user_id);
-	     	   		$data['exscontributors'][$i]['video_uploads']=
-	     	   		$this->admin_model->get_all_video_uploads($user_id);
-	     	   		$data['exscontributors'][$i]['new_video_uploads']=
-	     	   		$this->admin_model->get_new_video_uploads($user_id);
-	     	   	}
-	     	   	$this->load->view('admin/header' , $data);
-				$this->load->view('admin/index' , $data);
-				$this->load->view('admin/footer');
-			} else {
-				$data['success'] = FALSE ;
-				$data['message'] = 'Admin login is required for this page';
-				$this->load->helper(array('form', 'url'));
-				$this->load->view('registration/header' , $data);
-				$this->load->view('registration/login' , $data);
-				$this->load->view('registration/footer');
-			}
-   		} else {
-   			$data['success'] = FALSE ;
-   			$data['message'] = 'Admin login is required for this page';
-   			$this->load->helper(array('form', 'url'));
-   			$this->load->view('registration/header' , $data);
-   			$this->load->view('registration/login' , $data);
-   			$this->load->view('registration/footer');
-   		}
+					$data['managed_pricing'] = $this->admin_model->get_rm_pricing();
+					$data['rr_pricing'] = $this->admin_model->get_rr_pricing();
+					$data['rf_pricing'] = $this->fetch_rf_pricing();
+		     	   	$data['ex_pricing'] = $this->fetch_ex_pricing();
+		     	   	$data['members'] = $this->fetch_member_users();
+		     	   	$data['newcontributors'] = $this->fetch_newcontributor_users();
+		     	   	$data['contributors'] =$this->admin_model->get_excontributor_users();
+
+		     	   	for ( $i=0;$i<count($data['newcontributors']);$i++ ) {
+		     	   		$user_id = $data['newcontributors'][$i]['user_id'];
+		     	   		$data['newcontributors'][$i]['uploads']=
+		     	   		$this->admin_model->get_all_image_uploads($user_id);
+		     	   		$data['newcontributors'][$i]['new_uploads']=
+		     	   		$this->admin_model->get_new_image_uploads($user_id);
+		     	   	}
+		     	   	$data['exscontributors'] = $this->fetch_excontributor_users();
+		     	   	for ( $i=0;$i<count($data['exscontributors']);$i++ ) {
+		     	   		$user_id = $data['exscontributors'][$i]['user_id'];
+		     	   		$data['exscontributors'][$i]['uploads']=
+		     	   		$this->admin_model->get_all_image_uploads($user_id);
+		     	   		$data['exscontributors'][$i]['new_uploads']=
+		     	   		$this->admin_model->get_new_image_uploads($user_id);
+		     	   		$data['exscontributors'][$i]['video_uploads']=
+		     	   		$this->admin_model->get_all_video_uploads($user_id);
+		     	   		$data['exscontributors'][$i]['new_video_uploads']=
+		     	   		$this->admin_model->get_new_video_uploads($user_id);
+		     	   	}
+		     	   	$this->load->view('admin/header' , $data);
+					$this->load->view('admin/index' , $data);
+					$this->load->view('admin/footer');
+				} else {
+					$data['success'] = FALSE ;
+					$data['message'] = 'Admin login is required for this page';
+					$this->load->helper(array('form', 'url'));
+					$this->load->view('registration/header' , $data);
+					$this->load->view('registration/login' , $data);
+					$this->load->view('registration/footer');
+				}
+   		} 
+		else {
+			$data['success'] = FALSE ;
+			$data['message'] = 'Admin login is required for this page';
+			$this->load->helper(array('form', 'url'));
+			$this->load->view('registration/header' , $data);
+			$this->load->view('registration/login' , $data);
+			$this->load->view('registration/footer');
+		}
 	}
 	public function fetch_user_details() {
    		$this->load->library('session');
@@ -100,6 +104,69 @@ class admin extends CI_Controller {
 		return $this->user_model->get_user_details($data['user_session']['user_meta']['0']['email']);
 	}
 
+	public function contributor_files_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$contributor = $this->input->post("contributor_reports_select");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($contributor !==""){
+			$from_date = $this->input->post("from_date");	
+			$to_date = $this->input->post("to_date");		
+			
+			if($from_date !== '' && $to_date !== '' ){
+				$data['purchase_history'] = $this->admin_model->get_files_per_contributor($contributor,$from_date,$to_date);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'all fields are required to filter files';
+			}
+			
+		} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'Month is required to display Sale Statement';
+		}
+		$this->index($data);		
+	}
+	public function files_reports_filter(){
+	    $this->load->helper('url'); 
+		$this->load->library('session');
+		$this->load->helper(array('form', 'url'));
+		$data['act_history'] = TRUE;
+		$filter_type = $this->input->post("files_reports_select");	
+		$data['user_details'] = $this->fetch_user_details();
+		$id = $data['user_details'][0]['user_id'];
+		if($filter_type =="file_id"){
+			$image_id = $this->input->post("image_id");
+			$from_date = $this->input->post("from_date");	
+			$to_date = $this->input->post("to_date");		
+			if($image_id !== '' || $from_date !== '' && $to_date !== '' ){
+				$data['purchase_history'] = $this->admin_model->get_files_per_id($image_id,$from_date,$to_date);
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'all fields are required to filter files';
+			}
+			
+		} else {
+			$from_date = $this->input->post("from_date");	
+			$to_date = $this->input->post("to_date");	
+			if($from_date !== '' && $to_date !== '' ){
+				if($filter_type == 'images' || $filter_type == 'all' ){
+					$data['purchase_history'] = $this->admin_model->get_history_per_date($from_date,$to_date);	
+				} else {
+					$data['purchase_history'] = '';	
+				}
+				
+			} else {
+				$data['success'] = FALSE;
+				$data['message'] = 'dates are required to search by date';
+			}
+
+			
+		}
+		$this->index($data);		
+	}
 	public function sales_history_filter(){
 	    $this->load->helper('url'); 
 		$this->load->library('session');
@@ -176,26 +243,31 @@ class admin extends CI_Controller {
 		 $this->upload->initialize($config);
 
 		 $files = $_FILES;
-		 $count = count($_FILES['releasefiles']['name']);
+		 if(isset($_FILES)){
+		 	$count = count($_FILES['modelrelease']['name']);
+		 } else {
+		 	$count = 0;
+		 }
+
 		 $i = 0;
 		 $_FILES = array();
 		 $success = 0;
 		 while ($i < $count) { 
 
-			 $releasefiles = 'releasefiles';
-		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
-		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
-		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
-		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
-		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+			 $modelrelease = 'modelrelease';
+		     $_FILES['modelrelease']['name'] = $files['modelrelease']['name'][$i];
+		     $_FILES['modelrelease']['size'] = $files['modelrelease']['size'][$i];
+		     $_FILES['modelrelease']['tmp_name'] = $files['modelrelease']['tmp_name'][$i];
+		     $_FILES['modelrelease']['error'] = $files['modelrelease']['error'][$i];
+		     $_FILES['modelrelease']['type'] = $files['modelrelease']['type'][$i];
 
 
-		    if (!$this->upload->do_upload($releasefiles)) {
+		    if (!$this->upload->do_upload($modelrelease)) {
 		           $error = array('error' => $this->upload->display_errors());
 		    	   echo $this->upload->display_errors();
 		 	  } else {
 		 	       $id = $data['user_session']['user_meta']['0']['id'];
-		           $this->admin_model->upload_release($id, $_FILES['releasefiles']['name'],'model release');
+		           $this->admin_model->upload_release($id, $_FILES['modelrelease']['name'],'model release');
 		           $success = 1;
          	  }
 		    $i++;
@@ -254,26 +326,26 @@ class admin extends CI_Controller {
 		 $this->upload->initialize($config);
 
 		 $files = $_FILES;
-		 $count = count($_FILES['releasefiles']['name']);
+		 $count = count($_FILES['resourcefiles']['name']);
 		 $i = 0;
 		 $_FILES = array();
 		 $success = 0;
 		 while ($i < $count) { 
 
-			 $releasefiles = 'releasefiles';
-		     $_FILES['releasefiles']['name'] = $files['releasefiles']['name'][$i];
-		     $_FILES['releasefiles']['size'] = $files['releasefiles']['size'][$i];
-		     $_FILES['releasefiles']['tmp_name'] = $files['releasefiles']['tmp_name'][$i];
-		     $_FILES['releasefiles']['error'] = $files['releasefiles']['error'][$i];
-		     $_FILES['releasefiles']['type'] = $files['releasefiles']['type'][$i];
+			 $resourcefiles = 'resourcefiles';
+		     $_FILES['resourcefiles']['name'] = $files['resourcefiles']['name'][$i];
+		     $_FILES['resourcefiles']['size'] = $files['resourcefiles']['size'][$i];
+		     $_FILES['resourcefiles']['tmp_name'] = $files['resourcefiles']['tmp_name'][$i];
+		     $_FILES['resourcefiles']['error'] = $files['resourcefiles']['error'][$i];
+		     $_FILES['resourcefiles']['type'] = $files['resourcefiles']['type'][$i];
 
 
-		    if (!$this->upload->do_upload($releasefiles)) {
+		    if (!$this->upload->do_upload($resourcefiles)) {
 		           $error = array('error' => $this->upload->display_errors());
 		    	   echo $this->upload->display_errors();
 		 	  } else {
 		 	       $id = $data['user_session']['user_meta']['0']['id'];
-		           $this->admin_model->upload_release($id, $_FILES['releasefiles']['name'],'resource file');
+		           $this->admin_model->upload_release($id, $_FILES['resourcefiles']['name'],'resource file');
 		           $success = 1;
          	  }
 		    $i++;

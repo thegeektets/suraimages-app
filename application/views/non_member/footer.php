@@ -24,10 +24,11 @@
           </div>
           <div class="large-3 columns medium-2 columns">
             <div class="footer-social_media">
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-              <a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
-              <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+              <a href="https://www.facebook.com/suraimages" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+              <a href="https://twitter.com/suraimages" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+              <a href="https://www.youtube.com/channel/UCFg-S0r8HD5rSQslmXZzoPA" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+              <a href="https://plus.google.com/108412014602831693025" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+              
             </div>
           </div>
 

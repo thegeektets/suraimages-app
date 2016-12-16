@@ -85,9 +85,9 @@
                   }
                } else {
                     var mbsize = size.substring(6,size.indexOf('M'));
-                    if(mbsize > 2 ){
+                    if(mbsize > 10 ){
                       $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
-                      $( this ).append('Release form file should not be more than 2MB');
+                      $( this ).append('Release form file should not be more than 10MB');
                       return false
                     } else {
                       var tstr = type.substring(6);
@@ -110,7 +110,7 @@
         }
 
         if(success === "TRUE"){
-              var form = document.getElementById('property_release');
+              var form = document.getElementById('other_release');
               var myfd = new FormData(form);
               $.ajax({
               xhr: function () {
@@ -206,9 +206,9 @@
                   }
                } else {
                     var mbsize = size.substring(6,size.indexOf('M'));
-                    if(mbsize > 2 ){
+                    if(mbsize > 10 ){
                       $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
-                      $( this ).append('Release form file should not be more than 2MB');
+                      $( this ).append('Release form file should not be more than 10MB');
                       return false
                     } else {
                       var tstr = type.substring(6);
@@ -327,9 +327,9 @@
                   }
                } else {
                     var mbsize = size.substring(6,size.indexOf('M'));
-                    if(mbsize > 2 ){
+                    if(mbsize > 10 ){
                       $(this).css({'background':'#f8991c', 'color':'#fff' ,'text-align':'center'});
-                      $( this ).append('Release form file should not be more than 2MB');
+                      $( this ).append('Release form file should not be more than 10MB');
                       return false
                     } else {
                       var tstr = type.substring(6);

@@ -436,6 +436,7 @@ class Main extends CI_Controller {
 
 	}
 
+
 	public function complete_add_to_cart(){
 		$this->load->library('session');
 		$data['user_session'] = $this->session->all_userdata();

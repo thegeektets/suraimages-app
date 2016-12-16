@@ -80,6 +80,7 @@ body {
 	padding: 0.7rem 0rem;
 	line-height: inherit;
   margin-left:5px; 
+  display: relative;
 }
 
 .menu-divider {
@@ -1440,7 +1441,9 @@ button.slick-next.slick-arrow {
        width: 60%;
        margin-left: 5px;
    }
-
+   .dropdown.menu > li.is-dropdown-submenu-parent > a {
+      position: static;
+   }
    .dropdown.menu > li.is-dropdown-submenu-parent > a::after {
        content: '';
        display: block;
@@ -1450,7 +1453,8 @@ button.slick-next.slick-arrow {
        border-color: #f8991c transparent transparent;
        border-top-style: solid;
        border-bottom-width: 0;
-       right: 5px;
+       position: absolute;
+       right: 15px;
        margin-top: -2px;
    }
    label {

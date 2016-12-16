@@ -39,10 +39,11 @@
         </div>
         <div class="top-bar-right inside-page">
           <ul class="menu" data-responsive-menu="medium-dropdown">
-              <li class="menu-text"> <a href="#">Welcome  </a></li>
+              <li class="menu-text"> <a href="#"> Welcome  </a></li>
               <li class="menu-text menu-divider"> 
                             <a data-dropdown="menu_account" aria-controls="menu_account" aria-expanded="false">
-                            <?php echo $user_session['user_meta']['0']['email'];?>  </a>
+                                 <?php echo trim($user_session['user_meta']['0']['email']); ?>  
+                            </a>
                             <ul id="menu_account" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
                               <li><a href="#account" data-id="account" class="tab_link">Account</a></li>
                               <li><a href="#basket" data-id="basket" class="tab_link">Shopping Basket </a></li>

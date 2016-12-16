@@ -13,6 +13,8 @@ function formatBytes(bytes,decimals) {
 
 $(document).ready(function(){
 
+	$(".search_img_details").hide();
+	$(".search_img_popup").hide();
 	
 	$(function() {
             $('.standard-select-multiple').change(function() {
@@ -67,9 +69,6 @@ $(document).ready(function(){
 	var state = "open";
 	var popup_state = "closed";
 	var close_btn = "false";
-
-	$(".search_img_details").hide();
-	$(".search_img_popup").hide();
 
 	$( ".shopping_basket" ).click(
 	  function() {

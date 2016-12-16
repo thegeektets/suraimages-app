@@ -8,6 +8,7 @@ class member extends CI_Controller {
        parent::__construct();
        $this->load->model('user_model');
        $this->load->model('member_model');
+       $this->load->model('contributor_model');
    	}
 
 
@@ -77,8 +78,6 @@ class member extends CI_Controller {
 		// introduce check here
 
 		// store payment
-		//$reference = 127;
-		//$pesapal_tracking_id = 'TESTID';
 		if($reference !== null && $pesapal_tracking_id !== null ){
 			$this->member_model->update_order_payment($reference, $pesapal_tracking_id);	
 		}
@@ -87,30 +86,11 @@ class member extends CI_Controller {
 
 	}
 
-	function convertCurrency($amount, $from, $to){
-	    $url  = "https://www.google.com/finance/converter?a=$amount&from=$from&to=$to";
-	    $data = file_get_contents($url);
-	    preg_match("/<span class=bld>(.*)<\/span>/",$data, $converted);
-	    $converted = preg_replace("/[^0-9.]/", "", $converted[1]);
-	    return round($converted, 3);
-	}
-
 	public function download_package($order_id) {
-
-		$this->load->library('image_lib');
-			            
-		$reference = $order_id;
 		$package_files = $this->member_model->get_package_files($order_id);
-
-		$zipname = 'suraimages_package_'.$reference.'.zip';
-		$zip = new ZipArchive;
-		$zip -> open($zipname, ZipArchive:: CREATE | ZipArchive:: OVERWRITE);
 
 		for($i=0; $i < count($package_files); $i++) {
 			
-			$file_url = $package_files[$i]['file_url'];
-			
-			$duration = '';
 			if($package_files[$i]['product_license'] == 'Exclusive License') {
 			
 					$duration = $package_files[$i]['product_duration'];
@@ -153,16 +133,46 @@ class member extends CI_Controller {
 				  $upload_id = $package_files[$i]['upload_id'];
 				  $this->member_model->update_exclusive_image($upload_id, $start, $end);
 			}
+			$models = $this->contributor_model->get_image_models($package_files[$i]['upload_id']);
+			if(count($models) > 0) {
+				for($m=0; count($models)>$m ; $m++) {
+					$image_id  = $package_files[$i]['upload_id'];
+					$amount = $package_files[$i]['product_cost'];
+					$email = $models[$m]['model_email'];
+					$email = trim($email);
+					$image = $package_files[$i]['file_thumbnail'];
+					$this->notify_model_purchase($email,$image_id,$amount,$image);
+				}
+			}
 
+			
+		}
+
+		$this->create_zip($order_id,$package_files);
+	}
+	public function create_zip($order_id , $package_files) {
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('image_lib');
+		$reference = $order_id;
+		$zipname = 'suraimages_package_'.$reference.'.zip';
+		$zip = new ZipArchive;
+		$zip -> open($zipname, ZipArchive:: CREATE | ZipArchive:: OVERWRITE);
+		
+		for($i=0; $i < count($package_files); $i++) {
+			
+			$file_url = $package_files[$i]['file_url'];
+			
+			
 			if($package_files[$i]['file_license'] == 'Right Managed'){
-			
-				$zip->addFromString(basename($file_url), file_get_contents($file_url));		
-			
+				
+				$zip->addFromString(basename($file_url), file_get_contents($file_url));	
+				
 			} else {
 				$size = $package_files[$i]['product_size'];
 				$pathinfo = pathinfo($file_url);
 				if($size == 'Large'){
-					$zip->addFromString(basename($file_url), file_get_contents($file_url));	
+					 $zip->addFromString(basename($file_url), file_get_contents($file_url));	
+					
 				} else {
 					$config2['image_library'] = 'gd2';
 		 	  	 	$config2['source_image'] = "./assets/uploads/".$pathinfo['filename'].".".$pathinfo['extension'];
@@ -185,22 +195,20 @@ class member extends CI_Controller {
 	          	
 	          		} else {
 						$this->image_lib->clear();
-		            	$thumbnail_path = 'assets/downloads/'. $pathinfo['filename'] . "_download." . $pathinfo['extension'];
-		            	$zip->addFile($thumbnail_path, basename($thumbnail_path));
+		            	$thumbnail_path = base_url().'/assets/downloads/'. $pathinfo['filename'] . "_download." . $pathinfo['extension'];
+		            	  $zip->addFromString(basename($thumbnail_path), file_get_contents($thumbnail_path));	
 		            }
             	}
 			}
 			
 		}
-		
-
 		$zip->close();
-		
-		header('Content-Type: application/zip');
-		header('Content-disposition: attachment; filename='.$zipname);
-		header('Content-Length:'.filesize($zipname));
-		readfile($zipname);
-		
+		$this->download($zipname);
+	}
+	public function download($file) {
+		$this->load->helper(array('form', 'url'));
+		$file = base_url().$file;
+		header('Location:'.$file);
 	}
 
 	public function pay_pesapal() {
@@ -225,29 +233,32 @@ class member extends CI_Controller {
 
 		$consumer_key = 'qrzxxvlzP8+SBD2tojveiB7fOhi6SCTK';//Register a merchant account on
 		$consumer_secret = 'Sp9PIs7pURtJnJg3iDHKNC8PSYk=';
+		
+		
+		// live credentials
+		/*
+		$consumer_key = '05lbwlrtbaK4TKK3+hdYlphWYLt1ImGG';//Register a merchant account on
+		$consumer_secret = 'kfrsak44JrZU4fVx+T8jaGp+ZXc=';
+		*/
 
 		$signature_method = new OAuthSignatureMethod_HMAC_SHA1();
+		
 		$iframelink = 'https://demo.pesapal.com/api/PostPesapalDirectOrderV4';
-		 //$iframelink = 'https://www.pesapal.com/API/PostPesapalDirectOrderV4';
+		//$iframelink = 'https://www.pesapal.com/API/PostPesapalDirectOrderV4';
 
 		$amount = $user_cart[0]['order_cost'];
-		$amount = number_format($amount, 2);//format amount to 2 decimal places
+		$amount = number_format($amount, 2, '.', '');//format amount to 2 decimal places
 		$desc = 'Sura Images Order '.$user_cart[0]['order_id'].' Payment Request';
 		$type = 'MERCHANT'; //default value = MERCHANT
 		$reference = $user_cart[0]['order_id'];//unique order id of the transaction, generated by merchant
 		$first_name = $user_cart[0]['firstname'];
 		$last_name = $user_cart[0]['middlename'];
-		$email = $user_cart[0]['email'];
+		$email = $data['user_details'][0]['email'];
 		$phonenumber = $user_cart[0]['telnumber'];//ONE of email or phonenumber is required
 		$currency = 'USD';
-
 		$callback_url = base_url().'/index.php/member/pesapal_res'; //redirect url, the page that will handle the response from pesapal.
-
-		$post_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><PesapalDirectOrderInfo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" Amount=\"".$amount."\" Currency=\"".$currency."\" Description=\"".$desc."\" Type=\"".$type."\" Reference=\"".$reference."\" FirstName=\"".$first_name."\" LastName=\"".$last_name."\" Email=\"".$email."\" PhoneNumber=\"".$phonenumber."\" xmlns=\"http://www.pesapal.com\" />";
-		$post_xml = htmlentities($post_xml);
-
-
-
+		$post_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><PesapalDirectOrderInfo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" Amount=\"" . $amount . "\" Currency=\"" . $currency . "\" Description=\"" . $desc . "\" Type=\"" . $type . "\" Reference=\"" . $reference . "\" FirstName=\"" . $first_name . "\" LastName=\"" . $last_name . "\" Email=\"" . $email . "\" PhoneNumber=\"" . $phonenumber . "\" xmlns=\"http://www.pesapal.com\" />";
+        $post_xml = htmlspecialchars($post_xml);
 		$consumer = new OAuthConsumer($consumer_key, $consumer_secret);
 
 		//post transaction to pesapal
@@ -284,7 +295,202 @@ class member extends CI_Controller {
 	     $this->email->initialize($config);
 	 } 
 
+	public function notify_model_purchase($email,$image_id,$amount,$image) {
+		        
+		        $cart_items = "
+				 <table>
+				 	<thead>
+				 		<tr>
+					 		<th>
+					 			
+					 		</th>
+					 		<th>
+					 		</th>
+					 		<th>
+					 			Amount
+					 		</th>
+					 	</tr>
+				 	</thead>
+				 	<tbody>
+				 
+			          <tr>
+			            <td class='image_thumb'>
+			              <img src='".$image."' alt='' height='100px'>
+			            </td>
+			            <td class='image_desc'>
+			              	The image of image id  ".$image_id." that you appear in has been purchased. Contact your photographer for payment
+			            </td>
+			            <td class='image_cost'>
+			              <strong> Amount : </strong>
+			              $ ".$amount."
+			            </td>
+			          </tr>
+					 			          " ;	
+				 $cart_footer = "
+				  	</tbody>
+				  	</table>
+				  "	;		
+				  $cart_items = $cart_items . $cart_footer;		      
+				 
+				 $this->load->helper(array('form', 'url'));
+			     $html = "
+			     		<head>
+						<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
+						<style type='text/css'>
+						@font-face {
+						font-family: 'Calibri';
+						font-weight: 700;
+						src: url('".base_url('assets/admin/calibri/Calibri Bold.ttf')."');
+						}
 
+						@font-face {
+						font-family: 'Calibri';
+						font-weight: normal;
+						src: url('".base_url('assets/admin/calibri/Calibri.ttf')."');
+						}
+						@font-face {
+						font-family: 'Calibri';
+						font-weight: 100;
+						src: url('".base_url('assets/admin/calibri/calibril.ttf')."');
+						
+						}
+						body,
+						html {
+						background: #fff !important;
+						} 
+						body {
+						background: #f3f3f3 !important;
+						margin: 0px auto;
+						padding-left: 25px;
+						padding-right: 25px;
+						width: 900px;
+						box-shadow: 5px 5px 5px #888888;
+						margin-top: 10;
+						margin-bottom: 10;
+						position: relative;
+						font-family: 'Calibri';
+						font-weight: 300;
+						font-size: 18px;
+						color: #888;
+						}
+						.header {
+						background: #262134 !important;
+						margin-left: -25px;
+						margin-right: -25px;
+						display: block;
+						}
+						.body-drip {
+						margin-top: 10px;
+						display: block;
+						}
+						.logo {
+						padding: 10px;
+						float: left;
+						}
+						.logo > img {
+						height: 40px;
+						}
+						.phone {
+						margin-top: 10px;
+						float: right;
+						padding: 10px;
+						color: #fff;
+						}
+						.footer {
+						 background: #262134 !important;
+						 padding: 15px;
+						 display: block; 
+						 position: absolute;
+						 bottom: 0px;
+						 left: 0px;
+						 width: 920px;
+						}
+						.copyright {
+						color: #fff;
+						float: right;
+						font-size: 14px;
+						}
+						.social {
+						float: right;
+						color: #fff;
+						font-size: 14px;
+						margin-right: 10px;
+						}
+						</style>
+						</head>
+						<container class='header'>
+						  <div class='logo'>
+						    <img src='".base_url('assets/admin/img/sura_dark.png')."' alt=''>
+						  </div>
+						  <div class='address'>
+						      Duplex Lower Hill <br/>
+						      Upper Hill Rd <br/>
+						      Suite 20, Upper Hill
+						  </div>
+						  <div class='address'>
+						      P.O Box 38540-00100 <br/>
+						      GPO, Nairobi, Kenya <br/>
+						      +254 20 242 9588
+						  </div>
+						  <div class='phone'>
+						      www.suraimages.com
+						      info@suraimages.com
+						  </div>
+						  <div style='clear: both'></div>
+						</container>
+
+						<container class='body-drip'>
+
+						  
+						  <row>
+						    <div class='quote_head'>
+						      <h3 class='text-center' style='text-align:center'>	Subject: Sale(s) notification
+                              </h3>
+						    </div>
+						  </row>
+
+						 
+						  <row>
+						    <columns>
+						      <p class='text-center'> 
+						          <div class='float-left'>
+						            <p>
+						            <strong>Dear </strong> ".$email." </br>
+						            The following are the sales you have made in the last one day. 
+						            </p>
+						            <p>
+						          </div>
+						            
+						          <div class='float-right'>
+						           <strong>Date: </strong> ".date('d/m/Y')."
+						          </div>
+						          <div style='clear: both'></div>
+						          <br/>
+						          <hr/>
+						          ".$cart_items."
+						          <row>
+						            <div class='float-right'>
+						                <strong>Total Amount : </strong>$".$amount."
+						            </div>
+						          </row>
+						          <div style='clear: both'></div>
+						          <hr/>
+						          
+						          <row class='footer'>
+						              <hr/>
+						              <strong>Disclaimer: </strong>This is a system generated email.
+						          </row>
+						</container>";
+				  
+			     $this->initializemail();
+			     $this->load->helper('url');
+			     $this->load->library('email');
+			     $this->email->from('support@suraimages.com', 'SuraImages Support');
+			     $this->email->to($email); 
+			     $this->email->subject('Sale(s) notification');
+			     $this->email->message(''.$html);
+			     $this->email->send();
+	}
 	public function send_quote_email($email, $id, $user_cart ) {
          $this->load->library('Pdf');
 
@@ -514,7 +720,7 @@ class member extends CI_Controller {
 	
 		  $newFile  = 'qoute'.$user_cart[0]['member_id'].'.pdf';
 		   $obj = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
-		   $obj->SetSubject('SuraImages license Qoute'); // set document information
+		   $obj->SetSubject('SuraImages license Quote'); // set document information
 		   $obj->AddPage(); // add a page
 		   $obj->SetFont('helvetica', '', 6);
 		   $obj->writeHTML("".$html, true, false, false, false, '');
@@ -526,7 +732,7 @@ class member extends CI_Controller {
 	     $this->load->library('email');
 	     $this->email->from('support@suraimages.com', 'SuraImages Support');
 	     $this->email->to($email); 
-	     $this->email->subject('SuraImages license Qoute');
+	     $this->email->subject('SuraImages license Quote');
 	     $this->email->message(''.$html);
 	     $this->email->attach($newFile);
  

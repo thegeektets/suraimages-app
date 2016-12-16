@@ -464,6 +464,7 @@ body , h1, h2, h3, h4, h5, h6{
     bottom: 0px;
     background: rgba(0,0,0,0.6);
     width: 100%;
+    display: none;
 }
 .search_img_exclusive {
     position: absolute;
@@ -516,7 +517,8 @@ body , h1, h2, h3, h4, h5, h6{
     margin: 0px auto;
     left: 22.32rem;
     max-height: 100% !important;
-    overflow: scroll;
+    overflow-y: scroll;
+    display: none;
 }
 .search_display_img {
       padding: 10px;
@@ -916,6 +918,9 @@ button.ms-choice {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.dropdown.menu > li.is-dropdown-submenu-parent > a {
+    position: static;
+}
 .dropdown.menu > li.is-dropdown-submenu-parent > a::after {
     content: '';
     display: block;
@@ -925,7 +930,8 @@ button.ms-choice {
     border-color: #f8991c transparent transparent;
     border-top-style: solid;
     border-bottom-width: 0;
-    right: 5px;
+    position: absolute;
+    right: 15px;
     margin-top: -2px;
 }
 .standard-title {

@@ -42,9 +42,9 @@
             $('.message').text("cart item removed"); 
             $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
             $('.message').show();
-            setTimeout($('.message').hide(), 3000);
             $('#report_item'+item_id).hide();
-            $('.order_cost').text(parseInt($('.order_cost').text())-item_cost);
+            $('.order_cost').text(($('.order_cost').text()-item_cost).toFixed(2));
+            setTimeout($('.message').hide(), 3000);
           }
         },
       fail:

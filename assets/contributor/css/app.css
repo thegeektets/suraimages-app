@@ -93,6 +93,7 @@ textarea.inline_input {
 	padding: 0.7rem 0rem;
 	line-height: inherit;
   margin-left:5px; 
+  position: relative;
 }
 
 .menu-divider {
@@ -1157,7 +1158,7 @@ ul#menu_account::before {
 .jFiler-items.jFiler-row {
   border-top: 1px solid;
   padding-top: 10px;
-  width: 72vw;
+  width: 60vw;
 }
   /*Edit Files */
 .edit_content {
@@ -1441,8 +1442,8 @@ ul#menu_account::before {
      border-color: #f8991c transparent transparent;
      border-top-style: solid;
      border-bottom-width: 0;
-     right: -19px;
      position: absolute;
+     right: 15px;
      margin-top: -2px;
  }
  label {
@@ -1524,14 +1525,13 @@ ul#menu_account::before {
     width: 100%;
 }
 
-/*correction css*/
-
-
-.dropdown.menu > li.is-dropdown-submenu-parent > a {
-    padding-right: 1.5rem;
-    position: relative;
-    display: inline;
-}
+  /*correction css*/
+  
+  .dropdown.menu > li.is-dropdown-submenu-parent > a {
+      padding-right: 1.5rem;
+      display: inline;
+      position: static;
+  }
   .alert-box {
       border-style: solid;
       border-width: 1px;

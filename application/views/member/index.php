@@ -448,7 +448,6 @@
                                            <div class="report_item" id="<?php echo 'report_item'.$cart_items[$c]['item_id'] ?>">
                                              <div class="row">
                                                <div class="large-2 column report_col">
-                                                   <input type="checkbox" name="<?php echo 'check_'.$cart_items[$c]['product_id'] ?>">
                                                    <img src="<?php echo $cart_items[$c]['file_thumbnail']?>" class="search_image">
                                                </div>
                                                <div class="large-1 column report_col">
@@ -460,8 +459,8 @@
                                                <div class="large-2 column report_col">
                                                    <?php 
                                                       if( $cart_items[$c]['product_license'] == "Exclusive License" ) {
-                                                          echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration'] ;
-                                                      } else if ($cart_items[$c]['product_license'] == "Right Managed" && $cart_items[$c]['exclusive_duration'] !== NULL ) {
+                                                          echo "Royalty Free - ".$cart_items[$c]['product_size']." with ".$cart_items[$c]['product_duration']." ".$cart_items[$c]['product_license'];
+                                                      } else if ($cart_items[$c]['product_license'] == "Right Managed" && $cart_items[$c]['exclusive_duration'] !== NULL && $cart_items[$c]['exclusive_duration'] !== "NULL" ) {
                                                            echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration']." with ".$cart_items[$c]['exclusive_duration']." Exclusive license";
                                                       } else if ($cart_items[$c]['product_license'] == "Right Managed" ) {
                                                            echo $cart_items[$c]['product_license']." for ".$cart_items[$c]['product_duration'];
@@ -504,7 +503,7 @@
                                                                        <a class="question_close">
                                                                            <i class="fa fa-times" aria-hidden="true"></i>
                                                                        </a>
-                                                                       Provide an email address in the email address bar then click "Get A Quote" button for a quotation of selected items to be sent. Please note you cannot get a quote without selecting the items from  the shopping basket.
+                                                                       Provide an email address in the email address bar and click "Get A Quote" button and a quotation of the items in your shopping basket will be sent shorlty.
                                                                   </span>
                                                               </span>
                                                           </div>
