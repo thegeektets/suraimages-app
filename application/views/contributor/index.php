@@ -33,7 +33,7 @@
               <div class="user_message">
               Joining Sura Images as a contibutor;
                 <ul class="message_items">
-                  <li>You get 64.25% of each sale. </li>
+                  <li>You get 60% of each sale. </li>
                   <li>You have a non-exclusive contract </li>
                   <li>You retain all the copyright </li>
                   <li>You get access to your account statement </li>

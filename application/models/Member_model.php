@@ -24,7 +24,7 @@ class Member_model extends CI_Model {
                 return $query->result_array();
         }
         public function get_contributor_history($contributor_id) {
-                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id GROUP BY item_id");
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id GROUP BY item_id");
                 return $query->result_array();
         }
         public function get_all_history() {

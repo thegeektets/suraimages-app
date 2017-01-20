@@ -412,7 +412,7 @@ function submit_trial_images(){
               } else if (data.includes('POST Content-Length')){
                   $('.message').attr("class" ,"message alert-box warning");
                   $('.message').text(data.replace(/<\/?[^>]+(>|$)/g, "")); 
-                  $('.message').append('Please upload fewer images at a time');
+                  $('.message').append('<br/> please upload fewer images at a time');
                   $('.message').append('<a href="#"" class="close" id="close">&times;</a>');
                   
                   $('.processing').addClass('btn_upload_multi');
