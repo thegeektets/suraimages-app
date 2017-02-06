@@ -9,7 +9,7 @@ class member extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('member_model');
        $this->load->model('contributor_model');
-   	}
+      	}
 
 
 	public function index($data = NULL)
@@ -141,7 +141,7 @@ class member extends CI_Controller {
 					$email = $models[$m]['model_email'];
 					$email = trim($email);
 					$image = $package_files[$i]['file_thumbnail'];
-					$this->notify_model_purchase($email,$image_id,$amount,$image);
+					//$this->notify_model_purchase($email,$image_id,$amount,$image);
 				}
 			}
 
@@ -151,6 +151,7 @@ class member extends CI_Controller {
 		$this->create_zip($order_id,$package_files);
 	}
 	public function create_zip($order_id , $package_files) {
+		ini_set("allow_url_fopen", 'On');
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('image_lib');
 		$reference = $order_id;
@@ -164,14 +165,26 @@ class member extends CI_Controller {
 			
 			
 			if($package_files[$i]['file_license'] == 'Right Managed'){
-				
-				$zip->addFromString(basename($file_url), file_get_contents($file_url));	
+
+				$url = $file_url;
+				$ch = curl_init();
+				curl_setopt ($ch, CURLOPT_URL, $url);
+				curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+				$contents = curl_exec($ch);
+				$zip->addFromString(basename($file_url), $contents);	
 				
 			} else {
 				$size = $package_files[$i]['product_size'];
 				$pathinfo = pathinfo($file_url);
 				if($size == 'Large'){
-					 $zip->addFromString(basename($file_url), file_get_contents($file_url));	
+						$url = $file_url;
+						$ch = curl_init();
+						curl_setopt ($ch, CURLOPT_URL, $url);
+						curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+						curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+						$contents = curl_exec($ch);
+						$zip->addFromString(basename($file_url), $contents);	
 					
 				} else {
 					$config2['image_library'] = 'gd2';
@@ -196,7 +209,13 @@ class member extends CI_Controller {
 	          		} else {
 						$this->image_lib->clear();
 		            	$thumbnail_path = base_url().'/assets/downloads/'. $pathinfo['filename'] . "_download." . $pathinfo['extension'];
-		            	  $zip->addFromString(basename($thumbnail_path), file_get_contents($thumbnail_path));	
+		            	  $url = $thumbnail_path;
+				$ch = curl_init();
+				curl_setopt ($ch, CURLOPT_URL, $url);
+				curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+				$contents = curl_exec($ch);
+				$zip->addFromString(basename($thumbnail_path), $contents);	
 		            }
             	}
 			}
@@ -295,8 +314,9 @@ class member extends CI_Controller {
 	     $this->email->initialize($config);
 	 } 
 
+	/*
 	public function notify_model_purchase($email,$image_id,$amount,$image) {
-		        
+		        $this->load->helper(array('form', 'url'));
 		        $cart_items = "
 				 <table>
 				 	<thead>
@@ -324,17 +344,14 @@ class member extends CI_Controller {
 			              <strong> Amount : </strong>
 			              $ ".$amount."
 			            </td>
-			          </tr>
-					 			          " ;	
+			          </tr>" ;	
 				 $cart_footer = "
 				  	</tbody>
 				  	</table>
 				  "	;		
 				  $cart_items = $cart_items . $cart_footer;		      
 				 
-				 $this->load->helper(array('form', 'url'));
-			     $html = "
-			     		<head>
+			       $html = "<head><meta http-equiv="Content-Type" content="text/html; charset=gb18030">
 						<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
 						<style type='text/css'>
 						@font-face {
@@ -480,8 +497,7 @@ class member extends CI_Controller {
 						              <hr/>
 						              <strong>Disclaimer: </strong>This is a system generated email.
 						          </row>
-						</container>";
-				  
+						</container>"; 
 			     $this->initializemail();
 			     $this->load->helper('url');
 			     $this->load->library('email');
@@ -491,6 +507,9 @@ class member extends CI_Controller {
 			     $this->email->message(''.$html);
 			     $this->email->send();
 	}
+	
+	
+	
 	public function send_quote_email($email, $id, $user_cart ) {
          $this->load->library('Pdf');
 
@@ -750,6 +769,7 @@ class member extends CI_Controller {
 	     }
 		
 	 }
+	*/
 	public function send_quote() {
 		$this->load->helper(array('form', 'url'));	
 		$email = $this->input->post("qoute_email");

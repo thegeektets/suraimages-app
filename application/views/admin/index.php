@@ -1,4 +1,3 @@
-
   <div class="inside_body">
 
        <div class="row">
@@ -2587,11 +2586,11 @@
                               <div class="large-2 column report_col">
                                   <?php 
                                     if( $purchase_history[$r]['product_license'] == "Exclusive License" ) {
-                                                          echo "Royalty Free - ".$purchase_history[$r]['product_size']." with ".$purchase_history[$r]['product_duration']." ".$purchase_history[$r]['product_license'];  
-                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" && $purchase_history[$r]['exclusive_duration'] !== NULL ) {
-                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration']." with ".$purchase_history[$r]['exclusive_duration']." Exclusive license";
+                                         echo "Royalty Free - ".$purchase_history[$r]['product_size']." with ".$purchase_history[$r]['product_duration']." ".$purchase_history[$r]['product_license'];  
+                                     } else if ($purchase_history[$r]['product_license'] == "Right Managed" && $purchase_history[$r]['exclusive_duration'] !== 'NULL' ) {
+                                        echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration']." with ".$purchase_history[$r]['exclusive_duration']." Exclusive license";
                                      } else if ($purchase_history[$r]['product_license'] == "Right Managed" ) {
-                                          echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'];
+                                        echo $purchase_history[$r]['product_license']." for ".$purchase_history[$r]['product_duration'];
                                      }  else {
                                          echo $purchase_history[$r]['product_license'];
                                      }

@@ -215,17 +215,17 @@
                   </button>
                  </div>
              </form>
-             <form class="attach_release">
+             <form class="attach_release" onsubmit="return add_release();">
                <div class="add_title">
                 Attach Release  : 
-               <select  name="all_release" class="inline_input">
-                     <option value="">Select Releases </option>
-                     <?php for($r=0; $r < count($contributor_releases); $r++) { ?>
-                       <option value="<?php echo $contributor_releases[$r]['release_id'] ?>"> 
-                       <?php echo $contributor_releases[$r]['release_name'] ?> 
-                       </option>
-                     <?php } ?>
-                </select>
+                <select  name="all_file_release" class="inline_input">
+                      <option>Select Releases </option>
+                      <?php for($r=0; $r < count($contributor_releases); $r++) { ?>
+                        <option value="<?php echo $contributor_releases[$r]['release_id'] ?>"> 
+                        <?php echo $contributor_releases[$r]['release_name'] ?> 
+                        </option>
+                      <?php } ?>
+                 </select>
                 <button type="submit" class="button btn_search">
                     Attach
                 </button>

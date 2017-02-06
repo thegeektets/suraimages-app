@@ -389,7 +389,7 @@
                                       <?php 
                                         $categories = explode(",", $contributor_videos[$i]['file_category']);
                                          for($c=0; $c < count($categories); $c++) { 
-                                        if(strlen(categories[$c]) > 0){
+                                        if(strlen($categories[$c]) > 0){
                                     ?>
                                       <option value="<?php echo $categories[$c]; ?>" selected="selected">
                                         <?php echo $categories[$c];?>

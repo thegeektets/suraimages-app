@@ -284,12 +284,18 @@ class Admin_model extends CI_Model {
         }
         public function get_history_per_license($license) {
 
-                if($license == 'Royalty Free' || $license == 'Right Managed'){
+                if($license == 'Royalty Free'){
                     $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' AND product_duration = '' AND exclusive_duration = '' GROUP BY item_id");
                    
+                } else if( $license == 'Right Managed') {
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' GROUP BY item_id");
+                
+                } else if( $license == 'Exclusive License' ) {
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' AND file_license = 'Royalty Free' AND product_duration != '' GROUP BY item_id");
+               
                 } else {
-                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = '".$license."' AND product_duration != '' OR exclusive_duration != '' GROUP BY item_id");
-                }
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where   order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND product_license = 'Right Managed' AND exclusive_duration!= 'NULL' GROUP BY item_id");
+                } 
                 
                 return $query->result_array();
         }
