@@ -92,7 +92,8 @@ $(".standard-select").on('change',function() {
     //usage_warning(select_id);
 
     if (select_id == 'usage-select') {
-        var usage = $("select[id=usage-select] option:selected").text();
+        var usage = $(this).parents(".search_img_popup").find("select[id=usage-select] option:selected").text();
+            usage = usage.replace("Select the UsageSelect the UsageSelect the Usage", "");
             usage = usage.replace("Select the Usage", "");
             console.log(usage);
             if(usage == 'Advertising') {
@@ -167,7 +168,8 @@ $(".standard-select").on('change',function() {
     } else if (select_id == 'media-adv-select' || select_id == 'media-edt-select' || select_id == 'media-int-select') {
 
         if(select_id == 'media-adv-select') {
-                var media = $("select[id=media-adv-select] option:selected").text();
+                var media = $(this).parents(".search_img_popup").find("select[id=media-adv-select] option:selected").text();
+                    media = media.replace("Select the MediaSelect the MediaSelect the Media", "");
                     media = media.replace("Select the Media", "");
                     media = $.trim(media);
 
@@ -209,7 +211,8 @@ $(".standard-select").on('change',function() {
                     }
                 
            } else if (select_id == 'media-edt-select') {
-            var media = $("select[id=media-edt-select] option:selected").text();
+            var media = $(this).parents(".search_img_popup").find("select[id=media-edt-select] option:selected").text();
+                    media = media.replace("Select the MediaSelect the MediaSelect the Media", "");
                     media = media.replace("Select the Media", "");
                     media = $.trim(media);    
 
@@ -249,7 +252,8 @@ $(".standard-select").on('change',function() {
                         console.log(media);
                     }
         } else {
-            var media = $("select[id=media-int-select] option:selected").text();
+            var media = $(this).parents(".search_img_popup").find("select[id=media-int-select] option:selected").text();
+                    media = media.replace("Select the MediaSelect the MediaSelect the Media", "");
                     media = media.replace("Select the Media", "");
                     media = $.trim(media);
 
@@ -311,8 +315,11 @@ $(".standard-select").on('change',function() {
         console.log( $('input:hidden[name="details_txt"]').val() );
     
     } else if (select_id == 'duration-adv-select' || select_id == 'duration-edt-select' || select_id == 'duration-int-select') {
-        var duration = $("select[id="+select_id+"] option:selected").text();
+        var duration = $(this).parents(".search_img_popup").find("select[id="+select_id+"] option:selected").text();
+        duration = duration.replace("Select the DurationSelect the DurationSelect the Duration", "");
         duration = duration.replace("Select the Duration", "");
+        duration = $.trim(duration);
+
         $('input:hidden[name="duration_txt"]').val($(this).val());
 
         $(this).parents(".accordion-content").find('input:hidden[name="file_license"]').val('Right Managed'); 
@@ -326,8 +333,11 @@ $(".standard-select").on('change',function() {
     } else if (select_id == 'exclusive-select') {
 
         var detail_total =  $(this).val();
-        var duration = $("select[id="+select_id+"] option:selected").text();
+        var duration = $(this).parents(".search_img_popup").find("select[id="+select_id+"] option:selected").text();
+        duration = duration.replace("Select Exclusive LicenseSelect Exclusive LicenseSelect Exclusive License", "");
         duration = duration.replace("Select Exclusive License", "");
+        duration = $.trim(duration);
+
         $('input:hidden[name="exclusive_txt"]').val(detail_total);
         $('input:hidden[name="exclusive_duration"]').val(duration);
         $(this).parents(".accordion-content").find('input:hidden[name="file_license"]').val('Right Managed'); 

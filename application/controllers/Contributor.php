@@ -317,6 +317,7 @@ class contributor extends CI_Controller {
 		 $data['user_session']=$this->session->all_userdata();;
 		 $this->load->helper(array('form', 'url'));
 		 $id = $data['user_session']['user_meta']['0']['id'];
+		
 		 $config['upload_path'] = './assets/uploads/';
 		 $config['allowed_types'] = 'gif|jpg|png';
 		 $config['overwrite'] = FALSE; 
@@ -325,94 +326,104 @@ class contributor extends CI_Controller {
 		 $this->upload->initialize($config);
 
 		 $files = $_FILES;
+
+		 
 		 if(isset($_FILES['trialfiles'])){
-		 	$count = count($_FILES['trialfiles']['name']);	
+		
+		 	$count = count($files['trialfiles']['name']);	
+		 
 		 } else {
 		 	$count = 0;
 		 }
 		 
-		 $i = 0;
 		 $_FILES = array();
-		 $success = 0;
-		 while ($i < $count) { 
+		 $success = 0;	
 
-		     $trialfiles = 'trialfiles';
+		 
+		 for ($i=0; $i < $count ; $i++) { 
+		 	 $trialfiles = 'trialfiles';
 		     $_FILES['trialfiles']['name'] = $files['trialfiles']['name'][$i];
 		     $_FILES['trialfiles']['size'] = $files['trialfiles']['size'][$i];
 		     $_FILES['trialfiles']['tmp_name'] = $files['trialfiles']['tmp_name'][$i];
 		     $_FILES['trialfiles']['error'] = $files['trialfiles']['error'][$i];
 		     $_FILES['trialfiles']['type'] = $files['trialfiles']['type'][$i];
 
-			    if (!$this->upload->do_upload($trialfiles)) {
-			           $error = array('error' => $this->upload->display_errors());
-			    	   echo $this->upload->display_errors();
-			    	   return false;
-			     
-			     } else {
-
-	 	  	 	$ppic = $_FILES['trialfiles']['name'];
+		   	   
+		     if (!$this->upload->do_upload($trialfiles)) {
+	
+	           $error = array('error' => $this->upload->display_errors());
+	    	   echo $this->upload->display_errors();
+	    	  
+			 } else {
+			 
+			 	$ppic = $_FILES['trialfiles']['name'];
 	 	  	 	$url = "./assets/uploads/".$ppic; 
-	 	  	 	getimagesize($url, $info);
 	 	  	 	$file_keywords = '';
-	 	  	 	if(isset($info['APP13']))
-	 	  	 	{
-	 	  	 	    $iptc = iptcparse($info['APP13']);
-	 	  	 	    if(isset($iptc["2#025"])){
-	 	  	 	    	if(count($iptc["2#025"]) > 0){
-	 	  	 	    		for ($i=0; $i < count($iptc["2#025"]); $i++) { 
-	 	  	 	    			$file_keywords .= $iptc["2#025"][$i];
-	 	  	 	    		}
-	 	  	 	    	}
-	 	  	 	    }
-	 	  	 	}
+	 	  	 	
+	 	  	 	if(!getimagesize($url, $info)){
+	 	  	 		// do nothing
+	 	  	 		echo "failed";
+	 	  	 	} else {
+	 	  	 		
+	 	  	 		if(isset($info['APP13']))
+	 	  	 		{
+	 	  	 		    $iptc = iptcparse($info['APP13']);
+	 	  	 		    if(isset($iptc["2#025"])){
+	 	  	 		    	if(count($iptc["2#025"]) > 0){
+	 	  	 		    		for ($p=0; $p < count($iptc["2#025"]); $p++) { 
+	 	  	 		    			$file_keywords .= $iptc["2#025"][$p];
+	 	  	 		    		}
+	 	  	 		    	}
+	 	  	 		    }
+	 	  	 		}	
+	 	  	 	} 
 	 	  	 	$pathinfo = pathinfo($_FILES['trialfiles']['name']);
 	 	  	 	$image_path = 'assets/uploads/'. $pathinfo['filename'] . "." . $pathinfo['extension'];
-	 	  	 	$config2['image_library'] = 'gd2';
-	 	  	 	$config2['source_image'] = './'.$image_path;
-		                $config2['new_image'] = './assets/uploads/thumbs/';
-			        $config2['maintain_ratio'] = TRUE;
-		                $config2['create_thumb'] = TRUE;
-		                $config2['thumb_marker'] = '_thumb';
-		                $config2['width'] = 600;
-		                $config2['height'] = 600;
-                    
-		                $this->image_lib->initialize($config2);
+		 	  	 	$config2['image_library'] = 'gd2';
+		 	  	 	$config2['source_image'] = './'.$image_path;
+			        $config2['new_image'] = './assets/uploads/thumbs/';
+				    $config2['maintain_ratio'] = TRUE;
+			        $config2['create_thumb'] = TRUE;
+		            $config2['thumb_marker'] = '_thumb';
+		            $config2['width'] = 600;
+		            $config2['height'] = 600;
+                     $this->image_lib->initialize($config2);
 	
-		                if ( !$this->image_lib->resize()) {
-	            
-	            			echo $this->image_lib->display_errors();
+		             if ( !$this->image_lib->resize()) {
+	            		echo $this->image_lib->display_errors();
 	          	
-	          		} else {
+	          		 } else {				
 				
 				$this->image_lib->clear();
 				$thumbnail_path = 'assets/uploads/thumbs/'. $pathinfo['filename'] . "_thumb." . $pathinfo['extension'];
+	            
 	                	$config3['image_library'] = 'gd2';
 		                $config3['source_image'] = './'.$thumbnail_path;
 		                $config3['wm_type'] = 'overlay';
-	                        $config3['wm_overlay_path'] = './assets/contributor/img/watermark.png';
-	                        $config3['wm_vrt_alignment'] = 'middle'; 
-	                        $config3['wm_hor_alignment'] = 'center';
-	          		$this->image_lib->initialize($config3);
+                        $config3['wm_overlay_path'] = './assets/contributor/img/watermark.png';
+                        $config3['wm_vrt_alignment'] = 'middle'; 
+                        $config3['wm_hor_alignment'] = 'center';
+          				  $this->image_lib->initialize($config3);
 	          			
-          			if(!$this->image_lib->watermark()){
-          				
-          				echo $this->image_lib->display_errors();
-          			
-          			} else {
-					$this->image_lib->clear();
-	          			$this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size'], $thumbnail_path ,$file_keywords);
-		           		$success = 1;		          				
-          			}
+	          			if(!$this->image_lib->watermark()){
+	          				
+	          				echo $this->image_lib->display_errors();
+	          			
+	          			} else {
+							$this->image_lib->clear();
+		          			$this->contributor_model->upload_contributor_images($id, $_FILES['trialfiles']['name'], $_FILES['trialfiles']['size'], $thumbnail_path ,$file_keywords);
+			           		$success = 1;		          				
+	          			}
 	          		}
 	          	}
-		    $i++;
-		}
-		
-		if($success === 1 &&  $count > 0){
-			$this->user_model->update_edit_status($id,TRUE);
-			$this->user_model->update_upload_status($id,FALSE);
-		} 
-		echo $success;
+			}
+
+			if($success === 1 &&  $count > 0){
+				$this->user_model->update_edit_status($id,TRUE);
+				$this->user_model->update_upload_status($id,FALSE);
+			} 
+			echo $success;
+
 	}
 	
 	public function _create_thumbnail($fileName,$width,$height) {
