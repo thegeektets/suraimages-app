@@ -168,8 +168,8 @@ class User_model extends CI_Model {
                    return $query->result_array();
         }
         public function get_user_meta() {
-                $email = $this->input->post("login_email");
-                $query = $this->db->query("select * from user where email = '".$email ."'");
+                $email = $this->input->post("txt_email");
+                $query = $this->db->query("select * from users where email = '".$email ."'");
                    return $query->result_array();
         }
         public function get_user_details($id) {

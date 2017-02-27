@@ -9,8 +9,8 @@ class member extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('member_model');
        $this->load->model('contributor_model');
+       error_reporting(0);
       	}
-
 
 	public function index($data = NULL)
 	{
@@ -193,7 +193,13 @@ class member extends CI_Controller {
 		            $config2['maintain_ratio'] = TRUE;
 	                $config2['create_thumb'] = TRUE;
 	                $config2['thumb_marker'] = '_download';
-	                
+	                 if($package_files[$i]['file_width'] == '' || $package_files[$i]['file_width']){
+                                                         list($width, $height) = getimagesize($package_files[$i]['file_url']);
+                                                    	 $package_files[$i]['file_width'] = $width;
+                                                    	 $package_files[$i]['file_height'] = $height;
+
+                                                    }                           
+
 	                if($size == 'Medium'){
 	                	$config2['width'] = round($package_files[$i]['file_width']/2);
 	                	$config2['height'] = round($package_files[$i]['file_height']/2);
@@ -294,13 +300,13 @@ class member extends CI_Controller {
 	public function initializemail() {
 	    $this->load->library('email');
 		 $config['useragent'] = 'CodeIgniter';
-		 $config['mailpath']  = "/usr/bin/sendmail";
+		 $config['mailpath']  = "/usr/sbin/sendmail -t -i";
 		 $config['protocol'] = ""; 
 		 $config['smtp_host'] = ""; 
 		 $config['smtp_port'] = ""; 
 		 $config['smtp_user'] = "suraimagesbackend@gmail.com"; 
 		 $config['smtp_pass'] = "Sura@Images"; 
-		 $config['smtp_timeout'] = 5;
+		 $config['smtp_timeout'] = 15;
 		 $config['wordwrap'] = TRUE;
 		 $config['wrapchars'] = 76;
 		 $config['mailtype'] = 'html';
@@ -314,7 +320,7 @@ class member extends CI_Controller {
 	     $this->email->initialize($config);
 	 } 
 
-	/*
+	
 	public function notify_model_purchase($email,$image_id,$amount,$image) {
 		        $this->load->helper(array('form', 'url'));
 		        $cart_items = "
@@ -344,33 +350,14 @@ class member extends CI_Controller {
 			              <strong> Amount : </strong>
 			              $ ".$amount."
 			            </td>
-			          </tr>" ;	
-				 $cart_footer = "
-				  	</tbody>
+			          </tr>
+			      	</tbody>
 				  	</table>
-				  "	;		
-				  $cart_items = $cart_items . $cart_footer;		      
-				 
-			       $html = "<head><meta http-equiv="Content-Type" content="text/html; charset=gb18030">
-						<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
+				  ";		
+				
+				$head = "
+				        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
 						<style type='text/css'>
-						@font-face {
-						font-family: 'Calibri';
-						font-weight: 700;
-						src: url('".base_url('assets/admin/calibri/Calibri Bold.ttf')."');
-						}
-
-						@font-face {
-						font-family: 'Calibri';
-						font-weight: normal;
-						src: url('".base_url('assets/admin/calibri/Calibri.ttf')."');
-						}
-						@font-face {
-						font-family: 'Calibri';
-						font-weight: 100;
-						src: url('".base_url('assets/admin/calibri/calibril.ttf')."');
-						
-						}
 						body,
 						html {
 						background: #fff !important;
@@ -433,9 +420,10 @@ class member extends CI_Controller {
 						font-size: 14px;
 						margin-right: 10px;
 						}
-						</style>
-						</head>
-						<container class='header'>
+						</style>";
+						
+
+				$html=$head . "<container class='header'>
 						  <div class='logo'>
 						    <img src='".base_url('assets/admin/img/sura_dark.png')."' alt=''>
 						  </div>
@@ -583,8 +571,7 @@ class member extends CI_Controller {
 		  $cart_items = $cart_items . $cart_footer;		      
 		 $this->load->helper(array('form', 'url'));
 	     $html = "
-	     		<head>
-				<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
+	     		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
 				<style type='text/css'>
 				@font-face {
 				font-family: 'Calibri';
@@ -666,7 +653,6 @@ class member extends CI_Controller {
 				margin-right: 10px;
 				}
 				</style>
-				</head>
 				<container class='header'>
 				  <div class='logo'>
 				    <img src='".base_url('assets/admin/img/sura_dark.png')."' alt=''>
@@ -769,7 +755,7 @@ class member extends CI_Controller {
 	     }
 		
 	 }
-	*/
+	
 	public function send_quote() {
 		$this->load->helper(array('form', 'url'));	
 		$email = $this->input->post("qoute_email");

@@ -80,6 +80,12 @@
                                <div class="desc_column">
                                    <span class="file_dimensions">
                                     <?php
+                                         if($all_results[$s]['file_width'] == '' || $all_results[$s]['file_width']){
+                                                         list($width, $height) = getimagesize($all_results[$s]['file_url']);
+                                                    	 $all_results[$s]['file_width'] = $width;
+                                                    	 $all_results[$s]['file_height'] = $height;
+
+                                                    }
                                       echo (round($all_results[$i]['same_shoots'][$s]['file_width']/3,0)).' x '.(round($all_results[$i]['same_shoots'][$s]['file_height']/3)).'px';
                                     ?>
                                     |

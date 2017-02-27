@@ -87,6 +87,13 @@
                                  <div class="desc_column">
                                      <span class="file_dimensions">
                                       <?php
+
+                                                   if($all_results[$i]['file_width'] == '' || $all_results[$i]['file_width']){
+                                                         list($width, $height) = getimagesize($all_results[$i]['file_url']);
+                                                    	 $all_results[$i]['file_width'] = $width;
+                                                    	 $all_results[$i]['file_height'] = $height;
+
+                                                    } 
                                         echo (round($all_results[$i]['file_width']/3,0)).' x '.(round($all_results[$i]['file_height']/3)).'px';
                                       ?>
                                       |

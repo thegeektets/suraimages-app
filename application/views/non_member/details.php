@@ -220,7 +220,14 @@
                                               <p>
                                                  <span class="file_dimensions">
                                                   <?php
-                                                    echo (round($all_results[0]['file_width']/3,0)).' x '.(round($all_results[0]['file_height']/3)).'px';
+
+                                                   if($all_results[0]['file_width'] == '' || $all_results[0]['file_width']){
+                                                         list($width, $height) = getimagesize($all_results[0]['file_url']);
+                                                    	 $all_results[0]['file_width'] = $width;
+                                                    	 $all_results[0]['file_height'] = $height;
+
+                                                    } 
+                                                   echo (round($all_results[0]['file_width']/3,0)).' x '.(round($all_results[0]['file_height']/3)).'px';
                                                   ?>
                                                   |
                                                 </span>

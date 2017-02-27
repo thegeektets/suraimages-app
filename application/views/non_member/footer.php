@@ -19,7 +19,8 @@
 
           </div>
           <div class="large-4 columns medium-3 columns">
-              <span class="copyright"> Copyright &copy; 2016 SuraImages </span>
+              <span class="copyright"> Copyright &copy; <?php echo date("Y"); ?>
+ SuraImages </span>
 
           </div>
           <div class="large-3 columns medium-2 columns">
@@ -44,8 +45,8 @@
     <script src="<?php echo base_url('/assets/non_member/js/vendor/slick.min.js')?>"></script>
     <script src="<?php echo base_url('/assets/contributor/multiselect/multiple-select.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/app.js')?>"></script>
-    <script src="<?php echo base_url('/assets/non_member/js/paginations.js')?>"></script>
     <script src="<?php echo base_url('/assets/non_member/js/mainfile.js')?>"></script>
+    <script src="<?php echo base_url('/assets/non_member/js/paginations.js')?>"></script>
     <script type="text/javascript">
       $('.add_to_cart_form').submit( function () {
         

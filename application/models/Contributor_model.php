@@ -159,25 +159,27 @@ class Contributor_model extends CI_Model {
                     $file_orientation,$file_people,$file_shoot,$file_category){
             $this->db->query("UPDATE contributor_video_uploads SET date_uploaded = date_uploaded ,file_name = ".$this->db->escape($file_name)." , file_keywords = ".$this->db->escape($file_keywords)." , file_price_large = ".$this->db->escape($file_price_large).", file_price_medium = ".$this->db->escape($file_price_medium)." , file_price_small = ".$this->db->escape($file_price_small)." , file_type = ".$this->db->escape($file_type)." , file_subtype = ".$this->db->escape($file_subtype)." , file_orentiation = ".$this->db->escape($file_orientation)." , file_people = ".$this->db->escape($file_people)." ,file_category = ".$this->db->escape($file_category)." , file_same_shoot_code  = ".$this->db->escape($file_shoot)." WHERE upload_id = ".$this->db->escape($file_id)."");   
         }
+        
         public function get_history_per_image($contributor_id,$file_id) {
                 $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND upload_id = ".$file_id." GROUP BY item_id");
+                echo "select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND upload_id = ".$file_id." GROUP BY item_id";
                 return $query->result_array();
         }
         public function get_history_per_date($contributor_id, $from_date, $to_date) {
-                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND date_purchased BETWEEN '".$from_date."' AND '".$to_date."' GROUP BY item_id");
                 return $query->result_array();
         }
         public function get_history_per_month($contributor_id,$month) {
-                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND date_purchased like '".$month."%' GROUP BY item_id");
+                $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND date_purchased like '".$month."%' GROUP BY item_id");
                 return $query->result_array();
         }
         public function get_history_per_license($contributor_id,$license) {
 
                 if($license == 'Royalty Free' || $license == 'Right Managed'){
-                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND product_license = '".$license."' AND product_duration = '' AND exclusive_duration = '' GROUP BY item_id");
-                   
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND product_license = '".$license."' AND product_duration = '' AND exclusive_duration = '' GROUP BY item_id");
+              
                 } else {
-                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND user_details.user_id = member_id AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND product_license = '".$license."' AND product_duration != '' OR exclusive_duration != '' GROUP BY item_id");
+                    $query = $this->db->query("select * from orders,user_details,order_items,contributor_image_uploads where contributor_image_uploads.user_id = '".$contributor_id."' AND order_status = 'COMPLETE' AND orders.order_id = order_items.order_id AND order_items.product_id = upload_id AND contributor_image_uploads.user_id = user_details.user_id AND product_license = '".$license."' AND product_duration != '' OR exclusive_duration != '' GROUP BY item_id");
                 }
                 
                 return $query->result_array();
